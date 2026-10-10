@@ -1,5 +1,6 @@
 import request from 'supertest';
 import { AlbumController } from 'src/controllers/album.controller.js';
+import { Permission } from 'src/enum.js';
 import { AlbumService } from 'src/services/album.service.js';
 import { factory } from 'test/small.factory.js';
 import { ControllerContext, controllerSetup, mockBaseService } from 'test/utils.js';
@@ -33,6 +34,22 @@ describe(AlbumController.name, () => {
       const { status, body } = await request(ctx.getHttpServer()).get('/albums?assetId=invalid');
       expect(status).toEqual(400);
       expect(body).toEqual(factory.responses.validationError([{ path: ['assetId'], message: 'Invalid UUID' }]));
+    });
+  });
+
+  describe('GET /albums/names', () => {
+    // a read-only API key (e.g. the public gateway's) must be able to load the Cmd+K album list
+    it('should publish AlbumRead', async () => {
+      service.getNames.mockResolvedValue([]);
+
+      const { status } = await request(ctx.getHttpServer()).get('/albums/names');
+
+      expect(status).toBe(200);
+      expect(ctx.authenticate).toHaveBeenCalledWith(
+        expect.objectContaining({
+          metadata: expect.objectContaining({ permission: Permission.AlbumRead }),
+        }),
+      );
     });
   });
 });

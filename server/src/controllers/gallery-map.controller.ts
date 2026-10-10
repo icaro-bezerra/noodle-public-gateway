@@ -4,6 +4,7 @@ import type { AuthDto } from 'src/dtos/auth.dto.js';
 import { Endpoint, HistoryBuilder } from 'src/decorators.js';
 import { FilteredMapMarkerDto } from 'src/dtos/gallery-map.dto.js';
 import { MapMarkerResponseDto } from 'src/dtos/map.dto.js';
+import { Permission } from 'src/enum.js';
 import { Auth, Authenticated } from 'src/middleware/auth.guard.js';
 import { SharedSpaceService } from 'src/services/shared-space.service.js';
 
@@ -13,7 +14,7 @@ export class GalleryMapController {
   constructor(private service: SharedSpaceService) {}
 
   @Get('markers')
-  @Authenticated()
+  @Authenticated({ permission: Permission.MapRead })
   @Endpoint({
     summary: 'Get filtered map markers',
     description: 'Retrieve map markers with rich content filtering (people, camera, tags, etc.)',

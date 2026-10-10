@@ -9,7 +9,7 @@ import { ZodSerializerInterceptor, ZodValidationPipe } from 'nestjs-zod';
 import { commandsAndQuestions } from 'src/commands/index.js';
 import { IWorker } from 'src/constants.js';
 import { controllers } from 'src/controllers/index.js';
-import { ImmichWorker } from 'src/enum.js';
+import { ImmichWorker, Permission } from 'src/enum.js';
 import { MaintenanceAuthGuard } from 'src/maintenance/maintenance-auth.guard.js';
 import { MaintenanceHealthRepository } from 'src/maintenance/maintenance-health.repository.js';
 import { MaintenanceWebsocketRepository } from 'src/maintenance/maintenance-websocket.repository.js';
@@ -88,7 +88,13 @@ export class BaseModule implements OnModuleInit, OnModuleDestroy {
       this.authService.authenticate({
         headers: client.request.headers,
         queryParams: {},
-        metadata: { adminRoute: false, sharedLinkRoute: false, uri: '/api/socket.io' },
+        // the socket only pushes events to the client, so read access is enough
+        metadata: {
+          adminRoute: false,
+          sharedLinkRoute: false,
+          permission: Permission.AssetRead,
+          uri: '/api/socket.io',
+        },
       }),
     );
 

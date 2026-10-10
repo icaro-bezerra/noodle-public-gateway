@@ -61,7 +61,7 @@ export class AlbumController {
   }
 
   @Get('names')
-  @Authenticated()
+  @Authenticated({ permission: Permission.AlbumRead })
   @Endpoint({
     summary: 'Retrieve album names',
     description: 'Returns a lightweight list of albums available to the authenticated user for quick palette lookups.',

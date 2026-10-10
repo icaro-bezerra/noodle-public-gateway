@@ -3403,7 +3403,8 @@
             "version": "v2",
             "state": "Added"
           }
-        ]
+        ],
+        "x-immich-permission": "album.read"
       }
     },
     "/albums/statistics": {
@@ -8283,6 +8284,7 @@
             "state": "Beta"
           }
         ],
+        "x-immich-permission": "map.read",
         "x-immich-state": "Beta"
       }
     },
