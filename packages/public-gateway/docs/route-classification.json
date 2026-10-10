@@ -1,0 +1,3846 @@
+[
+  {
+    "method": "GET",
+    "path": "/api/activities",
+    "operationId": "getActivities",
+    "permission": "activity.read",
+    "class": "read",
+    "tags": [
+      "Activities"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/activities",
+    "operationId": "createActivity",
+    "permission": "activity.create",
+    "class": "write",
+    "tags": [
+      "Activities"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/activities/statistics",
+    "operationId": "getActivityStatistics",
+    "permission": "activity.statistics",
+    "class": "write",
+    "tags": [
+      "Activities"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/activities/{id}",
+    "operationId": "deleteActivity",
+    "permission": "activity.delete",
+    "class": "write",
+    "tags": [
+      "Activities"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/admin/auth/unlink-all",
+    "operationId": "unlinkAllOAuthAccountsAdmin",
+    "permission": "adminAuth.unlinkAll",
+    "class": "admin",
+    "tags": [
+      "Authentication (admin)"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/admin/config",
+    "operationId": "getAdminConfig",
+    "permission": "adminConfig.read",
+    "class": "admin",
+    "tags": [
+      "Config (admin)"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/admin/config",
+    "operationId": "updateAdminConfig",
+    "permission": "adminConfig.update",
+    "class": "admin",
+    "tags": [
+      "Config (admin)"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/admin/config/defaults",
+    "operationId": "getAdminConfigDefaults",
+    "permission": "adminConfig.read",
+    "class": "admin",
+    "tags": [
+      "Config (admin)"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/admin/database-backups",
+    "operationId": "listDatabaseBackups",
+    "permission": "maintenance",
+    "class": "admin",
+    "tags": [
+      "Database Backups (admin)"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/admin/database-backups",
+    "operationId": "deleteDatabaseBackup",
+    "permission": "backup.delete",
+    "class": "admin",
+    "tags": [
+      "Database Backups (admin)"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/admin/database-backups/start-restore",
+    "operationId": "startDatabaseRestoreFlow",
+    "permission": null,
+    "class": "public",
+    "tags": [
+      "Database Backups (admin)"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/admin/database-backups/upload",
+    "operationId": "uploadDatabaseBackup",
+    "permission": "backup.upload",
+    "class": "admin",
+    "tags": [
+      "Database Backups (admin)"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/admin/database-backups/{filename}",
+    "operationId": "downloadDatabaseBackup",
+    "permission": "backup.download",
+    "class": "admin",
+    "tags": [
+      "Database Backups (admin)"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/admin/face-repair",
+    "operationId": "runFaceRepair",
+    "permission": null,
+    "class": "admin",
+    "tags": [
+      "Faces"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/admin/face-repair/decline",
+    "operationId": "getFaceRepairDeclines",
+    "permission": null,
+    "class": "admin",
+    "tags": [
+      "Faces"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/admin/face-repair/decline",
+    "operationId": "declineFaceRepair",
+    "permission": null,
+    "class": "admin",
+    "tags": [
+      "Faces"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/admin/face-repair/decline",
+    "operationId": "removeFaceRepairDeclines",
+    "permission": null,
+    "class": "admin",
+    "tags": [
+      "Faces"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/admin/face-repair/faces/{assetFaceId}/preview",
+    "operationId": "getFaceRepairFacePreview",
+    "permission": null,
+    "class": "admin",
+    "tags": [
+      "Faces"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/admin/face-repair/faces/{assetFaceId}/thumbnail",
+    "operationId": "getFaceRepairFaceThumbnail",
+    "permission": null,
+    "class": "admin",
+    "tags": [
+      "Faces"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/admin/face-repair/owner/{ownerId}/people",
+    "operationId": "getFaceRepairOwnerPeople",
+    "permission": null,
+    "class": "admin",
+    "tags": [
+      "Faces"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/admin/face-repair/owner/{ownerId}/people",
+    "operationId": "createFaceRepairOwnerPerson",
+    "permission": null,
+    "class": "admin",
+    "tags": [
+      "Faces"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/admin/face-repair/person/{personId}",
+    "operationId": "getFaceRepairPersonMetadata",
+    "permission": null,
+    "class": "admin",
+    "tags": [
+      "Faces"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/admin/face-repair/resolutions",
+    "operationId": "getFaceRepairResolutions",
+    "permission": null,
+    "class": "admin",
+    "tags": [
+      "Faces"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/admin/face-repair/resolutions/remove",
+    "operationId": "removeFaceRepairResolutions",
+    "permission": null,
+    "class": "admin",
+    "tags": [
+      "Faces"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/admin/face-repair/resolve",
+    "operationId": "resolveFaces",
+    "permission": null,
+    "class": "admin",
+    "tags": [
+      "Faces"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/admin/face-repair/scan",
+    "operationId": "triggerScan",
+    "permission": null,
+    "class": "admin",
+    "tags": [
+      "Faces"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/admin/face-repair/scan/defaults",
+    "operationId": "getFaceRepairScanDefaults",
+    "permission": null,
+    "class": "admin",
+    "tags": [
+      "Faces"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/admin/face-repair/scan/latest",
+    "operationId": "getLatestScan",
+    "permission": null,
+    "class": "admin",
+    "tags": [
+      "Faces"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/admin/face-repair/scan/person/{personId}",
+    "operationId": "getFaceRepairPersonFaces",
+    "permission": null,
+    "class": "admin",
+    "tags": [
+      "Faces"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/admin/face-repair/scan/person/{personId}/cluster-faces",
+    "operationId": "getFaceRepairClusterFaces",
+    "permission": null,
+    "class": "admin",
+    "tags": [
+      "Faces"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/admin/face-repair/unconfirm",
+    "operationId": "unconfirmFaceRepairFaces",
+    "permission": null,
+    "class": "admin",
+    "tags": [
+      "Faces"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/admin/integrity/report",
+    "operationId": "getIntegrityReport",
+    "permission": "maintenance",
+    "class": "admin",
+    "tags": [
+      "Maintenance (admin)"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/admin/integrity/report/{id}",
+    "operationId": "deleteIntegrityReport",
+    "permission": "maintenance",
+    "class": "admin",
+    "tags": [
+      "Maintenance (admin)"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/admin/integrity/report/{id}/file",
+    "operationId": "getIntegrityReportFile",
+    "permission": "maintenance",
+    "class": "admin",
+    "tags": [
+      "Maintenance (admin)"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/admin/integrity/report/{type}/csv",
+    "operationId": "getIntegrityReportCsv",
+    "permission": "maintenance",
+    "class": "admin",
+    "tags": [
+      "Maintenance (admin)"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/admin/integrity/summary",
+    "operationId": "getIntegrityReportSummary",
+    "permission": "maintenance",
+    "class": "admin",
+    "tags": [
+      "Maintenance (admin)"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/admin/maintenance",
+    "operationId": "setMaintenanceMode",
+    "permission": "maintenance",
+    "class": "admin",
+    "tags": [
+      "Maintenance (admin)"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/admin/maintenance/detect-install",
+    "operationId": "detectPriorInstall",
+    "permission": "maintenance",
+    "class": "admin",
+    "tags": [
+      "Maintenance (admin)"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/admin/maintenance/login",
+    "operationId": "maintenanceLogin",
+    "permission": null,
+    "class": "public",
+    "tags": [
+      "Maintenance (admin)"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/admin/maintenance/status",
+    "operationId": "getMaintenanceStatus",
+    "permission": null,
+    "class": "public",
+    "tags": [
+      "Maintenance (admin)"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/admin/notifications",
+    "operationId": "createNotification",
+    "permission": null,
+    "class": "admin",
+    "tags": [
+      "Notifications (admin)"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/admin/notifications/templates/{name}",
+    "operationId": "getNotificationTemplateAdmin",
+    "permission": null,
+    "class": "admin",
+    "tags": [
+      "Notifications (admin)"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/admin/notifications/test-email",
+    "operationId": "sendTestEmailAdmin",
+    "permission": null,
+    "class": "admin",
+    "tags": [
+      "Notifications (admin)"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/admin/users",
+    "operationId": "searchUsersAdmin",
+    "permission": "adminUser.read",
+    "class": "admin",
+    "tags": [
+      "Users (admin)"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/admin/users",
+    "operationId": "createUserAdmin",
+    "permission": "adminUser.create",
+    "class": "admin",
+    "tags": [
+      "Users (admin)"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/admin/users/{id}",
+    "operationId": "getUserAdmin",
+    "permission": "adminUser.read",
+    "class": "admin",
+    "tags": [
+      "Users (admin)"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/admin/users/{id}",
+    "operationId": "updateUserAdmin",
+    "permission": "adminUser.update",
+    "class": "admin",
+    "tags": [
+      "Users (admin)",
+      "Deprecated"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/admin/users/{id}",
+    "operationId": "deleteUserAdmin",
+    "permission": "adminUser.delete",
+    "class": "admin",
+    "tags": [
+      "Users (admin)"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/admin/users/{id}/calendar-heatmap",
+    "operationId": "getUserCalendarHeatmapAdmin",
+    "permission": "adminUser.read",
+    "class": "admin",
+    "tags": [
+      "Users (admin)"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/admin/users/{id}/library-manifest",
+    "operationId": "getLibraryManifest",
+    "permission": "adminUser.read",
+    "class": "admin",
+    "tags": [
+      "Users (admin)"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/admin/users/{id}/preferences",
+    "operationId": "getUserPreferencesAdmin",
+    "permission": "adminUser.read",
+    "class": "admin",
+    "tags": [
+      "Users (admin)"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/admin/users/{id}/preferences",
+    "operationId": "updateUserPreferencesAdmin",
+    "permission": "adminUser.update",
+    "class": "admin",
+    "tags": [
+      "Users (admin)",
+      "Deprecated"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/admin/users/{id}/restore",
+    "operationId": "restoreUserAdmin",
+    "permission": "adminUser.delete",
+    "class": "admin",
+    "tags": [
+      "Users (admin)"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/admin/users/{id}/sessions",
+    "operationId": "getUserSessionsAdmin",
+    "permission": "adminSession.read",
+    "class": "admin",
+    "tags": [
+      "Users (admin)"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/admin/users/{id}/statistics",
+    "operationId": "getUserStatisticsAdmin",
+    "permission": "adminUser.read",
+    "class": "admin",
+    "tags": [
+      "Users (admin)"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/albums",
+    "operationId": "getAllAlbums",
+    "permission": "album.read",
+    "class": "read",
+    "tags": [
+      "Albums"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/albums",
+    "operationId": "createAlbum",
+    "permission": "album.create",
+    "class": "write",
+    "tags": [
+      "Albums"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/albums/assets",
+    "operationId": "addAssetsToAlbums",
+    "permission": "albumAsset.create",
+    "class": "write",
+    "tags": [
+      "Albums"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/albums/names",
+    "operationId": "getAlbumNames",
+    "permission": "album.read",
+    "class": "read",
+    "tags": [
+      "Albums"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/albums/statistics",
+    "operationId": "getAlbumStatistics",
+    "permission": "album.statistics",
+    "class": "write",
+    "tags": [
+      "Albums"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/albums/{id}",
+    "operationId": "getAlbumInfo",
+    "permission": "album.read",
+    "class": "read",
+    "tags": [
+      "Albums"
+    ]
+  },
+  {
+    "method": "PATCH",
+    "path": "/api/albums/{id}",
+    "operationId": "updateAlbumInfo",
+    "permission": "album.update",
+    "class": "write",
+    "tags": [
+      "Albums"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/albums/{id}",
+    "operationId": "deleteAlbum",
+    "permission": "album.delete",
+    "class": "write",
+    "tags": [
+      "Albums"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/albums/{id}/assets",
+    "operationId": "addAssetsToAlbum",
+    "permission": "albumAsset.create",
+    "class": "write",
+    "tags": [
+      "Albums"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/albums/{id}/assets",
+    "operationId": "removeAssetFromAlbum",
+    "permission": "albumAsset.delete",
+    "class": "write",
+    "tags": [
+      "Albums"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/albums/{id}/map-markers",
+    "operationId": "getAlbumMapMarkers",
+    "permission": "album.read",
+    "class": "read",
+    "tags": [
+      "Albums"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/albums/{id}/user/{userId}",
+    "operationId": "updateAlbumUser",
+    "permission": "albumUser.update",
+    "class": "write",
+    "tags": [
+      "Albums"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/albums/{id}/user/{userId}",
+    "operationId": "removeUserFromAlbum",
+    "permission": "albumUser.delete",
+    "class": "write",
+    "tags": [
+      "Albums"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/albums/{id}/users",
+    "operationId": "addUsersToAlbum",
+    "permission": "albumUser.create",
+    "class": "write",
+    "tags": [
+      "Albums"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/api-keys",
+    "operationId": "getApiKeys",
+    "permission": "apiKey.read",
+    "class": "read",
+    "tags": [
+      "API keys"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/api-keys",
+    "operationId": "createApiKey",
+    "permission": "apiKey.create",
+    "class": "write",
+    "tags": [
+      "API keys"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/api-keys/me",
+    "operationId": "getMyApiKey",
+    "permission": null,
+    "class": "full",
+    "tags": [
+      "API keys"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/api-keys/{id}",
+    "operationId": "getApiKey",
+    "permission": "apiKey.read",
+    "class": "read",
+    "tags": [
+      "API keys"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/api-keys/{id}",
+    "operationId": "updateApiKey",
+    "permission": "apiKey.update",
+    "class": "write",
+    "tags": [
+      "API keys",
+      "Deprecated"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/api-keys/{id}",
+    "operationId": "deleteApiKey",
+    "permission": "apiKey.delete",
+    "class": "write",
+    "tags": [
+      "API keys"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/api-keys/{id}/rotate",
+    "operationId": "rotateApiKey",
+    "permission": "apiKey.rotate",
+    "class": "write",
+    "tags": [
+      "API keys"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/asset-files",
+    "operationId": "searchAssetFiles",
+    "permission": "assetFile.read",
+    "class": "read",
+    "tags": [
+      "Asset files"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/asset-files/{id}",
+    "operationId": "getAssetFile",
+    "permission": "assetFile.read",
+    "class": "read",
+    "tags": [
+      "Asset files"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/asset-files/{id}",
+    "operationId": "deleteAssetFile",
+    "permission": "assetFile.delete",
+    "class": "write",
+    "tags": [
+      "Asset files"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/asset-files/{id}/download",
+    "operationId": "downloadAssetFile",
+    "permission": "assetFile.download",
+    "class": "write",
+    "tags": [
+      "Asset files"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/assets",
+    "operationId": "uploadAsset",
+    "permission": "asset.upload",
+    "class": "write",
+    "tags": [
+      "Assets"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/assets",
+    "operationId": "updateAssets",
+    "permission": "asset.update",
+    "class": "write",
+    "tags": [
+      "Assets",
+      "Deprecated"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/assets",
+    "operationId": "deleteAssets",
+    "permission": "asset.delete",
+    "class": "write",
+    "tags": [
+      "Assets"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/assets/bulk-upload-check",
+    "operationId": "checkBulkUpload",
+    "permission": "asset.upload",
+    "class": "write",
+    "tags": [
+      "Assets"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/assets/copy",
+    "operationId": "copyAsset",
+    "permission": "asset.copy",
+    "class": "write",
+    "tags": [
+      "Assets"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/assets/editable",
+    "operationId": "getEditableAssets",
+    "permission": "asset.read",
+    "class": "read",
+    "tags": [
+      "Assets"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/assets/favorites",
+    "operationId": "updateAssetFavorites",
+    "permission": "asset.read",
+    "class": "read",
+    "tags": [
+      "Assets"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/assets/jobs",
+    "operationId": "runAssetJobs",
+    "permission": "job.create",
+    "class": "write",
+    "tags": [
+      "Assets"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/assets/metadata",
+    "operationId": "updateBulkAssetMetadata",
+    "permission": "asset.update",
+    "class": "write",
+    "tags": [
+      "Assets"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/assets/metadata",
+    "operationId": "deleteBulkAssetMetadata",
+    "permission": "asset.update",
+    "class": "write",
+    "tags": [
+      "Assets"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/assets/statistics",
+    "operationId": "getAssetStatistics",
+    "permission": "asset.statistics",
+    "class": "write",
+    "tags": [
+      "Assets"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/assets/{id}",
+    "operationId": "getAssetInfo",
+    "permission": "asset.read",
+    "class": "read",
+    "tags": [
+      "Assets"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/assets/{id}",
+    "operationId": "updateAsset",
+    "permission": "asset.update",
+    "class": "write",
+    "tags": [
+      "Assets",
+      "Deprecated"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/assets/{id}/edits",
+    "operationId": "getAssetEdits",
+    "permission": "asset.edit.get",
+    "class": "write",
+    "tags": [
+      "Assets"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/assets/{id}/edits",
+    "operationId": "editAsset",
+    "permission": "asset.edit.create",
+    "class": "write",
+    "tags": [
+      "Assets"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/assets/{id}/edits",
+    "operationId": "removeAssetEdits",
+    "permission": "asset.edit.delete",
+    "class": "write",
+    "tags": [
+      "Assets"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/assets/{id}/metadata",
+    "operationId": "getAssetMetadata",
+    "permission": "asset.read",
+    "class": "read",
+    "tags": [
+      "Assets"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/assets/{id}/metadata",
+    "operationId": "updateAssetMetadata",
+    "permission": "asset.update",
+    "class": "write",
+    "tags": [
+      "Assets"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/assets/{id}/metadata/{key}",
+    "operationId": "getAssetMetadataByKey",
+    "permission": "asset.read",
+    "class": "read",
+    "tags": [
+      "Assets"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/assets/{id}/metadata/{key}",
+    "operationId": "deleteAssetMetadata",
+    "permission": "asset.update",
+    "class": "write",
+    "tags": [
+      "Assets"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/assets/{id}/ocr",
+    "operationId": "getAssetOcr",
+    "permission": "asset.read",
+    "class": "read",
+    "tags": [
+      "Assets"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/assets/{id}/original",
+    "operationId": "downloadAsset",
+    "permission": "asset.download",
+    "class": "write",
+    "tags": [
+      "Assets"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/assets/{id}/thumbnail",
+    "operationId": "viewAsset",
+    "permission": "asset.view",
+    "class": "write",
+    "tags": [
+      "Assets"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/assets/{id}/video/playback",
+    "operationId": "playAssetVideo",
+    "permission": "asset.view",
+    "class": "write",
+    "tags": [
+      "Assets"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/assets/{id}/video/stream/main.m3u8",
+    "operationId": "getMainPlaylist",
+    "permission": "asset.view",
+    "class": "write",
+    "tags": [
+      "Assets"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/assets/{id}/video/stream/{sessionId}",
+    "operationId": "endSession",
+    "permission": "asset.view",
+    "class": "write",
+    "tags": [
+      "Assets"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/assets/{id}/video/stream/{sessionId}/{variantIndex}/playlist.m3u8",
+    "operationId": "getMediaPlaylist",
+    "permission": "asset.view",
+    "class": "write",
+    "tags": [
+      "Assets"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/assets/{id}/video/stream/{sessionId}/{variantIndex}/{filename}",
+    "operationId": "getSegment",
+    "permission": "asset.view",
+    "class": "write",
+    "tags": [
+      "Assets"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/auth/admin-sign-up",
+    "operationId": "signUpAdmin",
+    "permission": null,
+    "class": "public",
+    "tags": [
+      "Authentication"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/auth/change-password",
+    "operationId": "changePassword",
+    "permission": "auth.changePassword",
+    "class": "write",
+    "tags": [
+      "Authentication"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/auth/login",
+    "operationId": "login",
+    "permission": null,
+    "class": "public",
+    "tags": [
+      "Authentication"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/auth/logout",
+    "operationId": "logout",
+    "permission": null,
+    "class": "full",
+    "tags": [
+      "Authentication"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/auth/pin-code",
+    "operationId": "setupPinCode",
+    "permission": "pinCode.create",
+    "class": "write",
+    "tags": [
+      "Authentication"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/auth/pin-code",
+    "operationId": "changePinCode",
+    "permission": "pinCode.update",
+    "class": "write",
+    "tags": [
+      "Authentication"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/auth/pin-code",
+    "operationId": "resetPinCode",
+    "permission": "pinCode.delete",
+    "class": "write",
+    "tags": [
+      "Authentication"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/auth/session/lock",
+    "operationId": "lockAuthSession",
+    "permission": null,
+    "class": "full",
+    "tags": [
+      "Authentication"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/auth/session/unlock",
+    "operationId": "unlockAuthSession",
+    "permission": null,
+    "class": "full",
+    "tags": [
+      "Authentication"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/auth/status",
+    "operationId": "getAuthStatus",
+    "permission": null,
+    "class": "full",
+    "tags": [
+      "Authentication"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/auth/validateToken",
+    "operationId": "validateAccessToken",
+    "permission": null,
+    "class": "full",
+    "tags": [
+      "Authentication"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/classification/scan",
+    "operationId": "scanClassification",
+    "permission": null,
+    "class": "admin",
+    "tags": [
+      "Classification"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/config",
+    "operationId": "getUserConfig",
+    "permission": "userConfig.read",
+    "class": "read",
+    "tags": [
+      "Config (user)"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/config/defaults",
+    "operationId": "getUserConfigDefaults",
+    "permission": "userConfig.read",
+    "class": "read",
+    "tags": [
+      "Config (user)"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/download/archive",
+    "operationId": "downloadArchive",
+    "permission": "asset.download",
+    "class": "write",
+    "tags": [
+      "Download"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/download/info",
+    "operationId": "getDownloadInfo",
+    "permission": "asset.download",
+    "class": "write",
+    "tags": [
+      "Download"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/duplicates",
+    "operationId": "getAssetDuplicates",
+    "permission": "duplicate.read",
+    "class": "read",
+    "tags": [
+      "Duplicates"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/duplicates",
+    "operationId": "deleteDuplicates",
+    "permission": "duplicate.delete",
+    "class": "write",
+    "tags": [
+      "Duplicates"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/duplicates/resolve",
+    "operationId": "resolveDuplicates",
+    "permission": "duplicate.delete",
+    "class": "write",
+    "tags": [
+      "Duplicates"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/duplicates/{id}",
+    "operationId": "deleteDuplicate",
+    "permission": "duplicate.delete",
+    "class": "write",
+    "tags": [
+      "Duplicates"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/faces",
+    "operationId": "getFaces",
+    "permission": "face.read",
+    "class": "read",
+    "tags": [
+      "Faces"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/faces",
+    "operationId": "createFace",
+    "permission": "face.create",
+    "class": "write",
+    "tags": [
+      "Faces"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/faces/{id}",
+    "operationId": "reassignFacesById",
+    "permission": "face.update",
+    "class": "write",
+    "tags": [
+      "Faces"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/faces/{id}",
+    "operationId": "deleteFace",
+    "permission": "face.delete",
+    "class": "write",
+    "tags": [
+      "Faces"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/gallery/map/markers",
+    "operationId": "getFilteredMapMarkers",
+    "permission": "map.read",
+    "class": "read",
+    "tags": [
+      "Gallery Map"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/jobs",
+    "operationId": "getQueuesLegacy",
+    "permission": "job.read",
+    "class": "admin",
+    "tags": [
+      "Jobs",
+      "Deprecated"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/jobs",
+    "operationId": "createJob",
+    "permission": "job.create",
+    "class": "admin",
+    "tags": [
+      "Jobs"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/jobs/{name}",
+    "operationId": "runQueueCommandLegacy",
+    "permission": "job.create",
+    "class": "admin",
+    "tags": [
+      "Jobs",
+      "Deprecated"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/libraries",
+    "operationId": "getAllLibraries",
+    "permission": "library.read",
+    "class": "admin",
+    "tags": [
+      "Libraries"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/libraries",
+    "operationId": "createLibrary",
+    "permission": "library.create",
+    "class": "admin",
+    "tags": [
+      "Libraries"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/libraries/{id}",
+    "operationId": "getLibrary",
+    "permission": "library.read",
+    "class": "admin",
+    "tags": [
+      "Libraries"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/libraries/{id}",
+    "operationId": "updateLibrary",
+    "permission": "library.update",
+    "class": "admin",
+    "tags": [
+      "Libraries",
+      "Deprecated"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/libraries/{id}",
+    "operationId": "deleteLibrary",
+    "permission": "library.delete",
+    "class": "admin",
+    "tags": [
+      "Libraries"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/libraries/{id}/scan",
+    "operationId": "scanLibrary",
+    "permission": "library.update",
+    "class": "admin",
+    "tags": [
+      "Libraries"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/libraries/{id}/statistics",
+    "operationId": "getLibraryStatistics",
+    "permission": "library.statistics",
+    "class": "admin",
+    "tags": [
+      "Libraries"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/libraries/{id}/validate",
+    "operationId": "validate",
+    "permission": null,
+    "class": "admin",
+    "tags": [
+      "Libraries"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/map/markers",
+    "operationId": "getMapMarkers",
+    "permission": "map.read",
+    "class": "read",
+    "tags": [
+      "Map"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/map/reverse-geocode",
+    "operationId": "reverseGeocode",
+    "permission": "map.search",
+    "class": "write",
+    "tags": [
+      "Map"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/memories",
+    "operationId": "searchMemories",
+    "permission": "memory.read",
+    "class": "read",
+    "tags": [
+      "Memories"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/memories",
+    "operationId": "createMemory",
+    "permission": "memory.create",
+    "class": "write",
+    "tags": [
+      "Memories"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/memories/statistics",
+    "operationId": "memoriesStatistics",
+    "permission": "memory.statistics",
+    "class": "write",
+    "tags": [
+      "Memories"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/memories/{id}",
+    "operationId": "getMemory",
+    "permission": "memory.read",
+    "class": "read",
+    "tags": [
+      "Memories"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/memories/{id}",
+    "operationId": "updateMemory",
+    "permission": "memory.update",
+    "class": "write",
+    "tags": [
+      "Memories",
+      "Deprecated"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/memories/{id}",
+    "operationId": "deleteMemory",
+    "permission": "memory.delete",
+    "class": "write",
+    "tags": [
+      "Memories"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/memories/{id}/assets",
+    "operationId": "addMemoryAssets",
+    "permission": "memoryAsset.create",
+    "class": "write",
+    "tags": [
+      "Memories"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/memories/{id}/assets",
+    "operationId": "removeMemoryAssets",
+    "permission": "memoryAsset.delete",
+    "class": "write",
+    "tags": [
+      "Memories"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/notifications",
+    "operationId": "getNotifications",
+    "permission": "notification.read",
+    "class": "read",
+    "tags": [
+      "Notifications"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/notifications",
+    "operationId": "updateNotifications",
+    "permission": "notification.update",
+    "class": "write",
+    "tags": [
+      "Notifications"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/notifications",
+    "operationId": "deleteNotifications",
+    "permission": "notification.delete",
+    "class": "write",
+    "tags": [
+      "Notifications"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/notifications/{id}",
+    "operationId": "getNotification",
+    "permission": "notification.read",
+    "class": "read",
+    "tags": [
+      "Notifications"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/notifications/{id}",
+    "operationId": "updateNotification",
+    "permission": "notification.update",
+    "class": "write",
+    "tags": [
+      "Notifications"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/notifications/{id}",
+    "operationId": "deleteNotification",
+    "permission": "notification.delete",
+    "class": "write",
+    "tags": [
+      "Notifications"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/oauth/authorize",
+    "operationId": "startOAuth",
+    "permission": null,
+    "class": "public",
+    "tags": [
+      "Authentication"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/oauth/backchannel-logout",
+    "operationId": "logoutOAuth",
+    "permission": null,
+    "class": "public",
+    "tags": [
+      "Authentication"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/oauth/callback",
+    "operationId": "finishOAuth",
+    "permission": null,
+    "class": "public",
+    "tags": [
+      "Authentication"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/oauth/link",
+    "operationId": "linkOAuthAccount",
+    "permission": null,
+    "class": "full",
+    "tags": [
+      "Authentication"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/oauth/mobile-redirect",
+    "operationId": "redirectOAuthToMobile",
+    "permission": null,
+    "class": "public",
+    "tags": [
+      "Authentication"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/oauth/unlink",
+    "operationId": "unlinkOAuthAccount",
+    "permission": null,
+    "class": "full",
+    "tags": [
+      "Authentication"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/partners",
+    "operationId": "getPartners",
+    "permission": "partner.read",
+    "class": "read",
+    "tags": [
+      "Partners"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/partners",
+    "operationId": "createPartner",
+    "permission": "partner.create",
+    "class": "write",
+    "tags": [
+      "Partners"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/partners/{id}",
+    "operationId": "createPartnerDeprecated",
+    "permission": "partner.create",
+    "class": "write",
+    "tags": [
+      "Partners",
+      "Deprecated"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/partners/{id}",
+    "operationId": "updatePartner",
+    "permission": "partner.update",
+    "class": "write",
+    "tags": [
+      "Partners"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/partners/{id}",
+    "operationId": "removePartner",
+    "permission": "partner.delete",
+    "class": "write",
+    "tags": [
+      "Partners"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/people",
+    "operationId": "getAllPeople",
+    "permission": "person.read",
+    "class": "read",
+    "tags": [
+      "People"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/people",
+    "operationId": "createPerson",
+    "permission": "person.create",
+    "class": "write",
+    "tags": [
+      "People"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/people",
+    "operationId": "updatePeople",
+    "permission": "person.update",
+    "class": "write",
+    "tags": [
+      "People"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/people",
+    "operationId": "deletePeople",
+    "permission": "person.delete",
+    "class": "write",
+    "tags": [
+      "People"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/people/detach-profile",
+    "operationId": "detachScopedPerson",
+    "permission": "person.merge",
+    "class": "write",
+    "tags": [
+      "People"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/people/face-statistics",
+    "operationId": "getPeopleFaceStatistics",
+    "permission": "person.read",
+    "class": "read",
+    "tags": [
+      "People"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/people/merge",
+    "operationId": "mergePeople",
+    "permission": "person.merge",
+    "class": "write",
+    "tags": [
+      "People"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/people/same-person",
+    "operationId": "mergeScopedPeople",
+    "permission": "person.merge",
+    "class": "write",
+    "tags": [
+      "People"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/people/statistics",
+    "operationId": "getPeopleStatistics",
+    "permission": "person.read",
+    "class": "read",
+    "tags": [
+      "People"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/people/users",
+    "operationId": "getUsersForPeople",
+    "permission": "person.read",
+    "class": "read",
+    "tags": [
+      "People"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/people/users",
+    "operationId": "upsertPeopleUsers",
+    "permission": "person.update",
+    "class": "write",
+    "tags": [
+      "People"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/people/users",
+    "operationId": "removeUsersFromPeople",
+    "permission": "person.delete",
+    "class": "write",
+    "tags": [
+      "People"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/people/{id}",
+    "operationId": "getPerson",
+    "permission": "person.read",
+    "class": "read",
+    "tags": [
+      "People"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/people/{id}",
+    "operationId": "updatePerson",
+    "permission": "person.update",
+    "class": "write",
+    "tags": [
+      "People",
+      "Deprecated"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/people/{id}",
+    "operationId": "deletePerson",
+    "permission": "person.delete",
+    "class": "write",
+    "tags": [
+      "People"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/people/{id}/face-suggestions",
+    "operationId": "getPersonFaceSuggestions",
+    "permission": "person.update",
+    "class": "write",
+    "tags": [
+      "People"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/people/{id}/face-suggestions/{assetFaceId}/confirm",
+    "operationId": "confirmPersonFaceSuggestion",
+    "permission": "person.update",
+    "class": "write",
+    "tags": [
+      "People"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/people/{id}/face-suggestions/{assetFaceId}/dismiss",
+    "operationId": "dismissPersonFaceSuggestion",
+    "permission": "person.update",
+    "class": "write",
+    "tags": [
+      "People"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/people/{id}/face-suggestions/{assetFaceId}/ignore",
+    "operationId": "ignorePersonFaceSuggestion",
+    "permission": "person.update",
+    "class": "write",
+    "tags": [
+      "People"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/people/{id}/face-suggestions/{assetFaceId}/reject",
+    "operationId": "rejectPersonFaceSuggestion",
+    "permission": "person.update",
+    "class": "write",
+    "tags": [
+      "People"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/people/{id}/faces",
+    "operationId": "getPersonFaces",
+    "permission": "person.read",
+    "class": "read",
+    "tags": [
+      "People"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/people/{id}/faces/{faceId}/thumbnail",
+    "operationId": "getPersonFaceThumbnail",
+    "permission": "person.read",
+    "class": "read",
+    "tags": [
+      "People"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/people/{id}/merge",
+    "operationId": "mergePersonLegacy",
+    "permission": "person.merge",
+    "class": "write",
+    "tags": [
+      "People",
+      "Deprecated"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/people/{id}/reassign",
+    "operationId": "reassignFaces",
+    "permission": "person.reassign",
+    "class": "write",
+    "tags": [
+      "People"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/people/{id}/representative-face",
+    "operationId": "updateRepresentativeFace",
+    "permission": "person.update",
+    "class": "write",
+    "tags": [
+      "People"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/people/{id}/statistics",
+    "operationId": "getPersonStatistics",
+    "permission": "person.statistics",
+    "class": "write",
+    "tags": [
+      "People"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/people/{id}/thumbnail",
+    "operationId": "getPersonThumbnail",
+    "permission": "person.read",
+    "class": "read",
+    "tags": [
+      "People"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/plugins",
+    "operationId": "searchPlugins",
+    "permission": "plugin.read",
+    "class": "read",
+    "tags": [
+      "Plugins"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/plugins/methods",
+    "operationId": "searchPluginMethods",
+    "permission": "plugin.read",
+    "class": "read",
+    "tags": [
+      "Plugins"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/plugins/templates",
+    "operationId": "searchPluginTemplates",
+    "permission": "plugin.read",
+    "class": "read",
+    "tags": [
+      "Plugins"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/plugins/{id}",
+    "operationId": "getPlugin",
+    "permission": "plugin.read",
+    "class": "read",
+    "tags": [
+      "Plugins"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/public/config",
+    "operationId": "getPublicConfig",
+    "permission": null,
+    "class": "public",
+    "tags": [
+      "Config (public)"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/public/config/defaults",
+    "operationId": "getPublicConfigDefaults",
+    "permission": null,
+    "class": "public",
+    "tags": [
+      "Config (public)"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/queues",
+    "operationId": "getQueues",
+    "permission": "queue.read",
+    "class": "admin",
+    "tags": [
+      "Queues"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/queues/{name}",
+    "operationId": "getQueue",
+    "permission": "queue.read",
+    "class": "admin",
+    "tags": [
+      "Queues"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/queues/{name}",
+    "operationId": "updateQueue",
+    "permission": "queue.update",
+    "class": "admin",
+    "tags": [
+      "Queues"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/queues/{name}/jobs",
+    "operationId": "getQueueJobs",
+    "permission": "queueJob.read",
+    "class": "admin",
+    "tags": [
+      "Queues"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/queues/{name}/jobs",
+    "operationId": "emptyQueue",
+    "permission": "queueJob.delete",
+    "class": "admin",
+    "tags": [
+      "Queues"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/search/cities",
+    "operationId": "getAssetsByCity",
+    "permission": "asset.read",
+    "class": "read",
+    "tags": [
+      "Search"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/search/explore",
+    "operationId": "getExploreData",
+    "permission": "asset.read",
+    "class": "read",
+    "tags": [
+      "Search"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/search/large-assets",
+    "operationId": "searchLargeAssets",
+    "permission": "asset.read",
+    "class": "read",
+    "tags": [
+      "Search",
+      "Deprecated"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/search/metadata",
+    "operationId": "searchAssets",
+    "permission": "asset.read",
+    "class": "read",
+    "tags": [
+      "Search"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/search/person",
+    "operationId": "searchPerson",
+    "permission": "person.read",
+    "class": "read",
+    "tags": [
+      "Search"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/search/places",
+    "operationId": "searchPlaces",
+    "permission": "asset.read",
+    "class": "read",
+    "tags": [
+      "Search"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/search/random",
+    "operationId": "searchRandom",
+    "permission": "asset.read",
+    "class": "read",
+    "tags": [
+      "Search"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/search/smart",
+    "operationId": "searchSmart",
+    "permission": "asset.read",
+    "class": "read",
+    "tags": [
+      "Search"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/search/smart/facets",
+    "operationId": "searchSmartFacets",
+    "permission": "asset.read",
+    "class": "read",
+    "tags": [
+      "Search"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/search/statistics",
+    "operationId": "searchAssetStatistics",
+    "permission": "asset.statistics",
+    "class": "write",
+    "tags": [
+      "Search"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/search/suggestions",
+    "operationId": "getSearchSuggestions",
+    "permission": "asset.read",
+    "class": "read",
+    "tags": [
+      "Search"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/search/suggestions/filters",
+    "operationId": "getFilterSuggestions",
+    "permission": "asset.read",
+    "class": "read",
+    "tags": [
+      "Search"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/search/suggestions/tags",
+    "operationId": "getTagSuggestions",
+    "permission": "asset.read",
+    "class": "read",
+    "tags": [
+      "Search"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/server/about",
+    "operationId": "getAboutInfo",
+    "permission": "server.about",
+    "class": "write",
+    "tags": [
+      "Server"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/server/apk-links",
+    "operationId": "getApkLinks",
+    "permission": "server.apkLinks",
+    "class": "write",
+    "tags": [
+      "Server"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/server/config",
+    "operationId": "getServerConfig",
+    "permission": null,
+    "class": "public",
+    "tags": [
+      "Server",
+      "Deprecated"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/server/features",
+    "operationId": "getServerFeatures",
+    "permission": null,
+    "class": "public",
+    "tags": [
+      "Server",
+      "Deprecated"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/server/license",
+    "operationId": "getServerLicense",
+    "permission": "serverLicense.read",
+    "class": "admin",
+    "tags": [
+      "Server"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/server/license",
+    "operationId": "setServerLicense",
+    "permission": "serverLicense.update",
+    "class": "admin",
+    "tags": [
+      "Server"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/server/license",
+    "operationId": "deleteServerLicense",
+    "permission": "serverLicense.delete",
+    "class": "admin",
+    "tags": [
+      "Server"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/server/media-types",
+    "operationId": "getSupportedMediaTypes",
+    "permission": null,
+    "class": "public",
+    "tags": [
+      "Server"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/server/ml-health",
+    "operationId": "getMlHealth",
+    "permission": "server.about",
+    "class": "write",
+    "tags": [
+      "Server"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/server/ping",
+    "operationId": "pingServer",
+    "permission": null,
+    "class": "public",
+    "tags": [
+      "Server"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/server/statistics",
+    "operationId": "getServerStatistics",
+    "permission": "server.statistics",
+    "class": "admin",
+    "tags": [
+      "Server"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/server/storage",
+    "operationId": "getStorage",
+    "permission": "server.storage",
+    "class": "write",
+    "tags": [
+      "Server"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/server/version",
+    "operationId": "getServerVersion",
+    "permission": null,
+    "class": "public",
+    "tags": [
+      "Server"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/server/version-check",
+    "operationId": "getVersionCheck",
+    "permission": "server.versionCheck",
+    "class": "write",
+    "tags": [
+      "Server"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/server/version-history",
+    "operationId": "getVersionHistory",
+    "permission": null,
+    "class": "public",
+    "tags": [
+      "Server"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/sessions",
+    "operationId": "getSessions",
+    "permission": "session.read",
+    "class": "read",
+    "tags": [
+      "Sessions"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/sessions",
+    "operationId": "createSession",
+    "permission": "session.create",
+    "class": "write",
+    "tags": [
+      "Sessions"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/sessions",
+    "operationId": "deleteAllSessions",
+    "permission": "session.delete",
+    "class": "write",
+    "tags": [
+      "Sessions"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/sessions/{id}",
+    "operationId": "updateSession",
+    "permission": "session.update",
+    "class": "write",
+    "tags": [
+      "Sessions",
+      "Deprecated"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/sessions/{id}",
+    "operationId": "deleteSession",
+    "permission": "session.delete",
+    "class": "write",
+    "tags": [
+      "Sessions"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/sessions/{id}/lock",
+    "operationId": "lockSession",
+    "permission": "session.lock",
+    "class": "write",
+    "tags": [
+      "Sessions"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/shared-links",
+    "operationId": "getAllSharedLinks",
+    "permission": "sharedLink.read",
+    "class": "read",
+    "tags": [
+      "Shared links"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/shared-links",
+    "operationId": "createSharedLink",
+    "permission": "sharedLink.create",
+    "class": "write",
+    "tags": [
+      "Shared links"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/shared-links/login",
+    "operationId": "sharedLinkLogin",
+    "permission": null,
+    "class": "full",
+    "tags": [
+      "Shared links"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/shared-links/me",
+    "operationId": "getMySharedLink",
+    "permission": null,
+    "class": "full",
+    "tags": [
+      "Shared links"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/shared-links/{id}",
+    "operationId": "getSharedLinkById",
+    "permission": "sharedLink.read",
+    "class": "read",
+    "tags": [
+      "Shared links"
+    ]
+  },
+  {
+    "method": "PATCH",
+    "path": "/api/shared-links/{id}",
+    "operationId": "updateSharedLink",
+    "permission": "sharedLink.update",
+    "class": "write",
+    "tags": [
+      "Shared links"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/shared-links/{id}",
+    "operationId": "removeSharedLink",
+    "permission": "sharedLink.delete",
+    "class": "write",
+    "tags": [
+      "Shared links"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/shared-links/{id}/assets",
+    "operationId": "addSharedLinkAssets",
+    "permission": "sharedLink.update",
+    "class": "write",
+    "tags": [
+      "Shared links"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/shared-links/{id}/assets",
+    "operationId": "removeSharedLinkAssets",
+    "permission": "sharedLink.update",
+    "class": "write",
+    "tags": [
+      "Shared links"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/shared-spaces",
+    "operationId": "getAllSpaces",
+    "permission": "sharedSpace.read",
+    "class": "read",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/shared-spaces",
+    "operationId": "createSpace",
+    "permission": "sharedSpace.create",
+    "class": "write",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/shared-spaces/{id}",
+    "operationId": "getSpace",
+    "permission": "sharedSpace.read",
+    "class": "read",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "PATCH",
+    "path": "/api/shared-spaces/{id}",
+    "operationId": "updateSpace",
+    "permission": "sharedSpace.update",
+    "class": "write",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/shared-spaces/{id}",
+    "operationId": "removeSpace",
+    "permission": "sharedSpace.delete",
+    "class": "write",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/shared-spaces/{id}/activities",
+    "operationId": "getSpaceActivities",
+    "permission": "sharedSpace.read",
+    "class": "read",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/shared-spaces/{id}/album-folders",
+    "operationId": "getSharedSpaceAlbumFolders",
+    "permission": "sharedSpace.read",
+    "class": "read",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/shared-spaces/{id}/album-folders",
+    "operationId": "createSharedSpaceAlbumFolder",
+    "permission": "sharedSpaceAlbumFolder.create",
+    "class": "write",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "PATCH",
+    "path": "/api/shared-spaces/{id}/album-folders/{folderId}",
+    "operationId": "updateSharedSpaceAlbumFolder",
+    "permission": "sharedSpaceAlbumFolder.update",
+    "class": "write",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/shared-spaces/{id}/album-folders/{folderId}",
+    "operationId": "deleteSharedSpaceAlbumFolder",
+    "permission": "sharedSpaceAlbumFolder.delete",
+    "class": "write",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/shared-spaces/{id}/albums",
+    "operationId": "getSharedSpaceAlbums",
+    "permission": "sharedSpace.read",
+    "class": "read",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/shared-spaces/{id}/albums/{albumId}",
+    "operationId": "linkAlbum",
+    "permission": "sharedSpaceAlbum.create",
+    "class": "write",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "PATCH",
+    "path": "/api/shared-spaces/{id}/albums/{albumId}",
+    "operationId": "updateSharedSpaceAlbum",
+    "permission": "sharedSpaceAlbum.update",
+    "class": "write",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/shared-spaces/{id}/albums/{albumId}",
+    "operationId": "unlinkAlbum",
+    "permission": "sharedSpaceAlbum.delete",
+    "class": "write",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/shared-spaces/{id}/albums/{albumId}/folder",
+    "operationId": "setSharedSpaceAlbumFolder",
+    "permission": "sharedSpaceAlbum.update",
+    "class": "write",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "PATCH",
+    "path": "/api/shared-spaces/{id}/albums/{albumId}/me/timeline",
+    "operationId": "updateAlbumTimelineForMember",
+    "permission": "sharedSpace.read",
+    "class": "read",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/shared-spaces/{id}/albums/{albumId}/timeline-hide-preview",
+    "operationId": "getAlbumTimelineHidePreview",
+    "permission": "sharedSpace.read",
+    "class": "read",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/shared-spaces/{id}/assets",
+    "operationId": "addAssets",
+    "permission": "sharedSpaceAsset.create",
+    "class": "write",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/shared-spaces/{id}/assets",
+    "operationId": "removeAssets",
+    "permission": "sharedSpaceAsset.delete",
+    "class": "write",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/shared-spaces/{id}/assets/bulk-add",
+    "operationId": "bulkAddAssets",
+    "permission": "sharedSpaceAsset.create",
+    "class": "write",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/shared-spaces/{id}/assets/linked-albums",
+    "operationId": "getSharedSpaceAssetLinkedAlbums",
+    "permission": "sharedSpace.read",
+    "class": "read",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/shared-spaces/{id}/assets/{assetId}/faces",
+    "operationId": "getSpaceAssetFaces",
+    "permission": "sharedSpace.read",
+    "class": "read",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/shared-spaces/{id}/assets/{assetId}/faces",
+    "operationId": "createSpaceAssetFace",
+    "permission": "sharedSpace.update",
+    "class": "write",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/shared-spaces/{id}/faces/{assetFaceId}",
+    "operationId": "deleteSpaceAssetFace",
+    "permission": "sharedSpace.update",
+    "class": "write",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/shared-spaces/{id}/libraries",
+    "operationId": "linkLibrary",
+    "permission": "sharedSpaceLibrary.create",
+    "class": "write",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/shared-spaces/{id}/libraries/{libraryId}",
+    "operationId": "unlinkLibrary",
+    "permission": "sharedSpaceLibrary.delete",
+    "class": "write",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/shared-spaces/{id}/map-markers",
+    "operationId": "getSpaceMapMarkers",
+    "permission": "sharedSpace.read",
+    "class": "read",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/shared-spaces/{id}/members",
+    "operationId": "getMembers",
+    "permission": "sharedSpace.read",
+    "class": "read",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/shared-spaces/{id}/members",
+    "operationId": "addMember",
+    "permission": "sharedSpaceMember.create",
+    "class": "write",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "PATCH",
+    "path": "/api/shared-spaces/{id}/members/me/preferences",
+    "operationId": "updateMemberPreferences",
+    "permission": "sharedSpace.read",
+    "class": "read",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "PATCH",
+    "path": "/api/shared-spaces/{id}/members/me/timeline",
+    "operationId": "updateMemberTimeline",
+    "permission": "sharedSpace.read",
+    "class": "read",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "PATCH",
+    "path": "/api/shared-spaces/{id}/members/{userId}",
+    "operationId": "updateMember",
+    "permission": "sharedSpaceMember.update",
+    "class": "write",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/shared-spaces/{id}/members/{userId}",
+    "operationId": "removeMember",
+    "permission": "sharedSpaceMember.delete",
+    "class": "write",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "PATCH",
+    "path": "/api/shared-spaces/{id}/members/{userId}/metadata-contribution",
+    "operationId": "updateMemberMetadataContribution",
+    "permission": "sharedSpaceMember.update",
+    "class": "write",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/shared-spaces/{id}/people",
+    "operationId": "getSpacePeople",
+    "permission": "sharedSpace.read",
+    "class": "read",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/shared-spaces/{id}/people",
+    "operationId": "createSpacePerson",
+    "permission": "sharedSpace.update",
+    "class": "write",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/shared-spaces/{id}/people/deduplicate",
+    "operationId": "deduplicateSpacePeople",
+    "permission": "sharedSpace.update",
+    "class": "write",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/shared-spaces/{id}/people/face-statistics",
+    "operationId": "getSpacePeopleFaceStatistics",
+    "permission": "sharedSpace.read",
+    "class": "read",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/shared-spaces/{id}/people/statistics",
+    "operationId": "getSpacePeopleStatistics",
+    "permission": "sharedSpace.read",
+    "class": "read",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/shared-spaces/{id}/people/{personId}",
+    "operationId": "getSpacePerson",
+    "permission": "sharedSpace.read",
+    "class": "read",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/shared-spaces/{id}/people/{personId}",
+    "operationId": "updateSpacePerson",
+    "permission": "sharedSpace.update",
+    "class": "write",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/shared-spaces/{id}/people/{personId}",
+    "operationId": "deleteSpacePerson",
+    "permission": "sharedSpace.update",
+    "class": "write",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/shared-spaces/{id}/people/{personId}/alias",
+    "operationId": "setSpacePersonAlias",
+    "permission": "sharedSpace.read",
+    "class": "read",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/shared-spaces/{id}/people/{personId}/alias",
+    "operationId": "deleteSpacePersonAlias",
+    "permission": "sharedSpace.read",
+    "class": "read",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/shared-spaces/{id}/people/{personId}/assets",
+    "operationId": "getSpacePersonAssets",
+    "permission": "sharedSpace.read",
+    "class": "read",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/shared-spaces/{id}/people/{personId}/face-suggestions",
+    "operationId": "getSpacePersonFaceSuggestions",
+    "permission": "sharedSpace.read",
+    "class": "read",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/shared-spaces/{id}/people/{personId}/face-suggestions/{assetFaceId}/confirm",
+    "operationId": "confirmSpacePersonFaceSuggestion",
+    "permission": "sharedSpace.update",
+    "class": "write",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/shared-spaces/{id}/people/{personId}/face-suggestions/{assetFaceId}/dismiss",
+    "operationId": "dismissSpacePersonFaceSuggestion",
+    "permission": "sharedSpace.update",
+    "class": "write",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/shared-spaces/{id}/people/{personId}/face-suggestions/{assetFaceId}/ignore",
+    "operationId": "ignoreSpacePersonFaceSuggestion",
+    "permission": "sharedSpace.update",
+    "class": "write",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/shared-spaces/{id}/people/{personId}/face-suggestions/{assetFaceId}/reject",
+    "operationId": "rejectSpacePersonFaceSuggestion",
+    "permission": "sharedSpace.update",
+    "class": "write",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/shared-spaces/{id}/people/{personId}/faces",
+    "operationId": "getSpacePersonFaces",
+    "permission": "sharedSpace.read",
+    "class": "read",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/shared-spaces/{id}/people/{personId}/faces/{assetFaceId}",
+    "operationId": "attachSpacePersonFace",
+    "permission": "sharedSpace.update",
+    "class": "write",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/shared-spaces/{id}/people/{personId}/faces/{assetFaceId}",
+    "operationId": "detachSpacePersonFace",
+    "permission": "sharedSpace.update",
+    "class": "write",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/shared-spaces/{id}/people/{personId}/faces/{faceId}/thumbnail",
+    "operationId": "getSpacePersonFaceThumbnail",
+    "permission": "sharedSpace.read",
+    "class": "read",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/shared-spaces/{id}/people/{personId}/merge",
+    "operationId": "mergeSpacePeople",
+    "permission": "sharedSpace.update",
+    "class": "write",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/shared-spaces/{id}/people/{personId}/representative-face",
+    "operationId": "updateSpacePersonRepresentativeFace",
+    "permission": "sharedSpace.update",
+    "class": "write",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/shared-spaces/{id}/people/{personId}/statistics",
+    "operationId": "getSpacePersonStatistics",
+    "permission": "sharedSpace.read",
+    "class": "read",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/shared-spaces/{id}/people/{personId}/thumbnail",
+    "operationId": "getSpacePersonThumbnail",
+    "permission": "sharedSpace.read",
+    "class": "read",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/shared-spaces/{id}/timeline-hide-preview",
+    "operationId": "getTimelineHidePreview",
+    "permission": "sharedSpace.read",
+    "class": "read",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "PATCH",
+    "path": "/api/shared-spaces/{id}/view",
+    "operationId": "markSpaceViewed",
+    "permission": "sharedSpace.read",
+    "class": "read",
+    "tags": [
+      "Shared Spaces"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/stacks",
+    "operationId": "searchStacks",
+    "permission": "stack.read",
+    "class": "read",
+    "tags": [
+      "Stacks"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/stacks",
+    "operationId": "createStack",
+    "permission": "stack.create",
+    "class": "write",
+    "tags": [
+      "Stacks"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/stacks",
+    "operationId": "deleteStacks",
+    "permission": "stack.delete",
+    "class": "write",
+    "tags": [
+      "Stacks"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/stacks/{id}",
+    "operationId": "getStack",
+    "permission": "stack.read",
+    "class": "read",
+    "tags": [
+      "Stacks"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/stacks/{id}",
+    "operationId": "updateStack",
+    "permission": "stack.update",
+    "class": "write",
+    "tags": [
+      "Stacks",
+      "Deprecated"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/stacks/{id}",
+    "operationId": "deleteStack",
+    "permission": "stack.delete",
+    "class": "write",
+    "tags": [
+      "Stacks"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/stacks/{id}/assets/{assetId}",
+    "operationId": "removeAssetFromStack",
+    "permission": "stack.update",
+    "class": "write",
+    "tags": [
+      "Stacks"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/storage-migration/estimate",
+    "operationId": "getEstimate",
+    "permission": "job.read",
+    "class": "admin",
+    "tags": [
+      "Storage Migration (admin)"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/storage-migration/rollback/{batchId}",
+    "operationId": "rollback",
+    "permission": "job.create",
+    "class": "admin",
+    "tags": [
+      "Storage Migration (admin)"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/storage-migration/start",
+    "operationId": "start",
+    "permission": "job.create",
+    "class": "admin",
+    "tags": [
+      "Storage Migration (admin)"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/storage-migration/status",
+    "operationId": "getStatus",
+    "permission": "job.read",
+    "class": "admin",
+    "tags": [
+      "Storage Migration (admin)"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/sync/ack",
+    "operationId": "getSyncAck",
+    "permission": "syncCheckpoint.read",
+    "class": "read",
+    "tags": [
+      "Sync"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/sync/ack",
+    "operationId": "sendSyncAck",
+    "permission": "syncCheckpoint.update",
+    "class": "write",
+    "tags": [
+      "Sync"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/sync/ack",
+    "operationId": "deleteSyncAck",
+    "permission": "syncCheckpoint.delete",
+    "class": "write",
+    "tags": [
+      "Sync"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/sync/stream",
+    "operationId": "getSyncStream",
+    "permission": "sync.stream",
+    "class": "write",
+    "tags": [
+      "Sync"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/system-config",
+    "operationId": "getConfig",
+    "permission": "systemConfig.read",
+    "class": "admin",
+    "tags": [
+      "System config",
+      "Deprecated"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/system-config",
+    "operationId": "updateConfig",
+    "permission": "systemConfig.update",
+    "class": "admin",
+    "tags": [
+      "System config",
+      "Deprecated"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/system-config/defaults",
+    "operationId": "getConfigDefaults",
+    "permission": "systemConfig.read",
+    "class": "admin",
+    "tags": [
+      "System config",
+      "Deprecated"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/system-config/storage-template-options",
+    "operationId": "getStorageTemplateOptions",
+    "permission": "systemConfig.read",
+    "class": "admin",
+    "tags": [
+      "System config"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/system-metadata/admin-onboarding",
+    "operationId": "getAdminOnboarding",
+    "permission": "systemMetadata.read",
+    "class": "admin",
+    "tags": [
+      "System metadata"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/system-metadata/admin-onboarding",
+    "operationId": "updateAdminOnboarding",
+    "permission": "systemMetadata.update",
+    "class": "admin",
+    "tags": [
+      "System metadata"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/system-metadata/reverse-geocoding-state",
+    "operationId": "getReverseGeocodingState",
+    "permission": "systemMetadata.read",
+    "class": "admin",
+    "tags": [
+      "System metadata"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/system-metadata/version-check-state",
+    "operationId": "getVersionCheckState",
+    "permission": "systemMetadata.read",
+    "class": "admin",
+    "tags": [
+      "System metadata"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/tags",
+    "operationId": "getAllTags",
+    "permission": "tag.read",
+    "class": "read",
+    "tags": [
+      "Tags"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/tags",
+    "operationId": "createTag",
+    "permission": "tag.create",
+    "class": "write",
+    "tags": [
+      "Tags"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/tags",
+    "operationId": "upsertTags",
+    "permission": "tag.create",
+    "class": "write",
+    "tags": [
+      "Tags"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/tags/assets",
+    "operationId": "bulkTagAssets",
+    "permission": "tag.asset",
+    "class": "write",
+    "tags": [
+      "Tags"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/tags/{id}",
+    "operationId": "getTagById",
+    "permission": "tag.read",
+    "class": "read",
+    "tags": [
+      "Tags"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/tags/{id}",
+    "operationId": "updateTag",
+    "permission": "tag.update",
+    "class": "write",
+    "tags": [
+      "Tags",
+      "Deprecated"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/tags/{id}",
+    "operationId": "deleteTag",
+    "permission": "tag.delete",
+    "class": "write",
+    "tags": [
+      "Tags"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/tags/{id}/assets",
+    "operationId": "tagAssets",
+    "permission": "tag.asset",
+    "class": "write",
+    "tags": [
+      "Tags"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/tags/{id}/assets",
+    "operationId": "untagAssets",
+    "permission": "tag.asset",
+    "class": "write",
+    "tags": [
+      "Tags"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/timeline/bucket",
+    "operationId": "getTimeBucket",
+    "permission": "asset.read",
+    "class": "read",
+    "tags": [
+      "Timeline"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/timeline/bucket-covers",
+    "operationId": "getTimeBucketCovers",
+    "permission": "asset.read",
+    "class": "read",
+    "tags": [
+      "Timeline"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/timeline/buckets",
+    "operationId": "getTimeBuckets",
+    "permission": "asset.read",
+    "class": "read",
+    "tags": [
+      "Timeline"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/trash/empty",
+    "operationId": "emptyTrash",
+    "permission": "asset.delete",
+    "class": "write",
+    "tags": [
+      "Trash"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/trash/restore",
+    "operationId": "restoreTrash",
+    "permission": "asset.delete",
+    "class": "write",
+    "tags": [
+      "Trash"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/trash/restore/assets",
+    "operationId": "restoreAssets",
+    "permission": "asset.delete",
+    "class": "write",
+    "tags": [
+      "Trash"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/user-groups",
+    "operationId": "getAllGroups",
+    "permission": "userGroup.read",
+    "class": "read",
+    "tags": [
+      "User Groups"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/user-groups",
+    "operationId": "createGroup",
+    "permission": "userGroup.create",
+    "class": "write",
+    "tags": [
+      "User Groups"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/user-groups/{id}",
+    "operationId": "getGroup",
+    "permission": "userGroup.read",
+    "class": "read",
+    "tags": [
+      "User Groups"
+    ]
+  },
+  {
+    "method": "PATCH",
+    "path": "/api/user-groups/{id}",
+    "operationId": "updateGroup",
+    "permission": "userGroup.update",
+    "class": "write",
+    "tags": [
+      "User Groups"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/user-groups/{id}",
+    "operationId": "removeGroup",
+    "permission": "userGroup.delete",
+    "class": "write",
+    "tags": [
+      "User Groups"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/user-groups/{id}/members",
+    "operationId": "setMembers",
+    "permission": "userGroup.update",
+    "class": "write",
+    "tags": [
+      "User Groups"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/users",
+    "operationId": "searchUsers",
+    "permission": "user.read",
+    "class": "read",
+    "tags": [
+      "Users"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/users/me",
+    "operationId": "getMyUser",
+    "permission": "user.read",
+    "class": "read",
+    "tags": [
+      "Users"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/users/me",
+    "operationId": "updateMyUser",
+    "permission": "user.update",
+    "class": "write",
+    "tags": [
+      "Users",
+      "Deprecated"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/users/me/calendar-heatmap",
+    "operationId": "getMyCalendarHeatmap",
+    "permission": "user.read",
+    "class": "read",
+    "tags": [
+      "Users"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/users/me/license",
+    "operationId": "getUserLicense",
+    "permission": "userLicense.read",
+    "class": "read",
+    "tags": [
+      "Users"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/users/me/license",
+    "operationId": "setUserLicense",
+    "permission": "userLicense.update",
+    "class": "write",
+    "tags": [
+      "Users"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/users/me/license",
+    "operationId": "deleteUserLicense",
+    "permission": "userLicense.delete",
+    "class": "write",
+    "tags": [
+      "Users"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/users/me/onboarding",
+    "operationId": "getUserOnboarding",
+    "permission": "userOnboarding.read",
+    "class": "read",
+    "tags": [
+      "Users"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/users/me/onboarding",
+    "operationId": "setUserOnboarding",
+    "permission": "userOnboarding.update",
+    "class": "write",
+    "tags": [
+      "Users"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/users/me/onboarding",
+    "operationId": "deleteUserOnboarding",
+    "permission": "userOnboarding.delete",
+    "class": "write",
+    "tags": [
+      "Users"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/users/me/preferences",
+    "operationId": "getMyPreferences",
+    "permission": "userPreference.read",
+    "class": "read",
+    "tags": [
+      "Users"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/users/me/preferences",
+    "operationId": "updateMyPreferences",
+    "permission": "userPreference.update",
+    "class": "write",
+    "tags": [
+      "Users",
+      "Deprecated"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/users/profile-image",
+    "operationId": "createProfileImage",
+    "permission": "userProfileImage.update",
+    "class": "write",
+    "tags": [
+      "Users"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/users/profile-image",
+    "operationId": "deleteProfileImage",
+    "permission": "userProfileImage.delete",
+    "class": "write",
+    "tags": [
+      "Users"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/users/{id}",
+    "operationId": "getUser",
+    "permission": "user.read",
+    "class": "read",
+    "tags": [
+      "Users"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/users/{id}/profile-image",
+    "operationId": "getProfileImage",
+    "permission": "userProfileImage.read",
+    "class": "read",
+    "tags": [
+      "Users"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/view/folder",
+    "operationId": "getAssetsByOriginalPath",
+    "permission": "folder.read",
+    "class": "read",
+    "tags": [
+      "Views"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/view/folder/unique-paths",
+    "operationId": "getUniqueOriginalPaths",
+    "permission": "folder.read",
+    "class": "read",
+    "tags": [
+      "Views"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/workflows",
+    "operationId": "searchWorkflows",
+    "permission": "workflow.read",
+    "class": "read",
+    "tags": [
+      "Workflows"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/api/workflows",
+    "operationId": "createWorkflow",
+    "permission": "workflow.create",
+    "class": "write",
+    "tags": [
+      "Workflows"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/workflows/triggers",
+    "operationId": "getWorkflowTriggers",
+    "permission": null,
+    "class": "full",
+    "tags": [
+      "Workflows"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/workflows/{id}",
+    "operationId": "getWorkflow",
+    "permission": "workflow.read",
+    "class": "read",
+    "tags": [
+      "Workflows"
+    ]
+  },
+  {
+    "method": "PUT",
+    "path": "/api/workflows/{id}",
+    "operationId": "updateWorkflow",
+    "permission": "workflow.update",
+    "class": "write",
+    "tags": [
+      "Workflows",
+      "Deprecated"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/workflows/{id}",
+    "operationId": "deleteWorkflow",
+    "permission": "workflow.delete",
+    "class": "write",
+    "tags": [
+      "Workflows"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/workflows/{id}/logs",
+    "operationId": "getWorkflowLogs",
+    "permission": "workflow.logs",
+    "class": "write",
+    "tags": [
+      "Workflows"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/api/workflows/{id}/share",
+    "operationId": "getWorkflowForShare",
+    "permission": "workflow.read",
+    "class": "read",
+    "tags": [
+      "Workflows"
+    ]
+  }
+]
