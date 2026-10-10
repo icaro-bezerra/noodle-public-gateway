@@ -23,14 +23,14 @@ photos.example.com ──► gallery-server (normal login, admin)
 
 ## Findings from the Noodle code (verified)
 
-| Finding | Where | Consequence |
-|---|---|---|
-| An API key authenticates as its owner, no session needed | `server/src/services/auth.service.ts` `validateApiKey` | No username/password stored anywhere |
-| Key permissions are enforced per route | `AuthService.authenticate` | A read-only key is a second barrier behind the gateway |
-| The web only checks that the `immich_is_authenticated` cookie exists | `web/src/lib/managers/auth-manager.svelte.ts` `#hasAuthCookie` | Gateway sets this non-secret cookie |
-| A session token outranks the API key | `AuthService.validate` | Gateway must strip client `Cookie`, `Authorization`, `x-immich-*` headers and `sessionKey`/`apiKey`/`key`/`slug` query params |
-| `GET /albums/names`, `GET /gallery/map/markers` and the WebSocket required the `all` permission | controllers / `app.module.ts` | **Fixed in this branch** (`album.read`, `map.read`, `asset.read`) |
-| Some writes are guarded only by `*.read` permissions (per-user state) | see below | Gateway must allowlist by method + route, not by permission suffix |
+| Finding                                                                                         | Where                                                          | Consequence                                                                                                                   |
+| ----------------------------------------------------------------------------------------------- | -------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| An API key authenticates as its owner, no session needed                                        | `server/src/services/auth.service.ts` `validateApiKey`         | No username/password stored anywhere                                                                                          |
+| Key permissions are enforced per route                                                          | `AuthService.authenticate`                                     | A read-only key is a second barrier behind the gateway                                                                        |
+| The web only checks that the `immich_is_authenticated` cookie exists                            | `web/src/lib/managers/auth-manager.svelte.ts` `#hasAuthCookie` | Gateway sets this non-secret cookie                                                                                           |
+| A session token outranks the API key                                                            | `AuthService.validate`                                         | Gateway must strip client `Cookie`, `Authorization`, `x-immich-*` headers and `sessionKey`/`apiKey`/`key`/`slug` query params |
+| `GET /albums/names`, `GET /gallery/map/markers` and the WebSocket required the `all` permission | controllers / `app.module.ts`                                  | **Fixed in this branch** (`album.read`, `map.read`, `asset.read`)                                                             |
+| Some writes are guarded only by `*.read` permissions (per-user state)                           | see below                                                      | Gateway must allowlist by method + route, not by permission suffix                                                            |
 
 Per-user writes reachable with read permissions — harmless for a real user, but in a public gallery every
 visitor shares one user, so one visitor's action would be seen by all:
@@ -64,8 +64,8 @@ A read-only API key is revocable, needs no refresh, and lets the server itself r
 7. **Everything else → 403.** New upstream routes are blocked by default.
 8. **Responses**: drop `Set-Cookie`; set `immich_is_authenticated=true` (host-only, no `Domain`); scrub
    `/api/users/me` (email → gallery title); optional GPS scrubbing.
-9. **WebSocket** `/api/socket.io`: forward with injected key; drop client→server frames (the server has no
-   handlers, the socket is push-only).
+9. **WebSocket** `/api/socket.io/`: forward with injected key. Client frames must pass (Engine.IO heartbeats are
+   client → server pongs); they are inert because the server registers no client message handlers.
 
 ## Per-gallery config
 
@@ -87,9 +87,7 @@ A disabled feature returns empty results (not 403), so the UI renders cleanly.
 
 1. Create a dedicated non-admin user; give it content (own library, partner sharing, or Viewer of a Shared Space).
 2. Log in once as that user and finish onboarding.
-3. Create an API key with read permissions only: the `*.read` permissions for asset, assetFile, album,
-   person, face, map, memory, tag, stack, folder, sharedSpace, sharedSpaceAsset, user, userPreference,
-   userProfileImage, userConfig, userOnboarding, userGroup.
+3. Create an API key with read-only permissions (exact list in [README.md](README.md#adding-a-gallery)).
 4. Store it as a secret and add the gallery to the config (hot-reloaded).
 
 ## Privacy
@@ -100,13 +98,17 @@ Face recognition on a public page publishes people's names and faces (biometric 
 
 ## Phases
 
-- [x] **0. Route inventory** — `scripts/classify-routes.py` → `docs/route-classification.{json,md}`.
+- [x] **0. Route inventory** — `pnpm inventory` → `docs/route-classification.{json,md}`.
 - [x] **1. Server patch** — `album.read` on `/albums/names`, `map.read` on `/gallery/map/markers`,
       `asset.read` on the WebSocket; controller tests; OpenAPI spec updated.
-- [ ] **2. Gateway MVP** — TypeScript service in this package: Host routing, key injection, credential
-      stripping, generated allowlist, cookie; unit tests for the matcher and normalizer.
-- [ ] **3. Full UI** — walk every screen in DevTools to capture calls; fake-success list; CSS/JS injection
-      to hide the user menu and edit controls.
+- [x] **2. Gateway MVP** — Host routing, key injection, credential stripping, explicit allowlist checked
+      against the OpenAPI spec, local answers for UI side-effect writes, websocket, SIGHUP reload. Verified
+      against a real Noodle (`e2e/`): the web app loads and shows the timeline without login. The released
+      image still rejects `/albums/names` and `/gallery/map/markers` with `Missing required permission: all`,
+      which the phase 1 patch fixes.
+- [ ] **3. Full UI** — walk every screen (with ML enabled, for people) to capture calls; `/api/server/about`
+      and `/api/server/storage` are the only denials on the photos page (storage widget spins); CSS/JS
+      injection to hide Upload, Import, Utilities, Trash, Locked Folder, the user menu and edit controls.
 - [ ] **4. Feature flags & privacy** — people/map/download flags, GPS and email scrubbing, Global People check.
 - [ ] **5. Hardening** — rate limiting, host-keyed cache, CSP, logging of blocked requests.
 - [ ] **6. Adversarial tests** — every `write`/`admin`/`full` route × every gallery must be 403; bypass

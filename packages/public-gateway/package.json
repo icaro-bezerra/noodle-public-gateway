@@ -1,0 +1,30 @@
+{
+  "name": "@immich/public-gateway",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Read-only reverse proxy that serves Noodle users as public galleries",
+  "license": "GNU Affero General Public License version 3",
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "start": "node src/main.ts",
+    "test": "vitest",
+    "check": "tsc --noEmit",
+    "format": "prettier --cache --check .",
+    "format:fix": "prettier --cache --write --list-different .",
+    "inventory": "node scripts/inventory.ts ../../open-api/immich-openapi-specs.json docs"
+  },
+  "dependencies": {
+    "yaml": "^2.3.1",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^24.19.0",
+    "@typescript/native": "npm:typescript@^7.0.2",
+    "prettier": "^3.7.4",
+    "typescript": "npm:@typescript/typescript6@^6.0.2",
+    "vitest": "^4.0.0"
+  }
+}

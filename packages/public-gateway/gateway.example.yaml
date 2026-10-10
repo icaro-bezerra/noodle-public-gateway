@@ -1,0 +1,29 @@
+# Noodle public gateway configuration. Reload with `kill -HUP <pid>` (or `docker kill -s HUP <container>`).
+
+# The Noodle server, as reachable from the gateway
+upstream: http://gallery-server:2283
+
+listen:
+  host: 0.0.0.0
+  port: 8080
+
+# Set to true only when an edge proxy (Caddy, Traefik, nginx) in front of the gateway sets X-Forwarded-For
+trustProxy: true
+
+# Largest request body accepted for the read-only POSTs (search)
+maxBodyBytes: 65536
+
+galleries:
+  # One entry per public hostname; each uses the read-only API key of a dedicated Noodle user
+  - host: gal-publica1.example.com
+    apiKeyFile: /run/secrets/gal1_key # relative paths resolve against this file's directory
+    title: Família Silva
+    features:
+      people: true # people and face recognition (names and faces become public)
+      map: true # map and place search
+      smartSearch: true
+      downloadOriginal: false
+
+  - host: gal-pub2.example.com
+    apiKeyFile: /run/secrets/gal2_key
+    # every feature defaults to off except smartSearch

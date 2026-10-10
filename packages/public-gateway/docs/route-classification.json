@@ -5,9 +5,7 @@
     "operationId": "getActivities",
     "permission": "activity.read",
     "class": "read",
-    "tags": [
-      "Activities"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "POST",
@@ -15,19 +13,7 @@
     "operationId": "createActivity",
     "permission": "activity.create",
     "class": "write",
-    "tags": [
-      "Activities"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/activities/statistics",
-    "operationId": "getActivityStatistics",
-    "permission": "activity.statistics",
-    "class": "write",
-    "tags": [
-      "Activities"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "DELETE",
@@ -35,9 +21,15 @@
     "operationId": "deleteActivity",
     "permission": "activity.delete",
     "class": "write",
-    "tags": [
-      "Activities"
-    ]
+    "gateway": "deny"
+  },
+  {
+    "method": "GET",
+    "path": "/api/activities/statistics",
+    "operationId": "getActivityStatistics",
+    "permission": "activity.statistics",
+    "class": "read",
+    "gateway": "forward"
   },
   {
     "method": "POST",
@@ -45,9 +37,7 @@
     "operationId": "unlinkAllOAuthAccountsAdmin",
     "permission": "adminAuth.unlinkAll",
     "class": "admin",
-    "tags": [
-      "Authentication (admin)"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -55,9 +45,7 @@
     "operationId": "getAdminConfig",
     "permission": "adminConfig.read",
     "class": "admin",
-    "tags": [
-      "Config (admin)"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "PUT",
@@ -65,9 +53,7 @@
     "operationId": "updateAdminConfig",
     "permission": "adminConfig.update",
     "class": "admin",
-    "tags": [
-      "Config (admin)"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -75,19 +61,7 @@
     "operationId": "getAdminConfigDefaults",
     "permission": "adminConfig.read",
     "class": "admin",
-    "tags": [
-      "Config (admin)"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/admin/database-backups",
-    "operationId": "listDatabaseBackups",
-    "permission": "maintenance",
-    "class": "admin",
-    "tags": [
-      "Database Backups (admin)"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "DELETE",
@@ -95,29 +69,15 @@
     "operationId": "deleteDatabaseBackup",
     "permission": "backup.delete",
     "class": "admin",
-    "tags": [
-      "Database Backups (admin)"
-    ]
+    "gateway": "deny"
   },
   {
-    "method": "POST",
-    "path": "/api/admin/database-backups/start-restore",
-    "operationId": "startDatabaseRestoreFlow",
-    "permission": null,
-    "class": "public",
-    "tags": [
-      "Database Backups (admin)"
-    ]
-  },
-  {
-    "method": "POST",
-    "path": "/api/admin/database-backups/upload",
-    "operationId": "uploadDatabaseBackup",
-    "permission": "backup.upload",
+    "method": "GET",
+    "path": "/api/admin/database-backups",
+    "operationId": "listDatabaseBackups",
+    "permission": "maintenance",
     "class": "admin",
-    "tags": [
-      "Database Backups (admin)"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -125,189 +85,148 @@
     "operationId": "downloadDatabaseBackup",
     "permission": "backup.download",
     "class": "admin",
-    "tags": [
-      "Database Backups (admin)"
-    ]
+    "gateway": "deny"
+  },
+  {
+    "method": "POST",
+    "path": "/api/admin/database-backups/start-restore",
+    "operationId": "startDatabaseRestoreFlow",
+    "class": "public",
+    "gateway": "deny"
+  },
+  {
+    "method": "POST",
+    "path": "/api/admin/database-backups/upload",
+    "operationId": "uploadDatabaseBackup",
+    "permission": "backup.upload",
+    "class": "admin",
+    "gateway": "deny"
   },
   {
     "method": "POST",
     "path": "/api/admin/face-repair",
     "operationId": "runFaceRepair",
-    "permission": null,
     "class": "admin",
-    "tags": [
-      "Faces"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/admin/face-repair/decline",
-    "operationId": "getFaceRepairDeclines",
-    "permission": null,
-    "class": "admin",
-    "tags": [
-      "Faces"
-    ]
-  },
-  {
-    "method": "POST",
-    "path": "/api/admin/face-repair/decline",
-    "operationId": "declineFaceRepair",
-    "permission": null,
-    "class": "admin",
-    "tags": [
-      "Faces"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "DELETE",
     "path": "/api/admin/face-repair/decline",
     "operationId": "removeFaceRepairDeclines",
-    "permission": null,
     "class": "admin",
-    "tags": [
-      "Faces"
-    ]
+    "gateway": "deny"
+  },
+  {
+    "method": "GET",
+    "path": "/api/admin/face-repair/decline",
+    "operationId": "getFaceRepairDeclines",
+    "class": "admin",
+    "gateway": "deny"
+  },
+  {
+    "method": "POST",
+    "path": "/api/admin/face-repair/decline",
+    "operationId": "declineFaceRepair",
+    "class": "admin",
+    "gateway": "deny"
   },
   {
     "method": "GET",
     "path": "/api/admin/face-repair/faces/{assetFaceId}/preview",
     "operationId": "getFaceRepairFacePreview",
-    "permission": null,
     "class": "admin",
-    "tags": [
-      "Faces"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
     "path": "/api/admin/face-repair/faces/{assetFaceId}/thumbnail",
     "operationId": "getFaceRepairFaceThumbnail",
-    "permission": null,
     "class": "admin",
-    "tags": [
-      "Faces"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
     "path": "/api/admin/face-repair/owner/{ownerId}/people",
     "operationId": "getFaceRepairOwnerPeople",
-    "permission": null,
     "class": "admin",
-    "tags": [
-      "Faces"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
     "path": "/api/admin/face-repair/owner/{ownerId}/people",
     "operationId": "createFaceRepairOwnerPerson",
-    "permission": null,
     "class": "admin",
-    "tags": [
-      "Faces"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
     "path": "/api/admin/face-repair/person/{personId}",
     "operationId": "getFaceRepairPersonMetadata",
-    "permission": null,
     "class": "admin",
-    "tags": [
-      "Faces"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
     "path": "/api/admin/face-repair/resolutions",
     "operationId": "getFaceRepairResolutions",
-    "permission": null,
     "class": "admin",
-    "tags": [
-      "Faces"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
     "path": "/api/admin/face-repair/resolutions/remove",
     "operationId": "removeFaceRepairResolutions",
-    "permission": null,
     "class": "admin",
-    "tags": [
-      "Faces"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
     "path": "/api/admin/face-repair/resolve",
     "operationId": "resolveFaces",
-    "permission": null,
     "class": "admin",
-    "tags": [
-      "Faces"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
     "path": "/api/admin/face-repair/scan",
     "operationId": "triggerScan",
-    "permission": null,
     "class": "admin",
-    "tags": [
-      "Faces"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
     "path": "/api/admin/face-repair/scan/defaults",
     "operationId": "getFaceRepairScanDefaults",
-    "permission": null,
     "class": "admin",
-    "tags": [
-      "Faces"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
     "path": "/api/admin/face-repair/scan/latest",
     "operationId": "getLatestScan",
-    "permission": null,
     "class": "admin",
-    "tags": [
-      "Faces"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
     "path": "/api/admin/face-repair/scan/person/{personId}",
     "operationId": "getFaceRepairPersonFaces",
-    "permission": null,
     "class": "admin",
-    "tags": [
-      "Faces"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
     "path": "/api/admin/face-repair/scan/person/{personId}/cluster-faces",
     "operationId": "getFaceRepairClusterFaces",
-    "permission": null,
     "class": "admin",
-    "tags": [
-      "Faces"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
     "path": "/api/admin/face-repair/unconfirm",
     "operationId": "unconfirmFaceRepairFaces",
-    "permission": null,
     "class": "admin",
-    "tags": [
-      "Faces"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -315,9 +234,7 @@
     "operationId": "getIntegrityReport",
     "permission": "maintenance",
     "class": "admin",
-    "tags": [
-      "Maintenance (admin)"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "DELETE",
@@ -325,9 +242,7 @@
     "operationId": "deleteIntegrityReport",
     "permission": "maintenance",
     "class": "admin",
-    "tags": [
-      "Maintenance (admin)"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -335,9 +250,7 @@
     "operationId": "getIntegrityReportFile",
     "permission": "maintenance",
     "class": "admin",
-    "tags": [
-      "Maintenance (admin)"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -345,9 +258,7 @@
     "operationId": "getIntegrityReportCsv",
     "permission": "maintenance",
     "class": "admin",
-    "tags": [
-      "Maintenance (admin)"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -355,9 +266,7 @@
     "operationId": "getIntegrityReportSummary",
     "permission": "maintenance",
     "class": "admin",
-    "tags": [
-      "Maintenance (admin)"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
@@ -365,9 +274,7 @@
     "operationId": "setMaintenanceMode",
     "permission": "maintenance",
     "class": "admin",
-    "tags": [
-      "Maintenance (admin)"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -375,59 +282,42 @@
     "operationId": "detectPriorInstall",
     "permission": "maintenance",
     "class": "admin",
-    "tags": [
-      "Maintenance (admin)"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
     "path": "/api/admin/maintenance/login",
     "operationId": "maintenanceLogin",
-    "permission": null,
     "class": "public",
-    "tags": [
-      "Maintenance (admin)"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
     "path": "/api/admin/maintenance/status",
     "operationId": "getMaintenanceStatus",
-    "permission": null,
     "class": "public",
-    "tags": [
-      "Maintenance (admin)"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
     "path": "/api/admin/notifications",
     "operationId": "createNotification",
-    "permission": null,
     "class": "admin",
-    "tags": [
-      "Notifications (admin)"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
     "path": "/api/admin/notifications/templates/{name}",
     "operationId": "getNotificationTemplateAdmin",
-    "permission": null,
     "class": "admin",
-    "tags": [
-      "Notifications (admin)"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
     "path": "/api/admin/notifications/test-email",
     "operationId": "sendTestEmailAdmin",
-    "permission": null,
     "class": "admin",
-    "tags": [
-      "Notifications (admin)"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -435,9 +325,7 @@
     "operationId": "searchUsersAdmin",
     "permission": "adminUser.read",
     "class": "admin",
-    "tags": [
-      "Users (admin)"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
@@ -445,30 +333,7 @@
     "operationId": "createUserAdmin",
     "permission": "adminUser.create",
     "class": "admin",
-    "tags": [
-      "Users (admin)"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/admin/users/{id}",
-    "operationId": "getUserAdmin",
-    "permission": "adminUser.read",
-    "class": "admin",
-    "tags": [
-      "Users (admin)"
-    ]
-  },
-  {
-    "method": "PUT",
-    "path": "/api/admin/users/{id}",
-    "operationId": "updateUserAdmin",
-    "permission": "adminUser.update",
-    "class": "admin",
-    "tags": [
-      "Users (admin)",
-      "Deprecated"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "DELETE",
@@ -476,9 +341,23 @@
     "operationId": "deleteUserAdmin",
     "permission": "adminUser.delete",
     "class": "admin",
-    "tags": [
-      "Users (admin)"
-    ]
+    "gateway": "deny"
+  },
+  {
+    "method": "GET",
+    "path": "/api/admin/users/{id}",
+    "operationId": "getUserAdmin",
+    "permission": "adminUser.read",
+    "class": "admin",
+    "gateway": "deny"
+  },
+  {
+    "method": "PUT",
+    "path": "/api/admin/users/{id}",
+    "operationId": "updateUserAdmin",
+    "permission": "adminUser.update",
+    "class": "admin",
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -486,9 +365,7 @@
     "operationId": "getUserCalendarHeatmapAdmin",
     "permission": "adminUser.read",
     "class": "admin",
-    "tags": [
-      "Users (admin)"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -496,9 +373,7 @@
     "operationId": "getLibraryManifest",
     "permission": "adminUser.read",
     "class": "admin",
-    "tags": [
-      "Users (admin)"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -506,9 +381,7 @@
     "operationId": "getUserPreferencesAdmin",
     "permission": "adminUser.read",
     "class": "admin",
-    "tags": [
-      "Users (admin)"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "PUT",
@@ -516,10 +389,7 @@
     "operationId": "updateUserPreferencesAdmin",
     "permission": "adminUser.update",
     "class": "admin",
-    "tags": [
-      "Users (admin)",
-      "Deprecated"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
@@ -527,9 +397,7 @@
     "operationId": "restoreUserAdmin",
     "permission": "adminUser.delete",
     "class": "admin",
-    "tags": [
-      "Users (admin)"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -537,9 +405,7 @@
     "operationId": "getUserSessionsAdmin",
     "permission": "adminSession.read",
     "class": "admin",
-    "tags": [
-      "Users (admin)"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -547,9 +413,7 @@
     "operationId": "getUserStatisticsAdmin",
     "permission": "adminUser.read",
     "class": "admin",
-    "tags": [
-      "Users (admin)"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -557,9 +421,7 @@
     "operationId": "getAllAlbums",
     "permission": "album.read",
     "class": "read",
-    "tags": [
-      "Albums"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "POST",
@@ -567,59 +429,7 @@
     "operationId": "createAlbum",
     "permission": "album.create",
     "class": "write",
-    "tags": [
-      "Albums"
-    ]
-  },
-  {
-    "method": "PUT",
-    "path": "/api/albums/assets",
-    "operationId": "addAssetsToAlbums",
-    "permission": "albumAsset.create",
-    "class": "write",
-    "tags": [
-      "Albums"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/albums/names",
-    "operationId": "getAlbumNames",
-    "permission": "album.read",
-    "class": "read",
-    "tags": [
-      "Albums"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/albums/statistics",
-    "operationId": "getAlbumStatistics",
-    "permission": "album.statistics",
-    "class": "write",
-    "tags": [
-      "Albums"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/albums/{id}",
-    "operationId": "getAlbumInfo",
-    "permission": "album.read",
-    "class": "read",
-    "tags": [
-      "Albums"
-    ]
-  },
-  {
-    "method": "PATCH",
-    "path": "/api/albums/{id}",
-    "operationId": "updateAlbumInfo",
-    "permission": "album.update",
-    "class": "write",
-    "tags": [
-      "Albums"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "DELETE",
@@ -627,19 +437,23 @@
     "operationId": "deleteAlbum",
     "permission": "album.delete",
     "class": "write",
-    "tags": [
-      "Albums"
-    ]
+    "gateway": "deny"
   },
   {
-    "method": "PUT",
-    "path": "/api/albums/{id}/assets",
-    "operationId": "addAssetsToAlbum",
-    "permission": "albumAsset.create",
+    "method": "GET",
+    "path": "/api/albums/{id}",
+    "operationId": "getAlbumInfo",
+    "permission": "album.read",
+    "class": "read",
+    "gateway": "forward"
+  },
+  {
+    "method": "PATCH",
+    "path": "/api/albums/{id}",
+    "operationId": "updateAlbumInfo",
+    "permission": "album.update",
     "class": "write",
-    "tags": [
-      "Albums"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "DELETE",
@@ -647,9 +461,15 @@
     "operationId": "removeAssetFromAlbum",
     "permission": "albumAsset.delete",
     "class": "write",
-    "tags": [
-      "Albums"
-    ]
+    "gateway": "deny"
+  },
+  {
+    "method": "PUT",
+    "path": "/api/albums/{id}/assets",
+    "operationId": "addAssetsToAlbum",
+    "permission": "albumAsset.create",
+    "class": "write",
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -657,19 +477,7 @@
     "operationId": "getAlbumMapMarkers",
     "permission": "album.read",
     "class": "read",
-    "tags": [
-      "Albums"
-    ]
-  },
-  {
-    "method": "PUT",
-    "path": "/api/albums/{id}/user/{userId}",
-    "operationId": "updateAlbumUser",
-    "permission": "albumUser.update",
-    "class": "write",
-    "tags": [
-      "Albums"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "DELETE",
@@ -677,9 +485,15 @@
     "operationId": "removeUserFromAlbum",
     "permission": "albumUser.delete",
     "class": "write",
-    "tags": [
-      "Albums"
-    ]
+    "gateway": "deny"
+  },
+  {
+    "method": "PUT",
+    "path": "/api/albums/{id}/user/{userId}",
+    "operationId": "updateAlbumUser",
+    "permission": "albumUser.update",
+    "class": "write",
+    "gateway": "deny"
   },
   {
     "method": "PUT",
@@ -687,9 +501,31 @@
     "operationId": "addUsersToAlbum",
     "permission": "albumUser.create",
     "class": "write",
-    "tags": [
-      "Albums"
-    ]
+    "gateway": "deny"
+  },
+  {
+    "method": "PUT",
+    "path": "/api/albums/assets",
+    "operationId": "addAssetsToAlbums",
+    "permission": "albumAsset.create",
+    "class": "write",
+    "gateway": "deny"
+  },
+  {
+    "method": "GET",
+    "path": "/api/albums/names",
+    "operationId": "getAlbumNames",
+    "permission": "album.read",
+    "class": "read",
+    "gateway": "forward"
+  },
+  {
+    "method": "GET",
+    "path": "/api/albums/statistics",
+    "operationId": "getAlbumStatistics",
+    "permission": "album.statistics",
+    "class": "read",
+    "gateway": "forward"
   },
   {
     "method": "GET",
@@ -697,9 +533,7 @@
     "operationId": "getApiKeys",
     "permission": "apiKey.read",
     "class": "read",
-    "tags": [
-      "API keys"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
@@ -707,40 +541,7 @@
     "operationId": "createApiKey",
     "permission": "apiKey.create",
     "class": "write",
-    "tags": [
-      "API keys"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/api-keys/me",
-    "operationId": "getMyApiKey",
-    "permission": null,
-    "class": "full",
-    "tags": [
-      "API keys"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/api-keys/{id}",
-    "operationId": "getApiKey",
-    "permission": "apiKey.read",
-    "class": "read",
-    "tags": [
-      "API keys"
-    ]
-  },
-  {
-    "method": "PUT",
-    "path": "/api/api-keys/{id}",
-    "operationId": "updateApiKey",
-    "permission": "apiKey.update",
-    "class": "write",
-    "tags": [
-      "API keys",
-      "Deprecated"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "DELETE",
@@ -748,9 +549,23 @@
     "operationId": "deleteApiKey",
     "permission": "apiKey.delete",
     "class": "write",
-    "tags": [
-      "API keys"
-    ]
+    "gateway": "deny"
+  },
+  {
+    "method": "GET",
+    "path": "/api/api-keys/{id}",
+    "operationId": "getApiKey",
+    "permission": "apiKey.read",
+    "class": "read",
+    "gateway": "deny"
+  },
+  {
+    "method": "PUT",
+    "path": "/api/api-keys/{id}",
+    "operationId": "updateApiKey",
+    "permission": "apiKey.update",
+    "class": "write",
+    "gateway": "deny"
   },
   {
     "method": "POST",
@@ -758,9 +573,14 @@
     "operationId": "rotateApiKey",
     "permission": "apiKey.rotate",
     "class": "write",
-    "tags": [
-      "API keys"
-    ]
+    "gateway": "deny"
+  },
+  {
+    "method": "GET",
+    "path": "/api/api-keys/me",
+    "operationId": "getMyApiKey",
+    "class": "full",
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -768,19 +588,7 @@
     "operationId": "searchAssetFiles",
     "permission": "assetFile.read",
     "class": "read",
-    "tags": [
-      "Asset files"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/asset-files/{id}",
-    "operationId": "getAssetFile",
-    "permission": "assetFile.read",
-    "class": "read",
-    "tags": [
-      "Asset files"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "DELETE",
@@ -788,40 +596,23 @@
     "operationId": "deleteAssetFile",
     "permission": "assetFile.delete",
     "class": "write",
-    "tags": [
-      "Asset files"
-    ]
+    "gateway": "deny"
+  },
+  {
+    "method": "GET",
+    "path": "/api/asset-files/{id}",
+    "operationId": "getAssetFile",
+    "permission": "assetFile.read",
+    "class": "read",
+    "gateway": "deny"
   },
   {
     "method": "GET",
     "path": "/api/asset-files/{id}/download",
     "operationId": "downloadAssetFile",
     "permission": "assetFile.download",
-    "class": "write",
-    "tags": [
-      "Asset files"
-    ]
-  },
-  {
-    "method": "POST",
-    "path": "/api/assets",
-    "operationId": "uploadAsset",
-    "permission": "asset.upload",
-    "class": "write",
-    "tags": [
-      "Assets"
-    ]
-  },
-  {
-    "method": "PUT",
-    "path": "/api/assets",
-    "operationId": "updateAssets",
-    "permission": "asset.update",
-    "class": "write",
-    "tags": [
-      "Assets",
-      "Deprecated"
-    ]
+    "class": "read",
+    "gateway": "deny"
   },
   {
     "method": "DELETE",
@@ -829,89 +620,23 @@
     "operationId": "deleteAssets",
     "permission": "asset.delete",
     "class": "write",
-    "tags": [
-      "Assets"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
-    "path": "/api/assets/bulk-upload-check",
-    "operationId": "checkBulkUpload",
+    "path": "/api/assets",
+    "operationId": "uploadAsset",
     "permission": "asset.upload",
     "class": "write",
-    "tags": [
-      "Assets"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "PUT",
-    "path": "/api/assets/copy",
-    "operationId": "copyAsset",
-    "permission": "asset.copy",
-    "class": "write",
-    "tags": [
-      "Assets"
-    ]
-  },
-  {
-    "method": "POST",
-    "path": "/api/assets/editable",
-    "operationId": "getEditableAssets",
-    "permission": "asset.read",
-    "class": "read",
-    "tags": [
-      "Assets"
-    ]
-  },
-  {
-    "method": "PUT",
-    "path": "/api/assets/favorites",
-    "operationId": "updateAssetFavorites",
-    "permission": "asset.read",
-    "class": "read",
-    "tags": [
-      "Assets"
-    ]
-  },
-  {
-    "method": "POST",
-    "path": "/api/assets/jobs",
-    "operationId": "runAssetJobs",
-    "permission": "job.create",
-    "class": "write",
-    "tags": [
-      "Assets"
-    ]
-  },
-  {
-    "method": "PUT",
-    "path": "/api/assets/metadata",
-    "operationId": "updateBulkAssetMetadata",
+    "path": "/api/assets",
+    "operationId": "updateAssets",
     "permission": "asset.update",
     "class": "write",
-    "tags": [
-      "Assets"
-    ]
-  },
-  {
-    "method": "DELETE",
-    "path": "/api/assets/metadata",
-    "operationId": "deleteBulkAssetMetadata",
-    "permission": "asset.update",
-    "class": "write",
-    "tags": [
-      "Assets"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/assets/statistics",
-    "operationId": "getAssetStatistics",
-    "permission": "asset.statistics",
-    "class": "write",
-    "tags": [
-      "Assets"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -919,9 +644,7 @@
     "operationId": "getAssetInfo",
     "permission": "asset.read",
     "class": "read",
-    "tags": [
-      "Assets"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "PUT",
@@ -929,30 +652,7 @@
     "operationId": "updateAsset",
     "permission": "asset.update",
     "class": "write",
-    "tags": [
-      "Assets",
-      "Deprecated"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/assets/{id}/edits",
-    "operationId": "getAssetEdits",
-    "permission": "asset.edit.get",
-    "class": "write",
-    "tags": [
-      "Assets"
-    ]
-  },
-  {
-    "method": "PUT",
-    "path": "/api/assets/{id}/edits",
-    "operationId": "editAsset",
-    "permission": "asset.edit.create",
-    "class": "write",
-    "tags": [
-      "Assets"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "DELETE",
@@ -960,9 +660,23 @@
     "operationId": "removeAssetEdits",
     "permission": "asset.edit.delete",
     "class": "write",
-    "tags": [
-      "Assets"
-    ]
+    "gateway": "deny"
+  },
+  {
+    "method": "GET",
+    "path": "/api/assets/{id}/edits",
+    "operationId": "getAssetEdits",
+    "permission": "asset.edit.get",
+    "class": "read",
+    "gateway": "deny"
+  },
+  {
+    "method": "PUT",
+    "path": "/api/assets/{id}/edits",
+    "operationId": "editAsset",
+    "permission": "asset.edit.create",
+    "class": "write",
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -970,9 +684,7 @@
     "operationId": "getAssetMetadata",
     "permission": "asset.read",
     "class": "read",
-    "tags": [
-      "Assets"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "PUT",
@@ -980,19 +692,7 @@
     "operationId": "updateAssetMetadata",
     "permission": "asset.update",
     "class": "write",
-    "tags": [
-      "Assets"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/assets/{id}/metadata/{key}",
-    "operationId": "getAssetMetadataByKey",
-    "permission": "asset.read",
-    "class": "read",
-    "tags": [
-      "Assets"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "DELETE",
@@ -1000,9 +700,15 @@
     "operationId": "deleteAssetMetadata",
     "permission": "asset.update",
     "class": "write",
-    "tags": [
-      "Assets"
-    ]
+    "gateway": "deny"
+  },
+  {
+    "method": "GET",
+    "path": "/api/assets/{id}/metadata/{key}",
+    "operationId": "getAssetMetadataByKey",
+    "permission": "asset.read",
+    "class": "read",
+    "gateway": "forward"
   },
   {
     "method": "GET",
@@ -1010,89 +716,134 @@
     "operationId": "getAssetOcr",
     "permission": "asset.read",
     "class": "read",
-    "tags": [
-      "Assets"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "GET",
     "path": "/api/assets/{id}/original",
     "operationId": "downloadAsset",
     "permission": "asset.download",
-    "class": "write",
-    "tags": [
-      "Assets"
-    ]
+    "class": "read",
+    "gateway": "forward"
   },
   {
     "method": "GET",
     "path": "/api/assets/{id}/thumbnail",
     "operationId": "viewAsset",
     "permission": "asset.view",
-    "class": "write",
-    "tags": [
-      "Assets"
-    ]
+    "class": "read",
+    "gateway": "forward"
   },
   {
     "method": "GET",
     "path": "/api/assets/{id}/video/playback",
     "operationId": "playAssetVideo",
     "permission": "asset.view",
-    "class": "write",
-    "tags": [
-      "Assets"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/assets/{id}/video/stream/main.m3u8",
-    "operationId": "getMainPlaylist",
-    "permission": "asset.view",
-    "class": "write",
-    "tags": [
-      "Assets"
-    ]
+    "class": "read",
+    "gateway": "forward"
   },
   {
     "method": "DELETE",
     "path": "/api/assets/{id}/video/stream/{sessionId}",
     "operationId": "endSession",
     "permission": "asset.view",
-    "class": "write",
-    "tags": [
-      "Assets"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/assets/{id}/video/stream/{sessionId}/{variantIndex}/playlist.m3u8",
-    "operationId": "getMediaPlaylist",
-    "permission": "asset.view",
-    "class": "write",
-    "tags": [
-      "Assets"
-    ]
+    "class": "read",
+    "gateway": "forward"
   },
   {
     "method": "GET",
     "path": "/api/assets/{id}/video/stream/{sessionId}/{variantIndex}/{filename}",
     "operationId": "getSegment",
     "permission": "asset.view",
+    "class": "read",
+    "gateway": "forward"
+  },
+  {
+    "method": "GET",
+    "path": "/api/assets/{id}/video/stream/{sessionId}/{variantIndex}/playlist.m3u8",
+    "operationId": "getMediaPlaylist",
+    "permission": "asset.view",
+    "class": "read",
+    "gateway": "forward"
+  },
+  {
+    "method": "GET",
+    "path": "/api/assets/{id}/video/stream/main.m3u8",
+    "operationId": "getMainPlaylist",
+    "permission": "asset.view",
+    "class": "read",
+    "gateway": "forward"
+  },
+  {
+    "method": "POST",
+    "path": "/api/assets/bulk-upload-check",
+    "operationId": "checkBulkUpload",
+    "permission": "asset.upload",
     "class": "write",
-    "tags": [
-      "Assets"
-    ]
+    "gateway": "deny"
+  },
+  {
+    "method": "PUT",
+    "path": "/api/assets/copy",
+    "operationId": "copyAsset",
+    "permission": "asset.copy",
+    "class": "write",
+    "gateway": "deny"
+  },
+  {
+    "method": "POST",
+    "path": "/api/assets/editable",
+    "operationId": "getEditableAssets",
+    "permission": "asset.read",
+    "class": "read",
+    "gateway": "fake"
+  },
+  {
+    "method": "PUT",
+    "path": "/api/assets/favorites",
+    "operationId": "updateAssetFavorites",
+    "permission": "asset.read",
+    "class": "read",
+    "gateway": "fake"
+  },
+  {
+    "method": "POST",
+    "path": "/api/assets/jobs",
+    "operationId": "runAssetJobs",
+    "permission": "job.create",
+    "class": "write",
+    "gateway": "deny"
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/assets/metadata",
+    "operationId": "deleteBulkAssetMetadata",
+    "permission": "asset.update",
+    "class": "write",
+    "gateway": "deny"
+  },
+  {
+    "method": "PUT",
+    "path": "/api/assets/metadata",
+    "operationId": "updateBulkAssetMetadata",
+    "permission": "asset.update",
+    "class": "write",
+    "gateway": "deny"
+  },
+  {
+    "method": "GET",
+    "path": "/api/assets/statistics",
+    "operationId": "getAssetStatistics",
+    "permission": "asset.statistics",
+    "class": "read",
+    "gateway": "forward"
   },
   {
     "method": "POST",
     "path": "/api/auth/admin-sign-up",
     "operationId": "signUpAdmin",
-    "permission": null,
     "class": "public",
-    "tags": [
-      "Authentication"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
@@ -1100,49 +851,21 @@
     "operationId": "changePassword",
     "permission": "auth.changePassword",
     "class": "write",
-    "tags": [
-      "Authentication"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
     "path": "/api/auth/login",
     "operationId": "login",
-    "permission": null,
     "class": "public",
-    "tags": [
-      "Authentication"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
     "path": "/api/auth/logout",
     "operationId": "logout",
-    "permission": null,
     "class": "full",
-    "tags": [
-      "Authentication"
-    ]
-  },
-  {
-    "method": "POST",
-    "path": "/api/auth/pin-code",
-    "operationId": "setupPinCode",
-    "permission": "pinCode.create",
-    "class": "write",
-    "tags": [
-      "Authentication"
-    ]
-  },
-  {
-    "method": "PUT",
-    "path": "/api/auth/pin-code",
-    "operationId": "changePinCode",
-    "permission": "pinCode.update",
-    "class": "write",
-    "tags": [
-      "Authentication"
-    ]
+    "gateway": "fake"
   },
   {
     "method": "DELETE",
@@ -1150,59 +873,58 @@
     "operationId": "resetPinCode",
     "permission": "pinCode.delete",
     "class": "write",
-    "tags": [
-      "Authentication"
-    ]
+    "gateway": "deny"
+  },
+  {
+    "method": "POST",
+    "path": "/api/auth/pin-code",
+    "operationId": "setupPinCode",
+    "permission": "pinCode.create",
+    "class": "write",
+    "gateway": "deny"
+  },
+  {
+    "method": "PUT",
+    "path": "/api/auth/pin-code",
+    "operationId": "changePinCode",
+    "permission": "pinCode.update",
+    "class": "write",
+    "gateway": "deny"
   },
   {
     "method": "POST",
     "path": "/api/auth/session/lock",
     "operationId": "lockAuthSession",
-    "permission": null,
     "class": "full",
-    "tags": [
-      "Authentication"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
     "path": "/api/auth/session/unlock",
     "operationId": "unlockAuthSession",
-    "permission": null,
     "class": "full",
-    "tags": [
-      "Authentication"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
     "path": "/api/auth/status",
     "operationId": "getAuthStatus",
-    "permission": null,
     "class": "full",
-    "tags": [
-      "Authentication"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
     "path": "/api/auth/validateToken",
     "operationId": "validateAccessToken",
-    "permission": null,
     "class": "full",
-    "tags": [
-      "Authentication"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
     "path": "/api/classification/scan",
     "operationId": "scanClassification",
-    "permission": null,
     "class": "admin",
-    "tags": [
-      "Classification"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -1210,9 +932,7 @@
     "operationId": "getUserConfig",
     "permission": "userConfig.read",
     "class": "read",
-    "tags": [
-      "Config (user)"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "GET",
@@ -1220,39 +940,23 @@
     "operationId": "getUserConfigDefaults",
     "permission": "userConfig.read",
     "class": "read",
-    "tags": [
-      "Config (user)"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "POST",
     "path": "/api/download/archive",
     "operationId": "downloadArchive",
     "permission": "asset.download",
-    "class": "write",
-    "tags": [
-      "Download"
-    ]
+    "class": "read",
+    "gateway": "forward"
   },
   {
     "method": "POST",
     "path": "/api/download/info",
     "operationId": "getDownloadInfo",
     "permission": "asset.download",
-    "class": "write",
-    "tags": [
-      "Download"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/duplicates",
-    "operationId": "getAssetDuplicates",
-    "permission": "duplicate.read",
     "class": "read",
-    "tags": [
-      "Duplicates"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "DELETE",
@@ -1260,19 +964,15 @@
     "operationId": "deleteDuplicates",
     "permission": "duplicate.delete",
     "class": "write",
-    "tags": [
-      "Duplicates"
-    ]
+    "gateway": "deny"
   },
   {
-    "method": "POST",
-    "path": "/api/duplicates/resolve",
-    "operationId": "resolveDuplicates",
-    "permission": "duplicate.delete",
-    "class": "write",
-    "tags": [
-      "Duplicates"
-    ]
+    "method": "GET",
+    "path": "/api/duplicates",
+    "operationId": "getAssetDuplicates",
+    "permission": "duplicate.read",
+    "class": "read",
+    "gateway": "deny"
   },
   {
     "method": "DELETE",
@@ -1280,9 +980,15 @@
     "operationId": "deleteDuplicate",
     "permission": "duplicate.delete",
     "class": "write",
-    "tags": [
-      "Duplicates"
-    ]
+    "gateway": "deny"
+  },
+  {
+    "method": "POST",
+    "path": "/api/duplicates/resolve",
+    "operationId": "resolveDuplicates",
+    "permission": "duplicate.delete",
+    "class": "write",
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -1290,9 +996,7 @@
     "operationId": "getFaces",
     "permission": "face.read",
     "class": "read",
-    "tags": [
-      "Faces"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "POST",
@@ -1300,19 +1004,7 @@
     "operationId": "createFace",
     "permission": "face.create",
     "class": "write",
-    "tags": [
-      "Faces"
-    ]
-  },
-  {
-    "method": "PUT",
-    "path": "/api/faces/{id}",
-    "operationId": "reassignFacesById",
-    "permission": "face.update",
-    "class": "write",
-    "tags": [
-      "Faces"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "DELETE",
@@ -1320,9 +1012,15 @@
     "operationId": "deleteFace",
     "permission": "face.delete",
     "class": "write",
-    "tags": [
-      "Faces"
-    ]
+    "gateway": "deny"
+  },
+  {
+    "method": "PUT",
+    "path": "/api/faces/{id}",
+    "operationId": "reassignFacesById",
+    "permission": "face.update",
+    "class": "write",
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -1330,9 +1028,7 @@
     "operationId": "getFilteredMapMarkers",
     "permission": "map.read",
     "class": "read",
-    "tags": [
-      "Gallery Map"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "GET",
@@ -1340,10 +1036,7 @@
     "operationId": "getQueuesLegacy",
     "permission": "job.read",
     "class": "admin",
-    "tags": [
-      "Jobs",
-      "Deprecated"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
@@ -1351,9 +1044,7 @@
     "operationId": "createJob",
     "permission": "job.create",
     "class": "admin",
-    "tags": [
-      "Jobs"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "PUT",
@@ -1361,10 +1052,7 @@
     "operationId": "runQueueCommandLegacy",
     "permission": "job.create",
     "class": "admin",
-    "tags": [
-      "Jobs",
-      "Deprecated"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -1372,9 +1060,7 @@
     "operationId": "getAllLibraries",
     "permission": "library.read",
     "class": "admin",
-    "tags": [
-      "Libraries"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
@@ -1382,30 +1068,7 @@
     "operationId": "createLibrary",
     "permission": "library.create",
     "class": "admin",
-    "tags": [
-      "Libraries"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/libraries/{id}",
-    "operationId": "getLibrary",
-    "permission": "library.read",
-    "class": "admin",
-    "tags": [
-      "Libraries"
-    ]
-  },
-  {
-    "method": "PUT",
-    "path": "/api/libraries/{id}",
-    "operationId": "updateLibrary",
-    "permission": "library.update",
-    "class": "admin",
-    "tags": [
-      "Libraries",
-      "Deprecated"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "DELETE",
@@ -1413,9 +1076,23 @@
     "operationId": "deleteLibrary",
     "permission": "library.delete",
     "class": "admin",
-    "tags": [
-      "Libraries"
-    ]
+    "gateway": "deny"
+  },
+  {
+    "method": "GET",
+    "path": "/api/libraries/{id}",
+    "operationId": "getLibrary",
+    "permission": "library.read",
+    "class": "admin",
+    "gateway": "deny"
+  },
+  {
+    "method": "PUT",
+    "path": "/api/libraries/{id}",
+    "operationId": "updateLibrary",
+    "permission": "library.update",
+    "class": "admin",
+    "gateway": "deny"
   },
   {
     "method": "POST",
@@ -1423,9 +1100,7 @@
     "operationId": "scanLibrary",
     "permission": "library.update",
     "class": "admin",
-    "tags": [
-      "Libraries"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -1433,19 +1108,14 @@
     "operationId": "getLibraryStatistics",
     "permission": "library.statistics",
     "class": "admin",
-    "tags": [
-      "Libraries"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
     "path": "/api/libraries/{id}/validate",
     "operationId": "validate",
-    "permission": null,
     "class": "admin",
-    "tags": [
-      "Libraries"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -1453,19 +1123,15 @@
     "operationId": "getMapMarkers",
     "permission": "map.read",
     "class": "read",
-    "tags": [
-      "Map"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "GET",
     "path": "/api/map/reverse-geocode",
     "operationId": "reverseGeocode",
     "permission": "map.search",
-    "class": "write",
-    "tags": [
-      "Map"
-    ]
+    "class": "read",
+    "gateway": "forward"
   },
   {
     "method": "GET",
@@ -1473,9 +1139,7 @@
     "operationId": "searchMemories",
     "permission": "memory.read",
     "class": "read",
-    "tags": [
-      "Memories"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "POST",
@@ -1483,40 +1147,7 @@
     "operationId": "createMemory",
     "permission": "memory.create",
     "class": "write",
-    "tags": [
-      "Memories"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/memories/statistics",
-    "operationId": "memoriesStatistics",
-    "permission": "memory.statistics",
-    "class": "write",
-    "tags": [
-      "Memories"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/memories/{id}",
-    "operationId": "getMemory",
-    "permission": "memory.read",
-    "class": "read",
-    "tags": [
-      "Memories"
-    ]
-  },
-  {
-    "method": "PUT",
-    "path": "/api/memories/{id}",
-    "operationId": "updateMemory",
-    "permission": "memory.update",
-    "class": "write",
-    "tags": [
-      "Memories",
-      "Deprecated"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "DELETE",
@@ -1524,19 +1155,23 @@
     "operationId": "deleteMemory",
     "permission": "memory.delete",
     "class": "write",
-    "tags": [
-      "Memories"
-    ]
+    "gateway": "deny"
+  },
+  {
+    "method": "GET",
+    "path": "/api/memories/{id}",
+    "operationId": "getMemory",
+    "permission": "memory.read",
+    "class": "read",
+    "gateway": "forward"
   },
   {
     "method": "PUT",
-    "path": "/api/memories/{id}/assets",
-    "operationId": "addMemoryAssets",
-    "permission": "memoryAsset.create",
+    "path": "/api/memories/{id}",
+    "operationId": "updateMemory",
+    "permission": "memory.update",
     "class": "write",
-    "tags": [
-      "Memories"
-    ]
+    "gateway": "fake"
   },
   {
     "method": "DELETE",
@@ -1544,29 +1179,23 @@
     "operationId": "removeMemoryAssets",
     "permission": "memoryAsset.delete",
     "class": "write",
-    "tags": [
-      "Memories"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/notifications",
-    "operationId": "getNotifications",
-    "permission": "notification.read",
-    "class": "read",
-    "tags": [
-      "Notifications"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "PUT",
-    "path": "/api/notifications",
-    "operationId": "updateNotifications",
-    "permission": "notification.update",
+    "path": "/api/memories/{id}/assets",
+    "operationId": "addMemoryAssets",
+    "permission": "memoryAsset.create",
     "class": "write",
-    "tags": [
-      "Notifications"
-    ]
+    "gateway": "deny"
+  },
+  {
+    "method": "GET",
+    "path": "/api/memories/statistics",
+    "operationId": "memoriesStatistics",
+    "permission": "memory.statistics",
+    "class": "read",
+    "gateway": "forward"
   },
   {
     "method": "DELETE",
@@ -1574,29 +1203,23 @@
     "operationId": "deleteNotifications",
     "permission": "notification.delete",
     "class": "write",
-    "tags": [
-      "Notifications"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
-    "path": "/api/notifications/{id}",
-    "operationId": "getNotification",
+    "path": "/api/notifications",
+    "operationId": "getNotifications",
     "permission": "notification.read",
     "class": "read",
-    "tags": [
-      "Notifications"
-    ]
+    "gateway": "fake"
   },
   {
     "method": "PUT",
-    "path": "/api/notifications/{id}",
-    "operationId": "updateNotification",
+    "path": "/api/notifications",
+    "operationId": "updateNotifications",
     "permission": "notification.update",
     "class": "write",
-    "tags": [
-      "Notifications"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "DELETE",
@@ -1604,69 +1227,65 @@
     "operationId": "deleteNotification",
     "permission": "notification.delete",
     "class": "write",
-    "tags": [
-      "Notifications"
-    ]
+    "gateway": "deny"
+  },
+  {
+    "method": "GET",
+    "path": "/api/notifications/{id}",
+    "operationId": "getNotification",
+    "permission": "notification.read",
+    "class": "read",
+    "gateway": "deny"
+  },
+  {
+    "method": "PUT",
+    "path": "/api/notifications/{id}",
+    "operationId": "updateNotification",
+    "permission": "notification.update",
+    "class": "write",
+    "gateway": "deny"
   },
   {
     "method": "POST",
     "path": "/api/oauth/authorize",
     "operationId": "startOAuth",
-    "permission": null,
     "class": "public",
-    "tags": [
-      "Authentication"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
     "path": "/api/oauth/backchannel-logout",
     "operationId": "logoutOAuth",
-    "permission": null,
     "class": "public",
-    "tags": [
-      "Authentication"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
     "path": "/api/oauth/callback",
     "operationId": "finishOAuth",
-    "permission": null,
     "class": "public",
-    "tags": [
-      "Authentication"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
     "path": "/api/oauth/link",
     "operationId": "linkOAuthAccount",
-    "permission": null,
     "class": "full",
-    "tags": [
-      "Authentication"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
     "path": "/api/oauth/mobile-redirect",
     "operationId": "redirectOAuthToMobile",
-    "permission": null,
     "class": "public",
-    "tags": [
-      "Authentication"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
     "path": "/api/oauth/unlink",
     "operationId": "unlinkOAuthAccount",
-    "permission": null,
     "class": "full",
-    "tags": [
-      "Authentication"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -1674,9 +1293,7 @@
     "operationId": "getPartners",
     "permission": "partner.read",
     "class": "read",
-    "tags": [
-      "Partners"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
@@ -1684,30 +1301,7 @@
     "operationId": "createPartner",
     "permission": "partner.create",
     "class": "write",
-    "tags": [
-      "Partners"
-    ]
-  },
-  {
-    "method": "POST",
-    "path": "/api/partners/{id}",
-    "operationId": "createPartnerDeprecated",
-    "permission": "partner.create",
-    "class": "write",
-    "tags": [
-      "Partners",
-      "Deprecated"
-    ]
-  },
-  {
-    "method": "PUT",
-    "path": "/api/partners/{id}",
-    "operationId": "updatePartner",
-    "permission": "partner.update",
-    "class": "write",
-    "tags": [
-      "Partners"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "DELETE",
@@ -1715,39 +1309,23 @@
     "operationId": "removePartner",
     "permission": "partner.delete",
     "class": "write",
-    "tags": [
-      "Partners"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/people",
-    "operationId": "getAllPeople",
-    "permission": "person.read",
-    "class": "read",
-    "tags": [
-      "People"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
-    "path": "/api/people",
-    "operationId": "createPerson",
-    "permission": "person.create",
+    "path": "/api/partners/{id}",
+    "operationId": "createPartnerDeprecated",
+    "permission": "partner.create",
     "class": "write",
-    "tags": [
-      "People"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "PUT",
-    "path": "/api/people",
-    "operationId": "updatePeople",
-    "permission": "person.update",
+    "path": "/api/partners/{id}",
+    "operationId": "updatePartner",
+    "permission": "partner.update",
     "class": "write",
-    "tags": [
-      "People"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "DELETE",
@@ -1755,110 +1333,31 @@
     "operationId": "deletePeople",
     "permission": "person.delete",
     "class": "write",
-    "tags": [
-      "People"
-    ]
-  },
-  {
-    "method": "POST",
-    "path": "/api/people/detach-profile",
-    "operationId": "detachScopedPerson",
-    "permission": "person.merge",
-    "class": "write",
-    "tags": [
-      "People"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
-    "path": "/api/people/face-statistics",
-    "operationId": "getPeopleFaceStatistics",
+    "path": "/api/people",
+    "operationId": "getAllPeople",
     "permission": "person.read",
     "class": "read",
-    "tags": [
-      "People"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "POST",
-    "path": "/api/people/merge",
-    "operationId": "mergePeople",
-    "permission": "person.merge",
+    "path": "/api/people",
+    "operationId": "createPerson",
+    "permission": "person.create",
     "class": "write",
-    "tags": [
-      "People"
-    ]
-  },
-  {
-    "method": "POST",
-    "path": "/api/people/same-person",
-    "operationId": "mergeScopedPeople",
-    "permission": "person.merge",
-    "class": "write",
-    "tags": [
-      "People"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/people/statistics",
-    "operationId": "getPeopleStatistics",
-    "permission": "person.read",
-    "class": "read",
-    "tags": [
-      "People"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/people/users",
-    "operationId": "getUsersForPeople",
-    "permission": "person.read",
-    "class": "read",
-    "tags": [
-      "People"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "PUT",
-    "path": "/api/people/users",
-    "operationId": "upsertPeopleUsers",
+    "path": "/api/people",
+    "operationId": "updatePeople",
     "permission": "person.update",
     "class": "write",
-    "tags": [
-      "People"
-    ]
-  },
-  {
-    "method": "DELETE",
-    "path": "/api/people/users",
-    "operationId": "removeUsersFromPeople",
-    "permission": "person.delete",
-    "class": "write",
-    "tags": [
-      "People"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/people/{id}",
-    "operationId": "getPerson",
-    "permission": "person.read",
-    "class": "read",
-    "tags": [
-      "People"
-    ]
-  },
-  {
-    "method": "PUT",
-    "path": "/api/people/{id}",
-    "operationId": "updatePerson",
-    "permission": "person.update",
-    "class": "write",
-    "tags": [
-      "People",
-      "Deprecated"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "DELETE",
@@ -1866,9 +1365,23 @@
     "operationId": "deletePerson",
     "permission": "person.delete",
     "class": "write",
-    "tags": [
-      "People"
-    ]
+    "gateway": "deny"
+  },
+  {
+    "method": "GET",
+    "path": "/api/people/{id}",
+    "operationId": "getPerson",
+    "permission": "person.read",
+    "class": "read",
+    "gateway": "forward"
+  },
+  {
+    "method": "PUT",
+    "path": "/api/people/{id}",
+    "operationId": "updatePerson",
+    "permission": "person.update",
+    "class": "write",
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -1876,9 +1389,7 @@
     "operationId": "getPersonFaceSuggestions",
     "permission": "person.update",
     "class": "write",
-    "tags": [
-      "People"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
@@ -1886,9 +1397,7 @@
     "operationId": "confirmPersonFaceSuggestion",
     "permission": "person.update",
     "class": "write",
-    "tags": [
-      "People"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
@@ -1896,9 +1405,7 @@
     "operationId": "dismissPersonFaceSuggestion",
     "permission": "person.update",
     "class": "write",
-    "tags": [
-      "People"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
@@ -1906,9 +1413,7 @@
     "operationId": "ignorePersonFaceSuggestion",
     "permission": "person.update",
     "class": "write",
-    "tags": [
-      "People"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
@@ -1916,9 +1421,7 @@
     "operationId": "rejectPersonFaceSuggestion",
     "permission": "person.update",
     "class": "write",
-    "tags": [
-      "People"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -1926,9 +1429,7 @@
     "operationId": "getPersonFaces",
     "permission": "person.read",
     "class": "read",
-    "tags": [
-      "People"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "GET",
@@ -1936,9 +1437,7 @@
     "operationId": "getPersonFaceThumbnail",
     "permission": "person.read",
     "class": "read",
-    "tags": [
-      "People"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "POST",
@@ -1946,10 +1445,7 @@
     "operationId": "mergePersonLegacy",
     "permission": "person.merge",
     "class": "write",
-    "tags": [
-      "People",
-      "Deprecated"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "PUT",
@@ -1957,9 +1453,7 @@
     "operationId": "reassignFaces",
     "permission": "person.reassign",
     "class": "write",
-    "tags": [
-      "People"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "PUT",
@@ -1967,19 +1461,15 @@
     "operationId": "updateRepresentativeFace",
     "permission": "person.update",
     "class": "write",
-    "tags": [
-      "People"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
     "path": "/api/people/{id}/statistics",
     "operationId": "getPersonStatistics",
     "permission": "person.statistics",
-    "class": "write",
-    "tags": [
-      "People"
-    ]
+    "class": "read",
+    "gateway": "forward"
   },
   {
     "method": "GET",
@@ -1987,9 +1477,71 @@
     "operationId": "getPersonThumbnail",
     "permission": "person.read",
     "class": "read",
-    "tags": [
-      "People"
-    ]
+    "gateway": "forward"
+  },
+  {
+    "method": "POST",
+    "path": "/api/people/detach-profile",
+    "operationId": "detachScopedPerson",
+    "permission": "person.merge",
+    "class": "write",
+    "gateway": "deny"
+  },
+  {
+    "method": "GET",
+    "path": "/api/people/face-statistics",
+    "operationId": "getPeopleFaceStatistics",
+    "permission": "person.read",
+    "class": "read",
+    "gateway": "forward"
+  },
+  {
+    "method": "POST",
+    "path": "/api/people/merge",
+    "operationId": "mergePeople",
+    "permission": "person.merge",
+    "class": "write",
+    "gateway": "deny"
+  },
+  {
+    "method": "POST",
+    "path": "/api/people/same-person",
+    "operationId": "mergeScopedPeople",
+    "permission": "person.merge",
+    "class": "write",
+    "gateway": "deny"
+  },
+  {
+    "method": "GET",
+    "path": "/api/people/statistics",
+    "operationId": "getPeopleStatistics",
+    "permission": "person.read",
+    "class": "read",
+    "gateway": "forward"
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/people/users",
+    "operationId": "removeUsersFromPeople",
+    "permission": "person.delete",
+    "class": "write",
+    "gateway": "deny"
+  },
+  {
+    "method": "GET",
+    "path": "/api/people/users",
+    "operationId": "getUsersForPeople",
+    "permission": "person.read",
+    "class": "read",
+    "gateway": "forward"
+  },
+  {
+    "method": "PUT",
+    "path": "/api/people/users",
+    "operationId": "upsertPeopleUsers",
+    "permission": "person.update",
+    "class": "write",
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -1997,29 +1549,7 @@
     "operationId": "searchPlugins",
     "permission": "plugin.read",
     "class": "read",
-    "tags": [
-      "Plugins"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/plugins/methods",
-    "operationId": "searchPluginMethods",
-    "permission": "plugin.read",
-    "class": "read",
-    "tags": [
-      "Plugins"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/plugins/templates",
-    "operationId": "searchPluginTemplates",
-    "permission": "plugin.read",
-    "class": "read",
-    "tags": [
-      "Plugins"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -2027,29 +1557,37 @@
     "operationId": "getPlugin",
     "permission": "plugin.read",
     "class": "read",
-    "tags": [
-      "Plugins"
-    ]
+    "gateway": "deny"
+  },
+  {
+    "method": "GET",
+    "path": "/api/plugins/methods",
+    "operationId": "searchPluginMethods",
+    "permission": "plugin.read",
+    "class": "read",
+    "gateway": "deny"
+  },
+  {
+    "method": "GET",
+    "path": "/api/plugins/templates",
+    "operationId": "searchPluginTemplates",
+    "permission": "plugin.read",
+    "class": "read",
+    "gateway": "deny"
   },
   {
     "method": "GET",
     "path": "/api/public/config",
     "operationId": "getPublicConfig",
-    "permission": null,
     "class": "public",
-    "tags": [
-      "Config (public)"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "GET",
     "path": "/api/public/config/defaults",
     "operationId": "getPublicConfigDefaults",
-    "permission": null,
     "class": "public",
-    "tags": [
-      "Config (public)"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "GET",
@@ -2057,9 +1595,7 @@
     "operationId": "getQueues",
     "permission": "queue.read",
     "class": "admin",
-    "tags": [
-      "Queues"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -2067,9 +1603,7 @@
     "operationId": "getQueue",
     "permission": "queue.read",
     "class": "admin",
-    "tags": [
-      "Queues"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "PUT",
@@ -2077,19 +1611,7 @@
     "operationId": "updateQueue",
     "permission": "queue.update",
     "class": "admin",
-    "tags": [
-      "Queues"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/queues/{name}/jobs",
-    "operationId": "getQueueJobs",
-    "permission": "queueJob.read",
-    "class": "admin",
-    "tags": [
-      "Queues"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "DELETE",
@@ -2097,9 +1619,15 @@
     "operationId": "emptyQueue",
     "permission": "queueJob.delete",
     "class": "admin",
-    "tags": [
-      "Queues"
-    ]
+    "gateway": "deny"
+  },
+  {
+    "method": "GET",
+    "path": "/api/queues/{name}/jobs",
+    "operationId": "getQueueJobs",
+    "permission": "queueJob.read",
+    "class": "admin",
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -2107,9 +1635,7 @@
     "operationId": "getAssetsByCity",
     "permission": "asset.read",
     "class": "read",
-    "tags": [
-      "Search"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "GET",
@@ -2117,9 +1643,7 @@
     "operationId": "getExploreData",
     "permission": "asset.read",
     "class": "read",
-    "tags": [
-      "Search"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "POST",
@@ -2127,10 +1651,7 @@
     "operationId": "searchLargeAssets",
     "permission": "asset.read",
     "class": "read",
-    "tags": [
-      "Search",
-      "Deprecated"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "POST",
@@ -2138,9 +1659,7 @@
     "operationId": "searchAssets",
     "permission": "asset.read",
     "class": "read",
-    "tags": [
-      "Search"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "GET",
@@ -2148,9 +1667,7 @@
     "operationId": "searchPerson",
     "permission": "person.read",
     "class": "read",
-    "tags": [
-      "Search"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "GET",
@@ -2158,9 +1675,7 @@
     "operationId": "searchPlaces",
     "permission": "asset.read",
     "class": "read",
-    "tags": [
-      "Search"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "POST",
@@ -2168,9 +1683,7 @@
     "operationId": "searchRandom",
     "permission": "asset.read",
     "class": "read",
-    "tags": [
-      "Search"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "POST",
@@ -2178,9 +1691,7 @@
     "operationId": "searchSmart",
     "permission": "asset.read",
     "class": "read",
-    "tags": [
-      "Search"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "POST",
@@ -2188,19 +1699,15 @@
     "operationId": "searchSmartFacets",
     "permission": "asset.read",
     "class": "read",
-    "tags": [
-      "Search"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "POST",
     "path": "/api/search/statistics",
     "operationId": "searchAssetStatistics",
     "permission": "asset.statistics",
-    "class": "write",
-    "tags": [
-      "Search"
-    ]
+    "class": "read",
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -2208,9 +1715,7 @@
     "operationId": "getSearchSuggestions",
     "permission": "asset.read",
     "class": "read",
-    "tags": [
-      "Search"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "GET",
@@ -2218,9 +1723,7 @@
     "operationId": "getFilterSuggestions",
     "permission": "asset.read",
     "class": "read",
-    "tags": [
-      "Search"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "GET",
@@ -2228,71 +1731,37 @@
     "operationId": "getTagSuggestions",
     "permission": "asset.read",
     "class": "read",
-    "tags": [
-      "Search"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "GET",
     "path": "/api/server/about",
     "operationId": "getAboutInfo",
     "permission": "server.about",
-    "class": "write",
-    "tags": [
-      "Server"
-    ]
+    "class": "read",
+    "gateway": "deny"
   },
   {
     "method": "GET",
     "path": "/api/server/apk-links",
     "operationId": "getApkLinks",
     "permission": "server.apkLinks",
-    "class": "write",
-    "tags": [
-      "Server"
-    ]
+    "class": "read",
+    "gateway": "deny"
   },
   {
     "method": "GET",
     "path": "/api/server/config",
     "operationId": "getServerConfig",
-    "permission": null,
     "class": "public",
-    "tags": [
-      "Server",
-      "Deprecated"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "GET",
     "path": "/api/server/features",
     "operationId": "getServerFeatures",
-    "permission": null,
     "class": "public",
-    "tags": [
-      "Server",
-      "Deprecated"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/server/license",
-    "operationId": "getServerLicense",
-    "permission": "serverLicense.read",
-    "class": "admin",
-    "tags": [
-      "Server"
-    ]
-  },
-  {
-    "method": "PUT",
-    "path": "/api/server/license",
-    "operationId": "setServerLicense",
-    "permission": "serverLicense.update",
-    "class": "admin",
-    "tags": [
-      "Server"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "DELETE",
@@ -2300,39 +1769,45 @@
     "operationId": "deleteServerLicense",
     "permission": "serverLicense.delete",
     "class": "admin",
-    "tags": [
-      "Server"
-    ]
+    "gateway": "deny"
+  },
+  {
+    "method": "GET",
+    "path": "/api/server/license",
+    "operationId": "getServerLicense",
+    "permission": "serverLicense.read",
+    "class": "admin",
+    "gateway": "deny"
+  },
+  {
+    "method": "PUT",
+    "path": "/api/server/license",
+    "operationId": "setServerLicense",
+    "permission": "serverLicense.update",
+    "class": "admin",
+    "gateway": "deny"
   },
   {
     "method": "GET",
     "path": "/api/server/media-types",
     "operationId": "getSupportedMediaTypes",
-    "permission": null,
     "class": "public",
-    "tags": [
-      "Server"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "GET",
     "path": "/api/server/ml-health",
     "operationId": "getMlHealth",
     "permission": "server.about",
-    "class": "write",
-    "tags": [
-      "Server"
-    ]
+    "class": "read",
+    "gateway": "deny"
   },
   {
     "method": "GET",
     "path": "/api/server/ping",
     "operationId": "pingServer",
-    "permission": null,
     "class": "public",
-    "tags": [
-      "Server"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "GET",
@@ -2340,69 +1815,37 @@
     "operationId": "getServerStatistics",
     "permission": "server.statistics",
     "class": "admin",
-    "tags": [
-      "Server"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
     "path": "/api/server/storage",
     "operationId": "getStorage",
     "permission": "server.storage",
-    "class": "write",
-    "tags": [
-      "Server"
-    ]
+    "class": "read",
+    "gateway": "deny"
   },
   {
     "method": "GET",
     "path": "/api/server/version",
     "operationId": "getServerVersion",
-    "permission": null,
     "class": "public",
-    "tags": [
-      "Server"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "GET",
     "path": "/api/server/version-check",
     "operationId": "getVersionCheck",
     "permission": "server.versionCheck",
-    "class": "write",
-    "tags": [
-      "Server"
-    ]
+    "class": "read",
+    "gateway": "deny"
   },
   {
     "method": "GET",
     "path": "/api/server/version-history",
     "operationId": "getVersionHistory",
-    "permission": null,
     "class": "public",
-    "tags": [
-      "Server"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/sessions",
-    "operationId": "getSessions",
-    "permission": "session.read",
-    "class": "read",
-    "tags": [
-      "Sessions"
-    ]
-  },
-  {
-    "method": "POST",
-    "path": "/api/sessions",
-    "operationId": "createSession",
-    "permission": "session.create",
-    "class": "write",
-    "tags": [
-      "Sessions"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "DELETE",
@@ -2410,20 +1853,23 @@
     "operationId": "deleteAllSessions",
     "permission": "session.delete",
     "class": "write",
-    "tags": [
-      "Sessions"
-    ]
+    "gateway": "deny"
   },
   {
-    "method": "PUT",
-    "path": "/api/sessions/{id}",
-    "operationId": "updateSession",
-    "permission": "session.update",
+    "method": "GET",
+    "path": "/api/sessions",
+    "operationId": "getSessions",
+    "permission": "session.read",
+    "class": "read",
+    "gateway": "deny"
+  },
+  {
+    "method": "POST",
+    "path": "/api/sessions",
+    "operationId": "createSession",
+    "permission": "session.create",
     "class": "write",
-    "tags": [
-      "Sessions",
-      "Deprecated"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "DELETE",
@@ -2431,9 +1877,15 @@
     "operationId": "deleteSession",
     "permission": "session.delete",
     "class": "write",
-    "tags": [
-      "Sessions"
-    ]
+    "gateway": "deny"
+  },
+  {
+    "method": "PUT",
+    "path": "/api/sessions/{id}",
+    "operationId": "updateSession",
+    "permission": "session.update",
+    "class": "write",
+    "gateway": "deny"
   },
   {
     "method": "POST",
@@ -2441,9 +1893,7 @@
     "operationId": "lockSession",
     "permission": "session.lock",
     "class": "write",
-    "tags": [
-      "Sessions"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -2451,9 +1901,7 @@
     "operationId": "getAllSharedLinks",
     "permission": "sharedLink.read",
     "class": "read",
-    "tags": [
-      "Shared links"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
@@ -2461,49 +1909,7 @@
     "operationId": "createSharedLink",
     "permission": "sharedLink.create",
     "class": "write",
-    "tags": [
-      "Shared links"
-    ]
-  },
-  {
-    "method": "POST",
-    "path": "/api/shared-links/login",
-    "operationId": "sharedLinkLogin",
-    "permission": null,
-    "class": "full",
-    "tags": [
-      "Shared links"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/shared-links/me",
-    "operationId": "getMySharedLink",
-    "permission": null,
-    "class": "full",
-    "tags": [
-      "Shared links"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/shared-links/{id}",
-    "operationId": "getSharedLinkById",
-    "permission": "sharedLink.read",
-    "class": "read",
-    "tags": [
-      "Shared links"
-    ]
-  },
-  {
-    "method": "PATCH",
-    "path": "/api/shared-links/{id}",
-    "operationId": "updateSharedLink",
-    "permission": "sharedLink.update",
-    "class": "write",
-    "tags": [
-      "Shared links"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "DELETE",
@@ -2511,19 +1917,23 @@
     "operationId": "removeSharedLink",
     "permission": "sharedLink.delete",
     "class": "write",
-    "tags": [
-      "Shared links"
-    ]
+    "gateway": "deny"
   },
   {
-    "method": "PUT",
-    "path": "/api/shared-links/{id}/assets",
-    "operationId": "addSharedLinkAssets",
+    "method": "GET",
+    "path": "/api/shared-links/{id}",
+    "operationId": "getSharedLinkById",
+    "permission": "sharedLink.read",
+    "class": "read",
+    "gateway": "deny"
+  },
+  {
+    "method": "PATCH",
+    "path": "/api/shared-links/{id}",
+    "operationId": "updateSharedLink",
     "permission": "sharedLink.update",
     "class": "write",
-    "tags": [
-      "Shared links"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "DELETE",
@@ -2531,9 +1941,29 @@
     "operationId": "removeSharedLinkAssets",
     "permission": "sharedLink.update",
     "class": "write",
-    "tags": [
-      "Shared links"
-    ]
+    "gateway": "deny"
+  },
+  {
+    "method": "PUT",
+    "path": "/api/shared-links/{id}/assets",
+    "operationId": "addSharedLinkAssets",
+    "permission": "sharedLink.update",
+    "class": "write",
+    "gateway": "deny"
+  },
+  {
+    "method": "POST",
+    "path": "/api/shared-links/login",
+    "operationId": "sharedLinkLogin",
+    "class": "full",
+    "gateway": "deny"
+  },
+  {
+    "method": "GET",
+    "path": "/api/shared-links/me",
+    "operationId": "getMySharedLink",
+    "class": "full",
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -2541,9 +1971,7 @@
     "operationId": "getAllSpaces",
     "permission": "sharedSpace.read",
     "class": "read",
-    "tags": [
-      "Shared Spaces"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "POST",
@@ -2551,29 +1979,7 @@
     "operationId": "createSpace",
     "permission": "sharedSpace.create",
     "class": "write",
-    "tags": [
-      "Shared Spaces"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/shared-spaces/{id}",
-    "operationId": "getSpace",
-    "permission": "sharedSpace.read",
-    "class": "read",
-    "tags": [
-      "Shared Spaces"
-    ]
-  },
-  {
-    "method": "PATCH",
-    "path": "/api/shared-spaces/{id}",
-    "operationId": "updateSpace",
-    "permission": "sharedSpace.update",
-    "class": "write",
-    "tags": [
-      "Shared Spaces"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "DELETE",
@@ -2581,9 +1987,23 @@
     "operationId": "removeSpace",
     "permission": "sharedSpace.delete",
     "class": "write",
-    "tags": [
-      "Shared Spaces"
-    ]
+    "gateway": "deny"
+  },
+  {
+    "method": "GET",
+    "path": "/api/shared-spaces/{id}",
+    "operationId": "getSpace",
+    "permission": "sharedSpace.read",
+    "class": "read",
+    "gateway": "forward"
+  },
+  {
+    "method": "PATCH",
+    "path": "/api/shared-spaces/{id}",
+    "operationId": "updateSpace",
+    "permission": "sharedSpace.update",
+    "class": "write",
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -2591,9 +2011,7 @@
     "operationId": "getSpaceActivities",
     "permission": "sharedSpace.read",
     "class": "read",
-    "tags": [
-      "Shared Spaces"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "GET",
@@ -2601,9 +2019,7 @@
     "operationId": "getSharedSpaceAlbumFolders",
     "permission": "sharedSpace.read",
     "class": "read",
-    "tags": [
-      "Shared Spaces"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "POST",
@@ -2611,19 +2027,7 @@
     "operationId": "createSharedSpaceAlbumFolder",
     "permission": "sharedSpaceAlbumFolder.create",
     "class": "write",
-    "tags": [
-      "Shared Spaces"
-    ]
-  },
-  {
-    "method": "PATCH",
-    "path": "/api/shared-spaces/{id}/album-folders/{folderId}",
-    "operationId": "updateSharedSpaceAlbumFolder",
-    "permission": "sharedSpaceAlbumFolder.update",
-    "class": "write",
-    "tags": [
-      "Shared Spaces"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "DELETE",
@@ -2631,9 +2035,15 @@
     "operationId": "deleteSharedSpaceAlbumFolder",
     "permission": "sharedSpaceAlbumFolder.delete",
     "class": "write",
-    "tags": [
-      "Shared Spaces"
-    ]
+    "gateway": "deny"
+  },
+  {
+    "method": "PATCH",
+    "path": "/api/shared-spaces/{id}/album-folders/{folderId}",
+    "operationId": "updateSharedSpaceAlbumFolder",
+    "permission": "sharedSpaceAlbumFolder.update",
+    "class": "write",
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -2641,29 +2051,7 @@
     "operationId": "getSharedSpaceAlbums",
     "permission": "sharedSpace.read",
     "class": "read",
-    "tags": [
-      "Shared Spaces"
-    ]
-  },
-  {
-    "method": "PUT",
-    "path": "/api/shared-spaces/{id}/albums/{albumId}",
-    "operationId": "linkAlbum",
-    "permission": "sharedSpaceAlbum.create",
-    "class": "write",
-    "tags": [
-      "Shared Spaces"
-    ]
-  },
-  {
-    "method": "PATCH",
-    "path": "/api/shared-spaces/{id}/albums/{albumId}",
-    "operationId": "updateSharedSpaceAlbum",
-    "permission": "sharedSpaceAlbum.update",
-    "class": "write",
-    "tags": [
-      "Shared Spaces"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "DELETE",
@@ -2671,9 +2059,23 @@
     "operationId": "unlinkAlbum",
     "permission": "sharedSpaceAlbum.delete",
     "class": "write",
-    "tags": [
-      "Shared Spaces"
-    ]
+    "gateway": "deny"
+  },
+  {
+    "method": "PATCH",
+    "path": "/api/shared-spaces/{id}/albums/{albumId}",
+    "operationId": "updateSharedSpaceAlbum",
+    "permission": "sharedSpaceAlbum.update",
+    "class": "write",
+    "gateway": "deny"
+  },
+  {
+    "method": "PUT",
+    "path": "/api/shared-spaces/{id}/albums/{albumId}",
+    "operationId": "linkAlbum",
+    "permission": "sharedSpaceAlbum.create",
+    "class": "write",
+    "gateway": "deny"
   },
   {
     "method": "PUT",
@@ -2681,9 +2083,7 @@
     "operationId": "setSharedSpaceAlbumFolder",
     "permission": "sharedSpaceAlbum.update",
     "class": "write",
-    "tags": [
-      "Shared Spaces"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "PATCH",
@@ -2691,9 +2091,7 @@
     "operationId": "updateAlbumTimelineForMember",
     "permission": "sharedSpace.read",
     "class": "read",
-    "tags": [
-      "Shared Spaces"
-    ]
+    "gateway": "fake"
   },
   {
     "method": "GET",
@@ -2701,19 +2099,7 @@
     "operationId": "getAlbumTimelineHidePreview",
     "permission": "sharedSpace.read",
     "class": "read",
-    "tags": [
-      "Shared Spaces"
-    ]
-  },
-  {
-    "method": "POST",
-    "path": "/api/shared-spaces/{id}/assets",
-    "operationId": "addAssets",
-    "permission": "sharedSpaceAsset.create",
-    "class": "write",
-    "tags": [
-      "Shared Spaces"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "DELETE",
@@ -2721,29 +2107,15 @@
     "operationId": "removeAssets",
     "permission": "sharedSpaceAsset.delete",
     "class": "write",
-    "tags": [
-      "Shared Spaces"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
-    "path": "/api/shared-spaces/{id}/assets/bulk-add",
-    "operationId": "bulkAddAssets",
+    "path": "/api/shared-spaces/{id}/assets",
+    "operationId": "addAssets",
     "permission": "sharedSpaceAsset.create",
     "class": "write",
-    "tags": [
-      "Shared Spaces"
-    ]
-  },
-  {
-    "method": "POST",
-    "path": "/api/shared-spaces/{id}/assets/linked-albums",
-    "operationId": "getSharedSpaceAssetLinkedAlbums",
-    "permission": "sharedSpace.read",
-    "class": "read",
-    "tags": [
-      "Shared Spaces"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -2751,9 +2123,7 @@
     "operationId": "getSpaceAssetFaces",
     "permission": "sharedSpace.read",
     "class": "read",
-    "tags": [
-      "Shared Spaces"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "POST",
@@ -2761,9 +2131,23 @@
     "operationId": "createSpaceAssetFace",
     "permission": "sharedSpace.update",
     "class": "write",
-    "tags": [
-      "Shared Spaces"
-    ]
+    "gateway": "deny"
+  },
+  {
+    "method": "POST",
+    "path": "/api/shared-spaces/{id}/assets/bulk-add",
+    "operationId": "bulkAddAssets",
+    "permission": "sharedSpaceAsset.create",
+    "class": "write",
+    "gateway": "deny"
+  },
+  {
+    "method": "POST",
+    "path": "/api/shared-spaces/{id}/assets/linked-albums",
+    "operationId": "getSharedSpaceAssetLinkedAlbums",
+    "permission": "sharedSpace.read",
+    "class": "read",
+    "gateway": "forward"
   },
   {
     "method": "DELETE",
@@ -2771,9 +2155,7 @@
     "operationId": "deleteSpaceAssetFace",
     "permission": "sharedSpace.update",
     "class": "write",
-    "tags": [
-      "Shared Spaces"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "PUT",
@@ -2781,9 +2163,7 @@
     "operationId": "linkLibrary",
     "permission": "sharedSpaceLibrary.create",
     "class": "write",
-    "tags": [
-      "Shared Spaces"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "DELETE",
@@ -2791,9 +2171,7 @@
     "operationId": "unlinkLibrary",
     "permission": "sharedSpaceLibrary.delete",
     "class": "write",
-    "tags": [
-      "Shared Spaces"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -2801,9 +2179,7 @@
     "operationId": "getSpaceMapMarkers",
     "permission": "sharedSpace.read",
     "class": "read",
-    "tags": [
-      "Shared Spaces"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "GET",
@@ -2811,9 +2187,7 @@
     "operationId": "getMembers",
     "permission": "sharedSpace.read",
     "class": "read",
-    "tags": [
-      "Shared Spaces"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "POST",
@@ -2821,39 +2195,7 @@
     "operationId": "addMember",
     "permission": "sharedSpaceMember.create",
     "class": "write",
-    "tags": [
-      "Shared Spaces"
-    ]
-  },
-  {
-    "method": "PATCH",
-    "path": "/api/shared-spaces/{id}/members/me/preferences",
-    "operationId": "updateMemberPreferences",
-    "permission": "sharedSpace.read",
-    "class": "read",
-    "tags": [
-      "Shared Spaces"
-    ]
-  },
-  {
-    "method": "PATCH",
-    "path": "/api/shared-spaces/{id}/members/me/timeline",
-    "operationId": "updateMemberTimeline",
-    "permission": "sharedSpace.read",
-    "class": "read",
-    "tags": [
-      "Shared Spaces"
-    ]
-  },
-  {
-    "method": "PATCH",
-    "path": "/api/shared-spaces/{id}/members/{userId}",
-    "operationId": "updateMember",
-    "permission": "sharedSpaceMember.update",
-    "class": "write",
-    "tags": [
-      "Shared Spaces"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "DELETE",
@@ -2861,9 +2203,15 @@
     "operationId": "removeMember",
     "permission": "sharedSpaceMember.delete",
     "class": "write",
-    "tags": [
-      "Shared Spaces"
-    ]
+    "gateway": "deny"
+  },
+  {
+    "method": "PATCH",
+    "path": "/api/shared-spaces/{id}/members/{userId}",
+    "operationId": "updateMember",
+    "permission": "sharedSpaceMember.update",
+    "class": "write",
+    "gateway": "deny"
   },
   {
     "method": "PATCH",
@@ -2871,9 +2219,23 @@
     "operationId": "updateMemberMetadataContribution",
     "permission": "sharedSpaceMember.update",
     "class": "write",
-    "tags": [
-      "Shared Spaces"
-    ]
+    "gateway": "deny"
+  },
+  {
+    "method": "PATCH",
+    "path": "/api/shared-spaces/{id}/members/me/preferences",
+    "operationId": "updateMemberPreferences",
+    "permission": "sharedSpace.read",
+    "class": "read",
+    "gateway": "fake"
+  },
+  {
+    "method": "PATCH",
+    "path": "/api/shared-spaces/{id}/members/me/timeline",
+    "operationId": "updateMemberTimeline",
+    "permission": "sharedSpace.read",
+    "class": "read",
+    "gateway": "fake"
   },
   {
     "method": "GET",
@@ -2881,9 +2243,7 @@
     "operationId": "getSpacePeople",
     "permission": "sharedSpace.read",
     "class": "read",
-    "tags": [
-      "Shared Spaces"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "POST",
@@ -2891,59 +2251,7 @@
     "operationId": "createSpacePerson",
     "permission": "sharedSpace.update",
     "class": "write",
-    "tags": [
-      "Shared Spaces"
-    ]
-  },
-  {
-    "method": "POST",
-    "path": "/api/shared-spaces/{id}/people/deduplicate",
-    "operationId": "deduplicateSpacePeople",
-    "permission": "sharedSpace.update",
-    "class": "write",
-    "tags": [
-      "Shared Spaces"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/shared-spaces/{id}/people/face-statistics",
-    "operationId": "getSpacePeopleFaceStatistics",
-    "permission": "sharedSpace.read",
-    "class": "read",
-    "tags": [
-      "Shared Spaces"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/shared-spaces/{id}/people/statistics",
-    "operationId": "getSpacePeopleStatistics",
-    "permission": "sharedSpace.read",
-    "class": "read",
-    "tags": [
-      "Shared Spaces"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/shared-spaces/{id}/people/{personId}",
-    "operationId": "getSpacePerson",
-    "permission": "sharedSpace.read",
-    "class": "read",
-    "tags": [
-      "Shared Spaces"
-    ]
-  },
-  {
-    "method": "PUT",
-    "path": "/api/shared-spaces/{id}/people/{personId}",
-    "operationId": "updateSpacePerson",
-    "permission": "sharedSpace.update",
-    "class": "write",
-    "tags": [
-      "Shared Spaces"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "DELETE",
@@ -2951,19 +2259,23 @@
     "operationId": "deleteSpacePerson",
     "permission": "sharedSpace.update",
     "class": "write",
-    "tags": [
-      "Shared Spaces"
-    ]
+    "gateway": "deny"
+  },
+  {
+    "method": "GET",
+    "path": "/api/shared-spaces/{id}/people/{personId}",
+    "operationId": "getSpacePerson",
+    "permission": "sharedSpace.read",
+    "class": "read",
+    "gateway": "forward"
   },
   {
     "method": "PUT",
-    "path": "/api/shared-spaces/{id}/people/{personId}/alias",
-    "operationId": "setSpacePersonAlias",
-    "permission": "sharedSpace.read",
-    "class": "read",
-    "tags": [
-      "Shared Spaces"
-    ]
+    "path": "/api/shared-spaces/{id}/people/{personId}",
+    "operationId": "updateSpacePerson",
+    "permission": "sharedSpace.update",
+    "class": "write",
+    "gateway": "deny"
   },
   {
     "method": "DELETE",
@@ -2971,9 +2283,15 @@
     "operationId": "deleteSpacePersonAlias",
     "permission": "sharedSpace.read",
     "class": "read",
-    "tags": [
-      "Shared Spaces"
-    ]
+    "gateway": "fake"
+  },
+  {
+    "method": "PUT",
+    "path": "/api/shared-spaces/{id}/people/{personId}/alias",
+    "operationId": "setSpacePersonAlias",
+    "permission": "sharedSpace.read",
+    "class": "read",
+    "gateway": "fake"
   },
   {
     "method": "GET",
@@ -2981,9 +2299,7 @@
     "operationId": "getSpacePersonAssets",
     "permission": "sharedSpace.read",
     "class": "read",
-    "tags": [
-      "Shared Spaces"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "GET",
@@ -2991,9 +2307,7 @@
     "operationId": "getSpacePersonFaceSuggestions",
     "permission": "sharedSpace.read",
     "class": "read",
-    "tags": [
-      "Shared Spaces"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
@@ -3001,9 +2315,7 @@
     "operationId": "confirmSpacePersonFaceSuggestion",
     "permission": "sharedSpace.update",
     "class": "write",
-    "tags": [
-      "Shared Spaces"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
@@ -3011,9 +2323,7 @@
     "operationId": "dismissSpacePersonFaceSuggestion",
     "permission": "sharedSpace.update",
     "class": "write",
-    "tags": [
-      "Shared Spaces"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
@@ -3021,9 +2331,7 @@
     "operationId": "ignoreSpacePersonFaceSuggestion",
     "permission": "sharedSpace.update",
     "class": "write",
-    "tags": [
-      "Shared Spaces"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
@@ -3031,9 +2339,7 @@
     "operationId": "rejectSpacePersonFaceSuggestion",
     "permission": "sharedSpace.update",
     "class": "write",
-    "tags": [
-      "Shared Spaces"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -3041,19 +2347,7 @@
     "operationId": "getSpacePersonFaces",
     "permission": "sharedSpace.read",
     "class": "read",
-    "tags": [
-      "Shared Spaces"
-    ]
-  },
-  {
-    "method": "PUT",
-    "path": "/api/shared-spaces/{id}/people/{personId}/faces/{assetFaceId}",
-    "operationId": "attachSpacePersonFace",
-    "permission": "sharedSpace.update",
-    "class": "write",
-    "tags": [
-      "Shared Spaces"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "DELETE",
@@ -3061,9 +2355,15 @@
     "operationId": "detachSpacePersonFace",
     "permission": "sharedSpace.update",
     "class": "write",
-    "tags": [
-      "Shared Spaces"
-    ]
+    "gateway": "deny"
+  },
+  {
+    "method": "PUT",
+    "path": "/api/shared-spaces/{id}/people/{personId}/faces/{assetFaceId}",
+    "operationId": "attachSpacePersonFace",
+    "permission": "sharedSpace.update",
+    "class": "write",
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -3071,9 +2371,7 @@
     "operationId": "getSpacePersonFaceThumbnail",
     "permission": "sharedSpace.read",
     "class": "read",
-    "tags": [
-      "Shared Spaces"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "POST",
@@ -3081,9 +2379,7 @@
     "operationId": "mergeSpacePeople",
     "permission": "sharedSpace.update",
     "class": "write",
-    "tags": [
-      "Shared Spaces"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "PUT",
@@ -3091,9 +2387,7 @@
     "operationId": "updateSpacePersonRepresentativeFace",
     "permission": "sharedSpace.update",
     "class": "write",
-    "tags": [
-      "Shared Spaces"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -3101,9 +2395,7 @@
     "operationId": "getSpacePersonStatistics",
     "permission": "sharedSpace.read",
     "class": "read",
-    "tags": [
-      "Shared Spaces"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "GET",
@@ -3111,9 +2403,31 @@
     "operationId": "getSpacePersonThumbnail",
     "permission": "sharedSpace.read",
     "class": "read",
-    "tags": [
-      "Shared Spaces"
-    ]
+    "gateway": "forward"
+  },
+  {
+    "method": "POST",
+    "path": "/api/shared-spaces/{id}/people/deduplicate",
+    "operationId": "deduplicateSpacePeople",
+    "permission": "sharedSpace.update",
+    "class": "write",
+    "gateway": "deny"
+  },
+  {
+    "method": "GET",
+    "path": "/api/shared-spaces/{id}/people/face-statistics",
+    "operationId": "getSpacePeopleFaceStatistics",
+    "permission": "sharedSpace.read",
+    "class": "read",
+    "gateway": "forward"
+  },
+  {
+    "method": "GET",
+    "path": "/api/shared-spaces/{id}/people/statistics",
+    "operationId": "getSpacePeopleStatistics",
+    "permission": "sharedSpace.read",
+    "class": "read",
+    "gateway": "forward"
   },
   {
     "method": "GET",
@@ -3121,9 +2435,7 @@
     "operationId": "getTimelineHidePreview",
     "permission": "sharedSpace.read",
     "class": "read",
-    "tags": [
-      "Shared Spaces"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "PATCH",
@@ -3131,29 +2443,7 @@
     "operationId": "markSpaceViewed",
     "permission": "sharedSpace.read",
     "class": "read",
-    "tags": [
-      "Shared Spaces"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/stacks",
-    "operationId": "searchStacks",
-    "permission": "stack.read",
-    "class": "read",
-    "tags": [
-      "Stacks"
-    ]
-  },
-  {
-    "method": "POST",
-    "path": "/api/stacks",
-    "operationId": "createStack",
-    "permission": "stack.create",
-    "class": "write",
-    "tags": [
-      "Stacks"
-    ]
+    "gateway": "fake"
   },
   {
     "method": "DELETE",
@@ -3161,30 +2451,23 @@
     "operationId": "deleteStacks",
     "permission": "stack.delete",
     "class": "write",
-    "tags": [
-      "Stacks"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
-    "path": "/api/stacks/{id}",
-    "operationId": "getStack",
+    "path": "/api/stacks",
+    "operationId": "searchStacks",
     "permission": "stack.read",
     "class": "read",
-    "tags": [
-      "Stacks"
-    ]
+    "gateway": "forward"
   },
   {
-    "method": "PUT",
-    "path": "/api/stacks/{id}",
-    "operationId": "updateStack",
-    "permission": "stack.update",
+    "method": "POST",
+    "path": "/api/stacks",
+    "operationId": "createStack",
+    "permission": "stack.create",
     "class": "write",
-    "tags": [
-      "Stacks",
-      "Deprecated"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "DELETE",
@@ -3192,9 +2475,23 @@
     "operationId": "deleteStack",
     "permission": "stack.delete",
     "class": "write",
-    "tags": [
-      "Stacks"
-    ]
+    "gateway": "deny"
+  },
+  {
+    "method": "GET",
+    "path": "/api/stacks/{id}",
+    "operationId": "getStack",
+    "permission": "stack.read",
+    "class": "read",
+    "gateway": "forward"
+  },
+  {
+    "method": "PUT",
+    "path": "/api/stacks/{id}",
+    "operationId": "updateStack",
+    "permission": "stack.update",
+    "class": "write",
+    "gateway": "deny"
   },
   {
     "method": "DELETE",
@@ -3202,9 +2499,7 @@
     "operationId": "removeAssetFromStack",
     "permission": "stack.update",
     "class": "write",
-    "tags": [
-      "Stacks"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -3212,9 +2507,7 @@
     "operationId": "getEstimate",
     "permission": "job.read",
     "class": "admin",
-    "tags": [
-      "Storage Migration (admin)"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
@@ -3222,9 +2515,7 @@
     "operationId": "rollback",
     "permission": "job.create",
     "class": "admin",
-    "tags": [
-      "Storage Migration (admin)"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
@@ -3232,9 +2523,7 @@
     "operationId": "start",
     "permission": "job.create",
     "class": "admin",
-    "tags": [
-      "Storage Migration (admin)"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -3242,29 +2531,7 @@
     "operationId": "getStatus",
     "permission": "job.read",
     "class": "admin",
-    "tags": [
-      "Storage Migration (admin)"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/sync/ack",
-    "operationId": "getSyncAck",
-    "permission": "syncCheckpoint.read",
-    "class": "read",
-    "tags": [
-      "Sync"
-    ]
-  },
-  {
-    "method": "POST",
-    "path": "/api/sync/ack",
-    "operationId": "sendSyncAck",
-    "permission": "syncCheckpoint.update",
-    "class": "write",
-    "tags": [
-      "Sync"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "DELETE",
@@ -3272,9 +2539,23 @@
     "operationId": "deleteSyncAck",
     "permission": "syncCheckpoint.delete",
     "class": "write",
-    "tags": [
-      "Sync"
-    ]
+    "gateway": "deny"
+  },
+  {
+    "method": "GET",
+    "path": "/api/sync/ack",
+    "operationId": "getSyncAck",
+    "permission": "syncCheckpoint.read",
+    "class": "read",
+    "gateway": "deny"
+  },
+  {
+    "method": "POST",
+    "path": "/api/sync/ack",
+    "operationId": "sendSyncAck",
+    "permission": "syncCheckpoint.update",
+    "class": "write",
+    "gateway": "deny"
   },
   {
     "method": "POST",
@@ -3282,9 +2563,7 @@
     "operationId": "getSyncStream",
     "permission": "sync.stream",
     "class": "write",
-    "tags": [
-      "Sync"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -3292,10 +2571,7 @@
     "operationId": "getConfig",
     "permission": "systemConfig.read",
     "class": "admin",
-    "tags": [
-      "System config",
-      "Deprecated"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "PUT",
@@ -3303,10 +2579,7 @@
     "operationId": "updateConfig",
     "permission": "systemConfig.update",
     "class": "admin",
-    "tags": [
-      "System config",
-      "Deprecated"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -3314,10 +2587,7 @@
     "operationId": "getConfigDefaults",
     "permission": "systemConfig.read",
     "class": "admin",
-    "tags": [
-      "System config",
-      "Deprecated"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -3325,9 +2595,7 @@
     "operationId": "getStorageTemplateOptions",
     "permission": "systemConfig.read",
     "class": "admin",
-    "tags": [
-      "System config"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -3335,9 +2603,7 @@
     "operationId": "getAdminOnboarding",
     "permission": "systemMetadata.read",
     "class": "admin",
-    "tags": [
-      "System metadata"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
@@ -3345,9 +2611,7 @@
     "operationId": "updateAdminOnboarding",
     "permission": "systemMetadata.update",
     "class": "admin",
-    "tags": [
-      "System metadata"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -3355,9 +2619,7 @@
     "operationId": "getReverseGeocodingState",
     "permission": "systemMetadata.read",
     "class": "admin",
-    "tags": [
-      "System metadata"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -3365,9 +2627,7 @@
     "operationId": "getVersionCheckState",
     "permission": "systemMetadata.read",
     "class": "admin",
-    "tags": [
-      "System metadata"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -3375,9 +2635,7 @@
     "operationId": "getAllTags",
     "permission": "tag.read",
     "class": "read",
-    "tags": [
-      "Tags"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "POST",
@@ -3385,9 +2643,7 @@
     "operationId": "createTag",
     "permission": "tag.create",
     "class": "write",
-    "tags": [
-      "Tags"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "PUT",
@@ -3395,40 +2651,7 @@
     "operationId": "upsertTags",
     "permission": "tag.create",
     "class": "write",
-    "tags": [
-      "Tags"
-    ]
-  },
-  {
-    "method": "PUT",
-    "path": "/api/tags/assets",
-    "operationId": "bulkTagAssets",
-    "permission": "tag.asset",
-    "class": "write",
-    "tags": [
-      "Tags"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/tags/{id}",
-    "operationId": "getTagById",
-    "permission": "tag.read",
-    "class": "read",
-    "tags": [
-      "Tags"
-    ]
-  },
-  {
-    "method": "PUT",
-    "path": "/api/tags/{id}",
-    "operationId": "updateTag",
-    "permission": "tag.update",
-    "class": "write",
-    "tags": [
-      "Tags",
-      "Deprecated"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "DELETE",
@@ -3436,19 +2659,23 @@
     "operationId": "deleteTag",
     "permission": "tag.delete",
     "class": "write",
-    "tags": [
-      "Tags"
-    ]
+    "gateway": "deny"
+  },
+  {
+    "method": "GET",
+    "path": "/api/tags/{id}",
+    "operationId": "getTagById",
+    "permission": "tag.read",
+    "class": "read",
+    "gateway": "forward"
   },
   {
     "method": "PUT",
-    "path": "/api/tags/{id}/assets",
-    "operationId": "tagAssets",
-    "permission": "tag.asset",
+    "path": "/api/tags/{id}",
+    "operationId": "updateTag",
+    "permission": "tag.update",
     "class": "write",
-    "tags": [
-      "Tags"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "DELETE",
@@ -3456,9 +2683,23 @@
     "operationId": "untagAssets",
     "permission": "tag.asset",
     "class": "write",
-    "tags": [
-      "Tags"
-    ]
+    "gateway": "deny"
+  },
+  {
+    "method": "PUT",
+    "path": "/api/tags/{id}/assets",
+    "operationId": "tagAssets",
+    "permission": "tag.asset",
+    "class": "write",
+    "gateway": "deny"
+  },
+  {
+    "method": "PUT",
+    "path": "/api/tags/assets",
+    "operationId": "bulkTagAssets",
+    "permission": "tag.asset",
+    "class": "write",
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -3466,9 +2707,7 @@
     "operationId": "getTimeBucket",
     "permission": "asset.read",
     "class": "read",
-    "tags": [
-      "Timeline"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "GET",
@@ -3476,9 +2715,7 @@
     "operationId": "getTimeBucketCovers",
     "permission": "asset.read",
     "class": "read",
-    "tags": [
-      "Timeline"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "GET",
@@ -3486,9 +2723,7 @@
     "operationId": "getTimeBuckets",
     "permission": "asset.read",
     "class": "read",
-    "tags": [
-      "Timeline"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "POST",
@@ -3496,9 +2731,7 @@
     "operationId": "emptyTrash",
     "permission": "asset.delete",
     "class": "write",
-    "tags": [
-      "Trash"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
@@ -3506,9 +2739,7 @@
     "operationId": "restoreTrash",
     "permission": "asset.delete",
     "class": "write",
-    "tags": [
-      "Trash"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
@@ -3516,9 +2747,7 @@
     "operationId": "restoreAssets",
     "permission": "asset.delete",
     "class": "write",
-    "tags": [
-      "Trash"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -3526,9 +2755,7 @@
     "operationId": "getAllGroups",
     "permission": "userGroup.read",
     "class": "read",
-    "tags": [
-      "User Groups"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
@@ -3536,29 +2763,7 @@
     "operationId": "createGroup",
     "permission": "userGroup.create",
     "class": "write",
-    "tags": [
-      "User Groups"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/user-groups/{id}",
-    "operationId": "getGroup",
-    "permission": "userGroup.read",
-    "class": "read",
-    "tags": [
-      "User Groups"
-    ]
-  },
-  {
-    "method": "PATCH",
-    "path": "/api/user-groups/{id}",
-    "operationId": "updateGroup",
-    "permission": "userGroup.update",
-    "class": "write",
-    "tags": [
-      "User Groups"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "DELETE",
@@ -3566,9 +2771,23 @@
     "operationId": "removeGroup",
     "permission": "userGroup.delete",
     "class": "write",
-    "tags": [
-      "User Groups"
-    ]
+    "gateway": "deny"
+  },
+  {
+    "method": "GET",
+    "path": "/api/user-groups/{id}",
+    "operationId": "getGroup",
+    "permission": "userGroup.read",
+    "class": "read",
+    "gateway": "deny"
+  },
+  {
+    "method": "PATCH",
+    "path": "/api/user-groups/{id}",
+    "operationId": "updateGroup",
+    "permission": "userGroup.update",
+    "class": "write",
+    "gateway": "deny"
   },
   {
     "method": "PUT",
@@ -3576,9 +2795,7 @@
     "operationId": "setMembers",
     "permission": "userGroup.update",
     "class": "write",
-    "tags": [
-      "User Groups"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -3586,141 +2803,7 @@
     "operationId": "searchUsers",
     "permission": "user.read",
     "class": "read",
-    "tags": [
-      "Users"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/users/me",
-    "operationId": "getMyUser",
-    "permission": "user.read",
-    "class": "read",
-    "tags": [
-      "Users"
-    ]
-  },
-  {
-    "method": "PUT",
-    "path": "/api/users/me",
-    "operationId": "updateMyUser",
-    "permission": "user.update",
-    "class": "write",
-    "tags": [
-      "Users",
-      "Deprecated"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/users/me/calendar-heatmap",
-    "operationId": "getMyCalendarHeatmap",
-    "permission": "user.read",
-    "class": "read",
-    "tags": [
-      "Users"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/users/me/license",
-    "operationId": "getUserLicense",
-    "permission": "userLicense.read",
-    "class": "read",
-    "tags": [
-      "Users"
-    ]
-  },
-  {
-    "method": "PUT",
-    "path": "/api/users/me/license",
-    "operationId": "setUserLicense",
-    "permission": "userLicense.update",
-    "class": "write",
-    "tags": [
-      "Users"
-    ]
-  },
-  {
-    "method": "DELETE",
-    "path": "/api/users/me/license",
-    "operationId": "deleteUserLicense",
-    "permission": "userLicense.delete",
-    "class": "write",
-    "tags": [
-      "Users"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/users/me/onboarding",
-    "operationId": "getUserOnboarding",
-    "permission": "userOnboarding.read",
-    "class": "read",
-    "tags": [
-      "Users"
-    ]
-  },
-  {
-    "method": "PUT",
-    "path": "/api/users/me/onboarding",
-    "operationId": "setUserOnboarding",
-    "permission": "userOnboarding.update",
-    "class": "write",
-    "tags": [
-      "Users"
-    ]
-  },
-  {
-    "method": "DELETE",
-    "path": "/api/users/me/onboarding",
-    "operationId": "deleteUserOnboarding",
-    "permission": "userOnboarding.delete",
-    "class": "write",
-    "tags": [
-      "Users"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/users/me/preferences",
-    "operationId": "getMyPreferences",
-    "permission": "userPreference.read",
-    "class": "read",
-    "tags": [
-      "Users"
-    ]
-  },
-  {
-    "method": "PUT",
-    "path": "/api/users/me/preferences",
-    "operationId": "updateMyPreferences",
-    "permission": "userPreference.update",
-    "class": "write",
-    "tags": [
-      "Users",
-      "Deprecated"
-    ]
-  },
-  {
-    "method": "POST",
-    "path": "/api/users/profile-image",
-    "operationId": "createProfileImage",
-    "permission": "userProfileImage.update",
-    "class": "write",
-    "tags": [
-      "Users"
-    ]
-  },
-  {
-    "method": "DELETE",
-    "path": "/api/users/profile-image",
-    "operationId": "deleteProfileImage",
-    "permission": "userProfileImage.delete",
-    "class": "write",
-    "tags": [
-      "Users"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -3728,9 +2811,7 @@
     "operationId": "getUser",
     "permission": "user.read",
     "class": "read",
-    "tags": [
-      "Users"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -3738,9 +2819,111 @@
     "operationId": "getProfileImage",
     "permission": "userProfileImage.read",
     "class": "read",
-    "tags": [
-      "Users"
-    ]
+    "gateway": "forward"
+  },
+  {
+    "method": "GET",
+    "path": "/api/users/me",
+    "operationId": "getMyUser",
+    "permission": "user.read",
+    "class": "read",
+    "gateway": "forward"
+  },
+  {
+    "method": "PUT",
+    "path": "/api/users/me",
+    "operationId": "updateMyUser",
+    "permission": "user.update",
+    "class": "write",
+    "gateway": "deny"
+  },
+  {
+    "method": "GET",
+    "path": "/api/users/me/calendar-heatmap",
+    "operationId": "getMyCalendarHeatmap",
+    "permission": "user.read",
+    "class": "read",
+    "gateway": "forward"
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/users/me/license",
+    "operationId": "deleteUserLicense",
+    "permission": "userLicense.delete",
+    "class": "write",
+    "gateway": "deny"
+  },
+  {
+    "method": "GET",
+    "path": "/api/users/me/license",
+    "operationId": "getUserLicense",
+    "permission": "userLicense.read",
+    "class": "read",
+    "gateway": "deny"
+  },
+  {
+    "method": "PUT",
+    "path": "/api/users/me/license",
+    "operationId": "setUserLicense",
+    "permission": "userLicense.update",
+    "class": "write",
+    "gateway": "deny"
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/users/me/onboarding",
+    "operationId": "deleteUserOnboarding",
+    "permission": "userOnboarding.delete",
+    "class": "write",
+    "gateway": "deny"
+  },
+  {
+    "method": "GET",
+    "path": "/api/users/me/onboarding",
+    "operationId": "getUserOnboarding",
+    "permission": "userOnboarding.read",
+    "class": "read",
+    "gateway": "forward"
+  },
+  {
+    "method": "PUT",
+    "path": "/api/users/me/onboarding",
+    "operationId": "setUserOnboarding",
+    "permission": "userOnboarding.update",
+    "class": "write",
+    "gateway": "fake"
+  },
+  {
+    "method": "GET",
+    "path": "/api/users/me/preferences",
+    "operationId": "getMyPreferences",
+    "permission": "userPreference.read",
+    "class": "read",
+    "gateway": "forward"
+  },
+  {
+    "method": "PUT",
+    "path": "/api/users/me/preferences",
+    "operationId": "updateMyPreferences",
+    "permission": "userPreference.update",
+    "class": "write",
+    "gateway": "fake"
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/users/profile-image",
+    "operationId": "deleteProfileImage",
+    "permission": "userProfileImage.delete",
+    "class": "write",
+    "gateway": "deny"
+  },
+  {
+    "method": "POST",
+    "path": "/api/users/profile-image",
+    "operationId": "createProfileImage",
+    "permission": "userProfileImage.update",
+    "class": "write",
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -3748,9 +2931,7 @@
     "operationId": "getAssetsByOriginalPath",
     "permission": "folder.read",
     "class": "read",
-    "tags": [
-      "Views"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "GET",
@@ -3758,9 +2939,7 @@
     "operationId": "getUniqueOriginalPaths",
     "permission": "folder.read",
     "class": "read",
-    "tags": [
-      "Views"
-    ]
+    "gateway": "forward"
   },
   {
     "method": "GET",
@@ -3768,9 +2947,7 @@
     "operationId": "searchWorkflows",
     "permission": "workflow.read",
     "class": "read",
-    "tags": [
-      "Workflows"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "POST",
@@ -3778,40 +2955,7 @@
     "operationId": "createWorkflow",
     "permission": "workflow.create",
     "class": "write",
-    "tags": [
-      "Workflows"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/workflows/triggers",
-    "operationId": "getWorkflowTriggers",
-    "permission": null,
-    "class": "full",
-    "tags": [
-      "Workflows"
-    ]
-  },
-  {
-    "method": "GET",
-    "path": "/api/workflows/{id}",
-    "operationId": "getWorkflow",
-    "permission": "workflow.read",
-    "class": "read",
-    "tags": [
-      "Workflows"
-    ]
-  },
-  {
-    "method": "PUT",
-    "path": "/api/workflows/{id}",
-    "operationId": "updateWorkflow",
-    "permission": "workflow.update",
-    "class": "write",
-    "tags": [
-      "Workflows",
-      "Deprecated"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "DELETE",
@@ -3819,9 +2963,23 @@
     "operationId": "deleteWorkflow",
     "permission": "workflow.delete",
     "class": "write",
-    "tags": [
-      "Workflows"
-    ]
+    "gateway": "deny"
+  },
+  {
+    "method": "GET",
+    "path": "/api/workflows/{id}",
+    "operationId": "getWorkflow",
+    "permission": "workflow.read",
+    "class": "read",
+    "gateway": "deny"
+  },
+  {
+    "method": "PUT",
+    "path": "/api/workflows/{id}",
+    "operationId": "updateWorkflow",
+    "permission": "workflow.update",
+    "class": "write",
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -3829,9 +2987,7 @@
     "operationId": "getWorkflowLogs",
     "permission": "workflow.logs",
     "class": "write",
-    "tags": [
-      "Workflows"
-    ]
+    "gateway": "deny"
   },
   {
     "method": "GET",
@@ -3839,8 +2995,13 @@
     "operationId": "getWorkflowForShare",
     "permission": "workflow.read",
     "class": "read",
-    "tags": [
-      "Workflows"
-    ]
+    "gateway": "deny"
+  },
+  {
+    "method": "GET",
+    "path": "/api/workflows/triggers",
+    "operationId": "getWorkflowTriggers",
+    "class": "full",
+    "gateway": "deny"
   }
 ]
