@@ -44,10 +44,28 @@ the server itself for the people who log in.
   added upstream stay blocked until reviewed. Writes the UI fires on its own (favorites, person aliases, memory
   "seen", preferences, logout) are answered locally without reaching the server, because every visitor shares one
   user.
-- Web pages are forwarded for `GET`/`HEAD`; `/auth`, `/admin` and `/user-settings` redirect to `/`.
+- Reads of archived, hidden, locked or trashed assets are refused (`visibility=archive|hidden|locked`, `isTrashed`,
+  `isArchived`, `withDeleted`, `trashedAfter|Before`, in the query or a search body): what the owner put away is
+  not part of the gallery.
+- Web pages are forwarded for `GET`/`HEAD`; login, admin, settings and the owner's private or management areas
+  (`/archive`, `/trash`, `/locked`, `/utilities`, `/import`, `/sharing`…) redirect to `/`.
 - Server `Set-Cookie` headers are dropped; web pages get `immich_is_authenticated=true` so the app skips its login
   redirect.
 - The websocket is proxied with the gallery's key.
+
+## How the web app stays read-only
+
+- `/api/users/me` answers with a stable fake user id per gallery (and `public@<host>` as email). The web app shows
+  edit, delete, share and face-naming controls only when `asset.ownerId === currentUser.id`, so every asset renders
+  read-only. Requests that send the fake id back (e.g. `/api/timeline/buckets?userId=…`) get the real one.
+- The app shell gets `<meta name="noodle-public-gallery" content="people map …">`. The web app
+  (`web/src/lib/utils/public-gallery.ts`) then hides upload, notifications, the account menu, management links,
+  storage info, album creation, person editing, bulk selection and "add to album", and offers downloads only when
+  the meta lists `download`.
+- Without `downloadOriginal`, full-size image requests are served the preview: the server would otherwise redirect
+  them to the original file.
+
+None of this is a security boundary: the gateway's allowlist and the read-only API key are.
 
 ## Tests
 
@@ -60,7 +78,22 @@ pnpm inventory   # regenerate docs/route-classification.{json,md} from the OpenA
 `src/policy.spec.ts` reads the OpenAPI spec and fails if the policy forwards any route whose permission is not
 read-only, or any non-GET route outside the reviewed list. Run it after every upstream sync.
 
+## End-to-end environment
+
+`e2e/` starts a disposable Noodle and seeds two galleries (one owning photos, an album, a tag and a named face, and
+viewing a Shared Space; one for isolation checks):
+
+```sh
+cd e2e
+NOODLE_VERSION=v5.8.0-rc.1 docker compose -f compose.yml -f compose.web.yml up -d   # web from this checkout
+node seed.ts
+cd .. && node src/main.ts e2e/gateway.yaml   # then open http://gal1.localhost:28080
+```
+
+`compose.web.yml` mounts `web/build`, so build the web app first (`pnpm --filter immich-web build`). Leave it out to
+test the image's own web app.
+
 ## Not yet done
 
-The UI still shows edit controls (they fail harmlessly), `/api/users/me` exposes the gallery user's email, and GPS
-data is not scrubbed when `map` is off. These are phases 3–4 in [PLAN.md](PLAN.md).
+GPS data is not scrubbed from asset details when `map` is off, and Global People has not been checked for
+cross-gallery leaks. See phase 4 in [PLAN.md](PLAN.md).

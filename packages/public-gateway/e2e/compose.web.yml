@@ -1,0 +1,6 @@
+# Serves the web app built from this checkout (`pnpm --filter immich-web build`) instead of the image's own:
+#   NOODLE_VERSION=v5.8.0-rc.1 docker compose -f compose.yml -f compose.web.yml up -d
+services:
+  server:
+    volumes:
+      - '../../../web/build:/build/www:ro'

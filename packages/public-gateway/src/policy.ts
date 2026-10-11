@@ -1,10 +1,12 @@
+import type { RewriteName } from './rewrite.ts';
+
 export type Feature = 'people' | 'map' | 'smartSearch' | 'downloadOriginal';
 export type Features = Record<Feature, boolean>;
 
 export const ALL_FEATURES: Features = { people: true, map: true, smartSearch: true, downloadOriginal: true };
 
 export type Decision =
-  | { action: 'forward' }
+  | { action: 'forward'; rewrite?: RewriteName }
   /** Answer locally without contacting the server */
   | { action: 'fake'; status: number; body?: unknown }
   | { action: 'redirect'; location: string }
@@ -19,6 +21,7 @@ type Rule = {
   feature?: Feature;
   /** Response while `feature` is disabled. Default: 404 */
   whenDisabled?: { status: number; body?: unknown };
+  rewrite?: RewriteName;
 };
 
 const GET = ['GET', 'HEAD'];
@@ -42,12 +45,12 @@ const API_RULES: Rule[] = [
     '/api/public/config/defaults',
     '/api/config',
     '/api/config/defaults',
-    '/api/users/me',
     '/api/users/me/preferences',
     '/api/users/me/onboarding',
     '/api/users/me/calendar-heatmap',
     '/api/users/{id}/profile-image',
   ].map((path) => ({ methods: GET, path })),
+  { methods: GET, path: '/api/users/me', rewrite: 'currentUser' },
 
   // timeline and assets
   ...[
@@ -181,13 +184,33 @@ const API_RULES: Rule[] = [
     respond: { status: 200, body: { successful: true, redirectUri: '/' } },
   },
   { methods: GET, path: '/api/notifications', respond: empty },
+  // Server details stay private. The web app only reads `licensed` from it, to decide whether to show purchase
+  // prompts, which visitors should never see.
+  { methods: GET, path: '/api/server/about', respond: { status: 200, body: { licensed: true } } },
+  // face suggestions are an owner-only review queue (person.update); the person page asks for them anyway
+  { methods: GET, path: '/api/people/{id}/face-suggestions', respond: { status: 200, body: { total: 0, items: [] } } },
 ];
 
 /** For tests: the route templates the policy knows about */
 export const ruleTemplates = () => API_RULES.map(({ methods, path }) => ({ methods, path }));
 
 /** Web app pages a visitor has no business on */
-const REDIRECT_PREFIXES = ['/auth', '/admin', '/user-settings'];
+const REDIRECT_PREFIXES = [
+  '/auth',
+  '/admin',
+  '/user-settings',
+  // the owner's private areas, and pages that only manage things
+  '/archive',
+  '/trash',
+  '/locked',
+  '/utilities',
+  '/import',
+  '/sharing',
+  '/shared-links',
+  '/partners',
+  '/buy',
+  '/workflows',
+];
 
 function emptyPeople() {
   return { people: [], total: 0, hidden: 0, hasNextPage: false };
@@ -210,6 +233,65 @@ const COMPILED: CompiledRule[] = API_RULES.map((rule) => ({ ...rule, pattern: co
   (a, b) => a.path.split('{').length - b.path.split('{').length,
 );
 
+const THUMBNAIL = compile('/api/assets/{id}/thumbnail');
+
+/**
+ * Query string to send upstream. Without original downloads, a full-size thumbnail request asks for the preview
+ * instead: when no full-size image was generated, the server redirects `size=fullsize` to the original file.
+ */
+export const upstreamQuery = (path: string, query: string, features: Features): string => {
+  if (features.downloadOriginal || !THUMBNAIL.test(path) || !query) {
+    return query;
+  }
+  const params = new URLSearchParams(query.slice(1));
+  if (params.get('size') !== 'fullsize') {
+    return query;
+  }
+  params.set('size', 'preview');
+  return `?${params}`;
+};
+
+// What the owner archived, trashed, hid or locked away is not part of the public gallery.
+const PRIVATE_VISIBILITIES = new Set(['archive', 'hidden', 'locked']);
+const TRUE_FLAGS = ['isTrashed', 'isArchived', 'withDeleted'];
+const TRASH_RANGE = ['trashedAfter', 'trashedBefore'];
+
+/**
+ * True when a read asks for assets outside the normal timeline, through query parameters (`/api/timeline/*`,
+ * `/api/map/markers`, `/api/memories`…) or a search body (`/api/search/*`).
+ */
+export const requestsPrivateAssets = (query: string, body?: Buffer): boolean => {
+  const params = new URLSearchParams(query.startsWith('?') ? query.slice(1) : query);
+  for (const [name, value] of params) {
+    if (
+      (name === 'visibility' && PRIVATE_VISIBILITIES.has(value.toLowerCase())) ||
+      (TRUE_FLAGS.includes(name) && value.toLowerCase() !== 'false') ||
+      TRASH_RANGE.includes(name)
+    ) {
+      return true;
+    }
+  }
+  if (!body?.length) {
+    return false;
+  }
+  let dto: unknown;
+  try {
+    dto = JSON.parse(body.toString('utf8'));
+  } catch {
+    // the server would reject it anyway; refusing here keeps the check from being bypassed by odd encodings
+    return true;
+  }
+  if (typeof dto !== 'object' || dto === null || Array.isArray(dto)) {
+    return true;
+  }
+  const fields = dto as Record<string, unknown>;
+  return (
+    (typeof fields.visibility === 'string' && PRIVATE_VISIBILITIES.has(fields.visibility.toLowerCase())) ||
+    TRUE_FLAGS.some((name) => fields[name] !== undefined && fields[name] !== false) ||
+    TRASH_RANGE.some((name) => fields[name] !== undefined)
+  );
+};
+
 const isUnder = (path: string, prefix: string) => path === prefix || path.startsWith(`${prefix}/`);
 
 /** `path` must already be normalized (see `normalizePath`) and carry no query string */
@@ -225,7 +307,10 @@ export const decide = (method: string, path: string, features: Features = ALL_FE
     if (rule.feature && !features[rule.feature]) {
       return rule.whenDisabled ? { action: 'fake', ...rule.whenDisabled } : { action: 'deny', status: 404 };
     }
-    return rule.respond ? { action: 'fake', ...rule.respond } : { action: 'forward' };
+    if (rule.respond) {
+      return { action: 'fake', ...rule.respond };
+    }
+    return rule.rewrite ? { action: 'forward', rewrite: rule.rewrite } : { action: 'forward' };
   }
 
   if (!GET.includes(method)) {
@@ -234,5 +319,7 @@ export const decide = (method: string, path: string, features: Features = ALL_FE
   if (REDIRECT_PREFIXES.some((prefix) => isUnder(lowerPath, prefix))) {
     return { action: 'redirect', location: '/' };
   }
-  return { action: 'forward' };
+  // build assets are immutable files; every other web path may be the app's HTML shell
+  const isAsset = isUnder(lowerPath, '/_app') || (path.split('/').at(-1) ?? '').includes('.');
+  return isAsset ? { action: 'forward' } : { action: 'forward', rewrite: 'html' };
 };

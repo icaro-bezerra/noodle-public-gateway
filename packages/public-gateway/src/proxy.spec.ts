@@ -213,6 +213,16 @@ describe('gateway', () => {
     expect(seen).toEqual([]);
   });
 
+  it('refuses reads of archived or trashed assets before they reach the server', async () => {
+    expect((await send('gal1.example.com', 'GET', '/api/timeline/buckets?visibility=archive')).status).toBe(403);
+    const search = await send('gal1.example.com', 'POST', '/api/search/metadata', {
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ withDeleted: true }),
+    });
+    expect(search.status).toBe(403);
+    expect(seen).toEqual([]);
+  });
+
   it('redirects the login page home', async () => {
     const res = await send('gal1.example.com', 'GET', '/auth/login');
     expect(res.status).toBe(302);

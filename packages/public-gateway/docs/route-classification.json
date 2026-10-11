@@ -1389,7 +1389,7 @@
     "operationId": "getPersonFaceSuggestions",
     "permission": "person.update",
     "class": "write",
-    "gateway": "deny"
+    "gateway": "fake"
   },
   {
     "method": "POST",
@@ -1739,7 +1739,7 @@
     "operationId": "getAboutInfo",
     "permission": "server.about",
     "class": "read",
-    "gateway": "deny"
+    "gateway": "fake"
   },
   {
     "method": "GET",

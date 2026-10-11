@@ -1,9 +1,7 @@
 library/
 chrome-profile/
 *.key
-asset.json
-photo.jpg
+*.jpg
+seed.json
 gateway.yaml
-out
-hdr
-*.png
+shots/

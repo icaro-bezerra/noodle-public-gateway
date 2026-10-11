@@ -8,8 +8,10 @@ import {
 import { request as httpsRequest } from 'node:https';
 import type { Duplex } from 'node:stream';
 import type { Gallery, GatewayConfig } from './config.ts';
-import { decide, type Decision } from './policy.ts';
+import { IdentityMap } from './identity.ts';
+import { decide, requestsPrivateAssets, upstreamQuery, type Decision } from './policy.ts';
 import { buildUpstreamHeaders, normalizePath, stripCredentialParams } from './request.ts';
+import { appliesTo, MAX_REWRITE_BYTES, rewriteBody, type RewriteName } from './rewrite.ts';
 
 /** Lets the web app skip its login redirect; it carries no secret. */
 const AUTH_COOKIE = 'immich_is_authenticated=true; Path=/; SameSite=Lax';
@@ -164,9 +166,56 @@ const responseHeaders = (upstream: IncomingMessage, isApi: boolean) => {
   return headers;
 };
 
-const forward = async (config: GatewayConfig, req: IncomingMessage, res: ServerResponse, target: Resolved) => {
+const readAll = (stream: IncomingMessage, maxBytes: number) =>
+  new Promise<Buffer>((resolve, reject) => {
+    const chunks: Buffer[] = [];
+    let size = 0;
+    stream.on('data', (chunk: Buffer) => {
+      size += chunk.length;
+      if (size > maxBytes) {
+        stream.destroy(new Error('Upstream response too large to rewrite'));
+        return;
+      }
+      chunks.push(chunk);
+    });
+    stream.on('end', () => resolve(Buffer.concat(chunks)));
+    stream.on('error', reject);
+  });
+
+const sendRewritten = async (
+  res: ServerResponse,
+  upstreamRes: IncomingMessage,
+  headers: Record<string, string | string[]>,
+  rewrite: RewriteName,
+  target: Resolved,
+) => {
+  const original = await readAll(upstreamRes, MAX_REWRITE_BYTES);
+  const body = Buffer.from(rewriteBody(rewrite, original.toString('utf8'), target.gallery));
+  // the body changed, so validators computed by the server no longer describe it
+  delete headers['etag'];
+  delete headers['content-encoding'];
+  headers['content-length'] = String(body.length);
+  res.writeHead(upstreamRes.statusCode ?? 502, headers);
+  res.end(body);
+};
+
+const forward = async (
+  config: GatewayConfig,
+  identity: IdentityMap,
+  req: IncomingMessage,
+  res: ServerResponse,
+  target: Resolved,
+  rewrite?: RewriteName,
+) => {
   const method = req.method ?? 'GET';
-  const body = await readBody(req, config.maxBodyBytes);
+  const rawBody = await readBody(req, config.maxBodyBytes);
+  if (requestsPrivateAssets(target.query, rawBody)) {
+    throw new HttpError(403, 'Forbidden');
+  }
+  // the policy already approved this path; swapping one id segment for another cannot change the route
+  const query = upstreamQuery(target.path, target.query, target.gallery.features);
+  const upstreamPath = await identity.translate(target.gallery, target.path + query);
+  const body = rawBody && Buffer.from(await identity.translate(target.gallery, rawBody.toString('utf8')));
   const headers = buildUpstreamHeaders(req.headers, {
     apiKey: target.gallery.apiKey,
     host: target.gallery.host,
@@ -175,18 +224,27 @@ const forward = async (config: GatewayConfig, req: IncomingMessage, res: ServerR
   if (body) {
     headers['content-length'] = body.length;
   }
+  if (rewrite) {
+    // rewriting needs the plain body; conditional requests could answer 304 with a stale, unrewritten copy cached
+    delete headers['accept-encoding'];
+    delete headers['if-none-match'];
+    delete headers['if-modified-since'];
+  }
 
   await new Promise<void>((resolve, reject) => {
-    const upstream = upstreamRequest(config)(
-      upstreamOptions(config, method, target.path + target.query, headers),
-      (upstreamRes) => {
-        const isApi = target.path.toLowerCase().startsWith('/api');
-        res.writeHead(upstreamRes.statusCode ?? 502, responseHeaders(upstreamRes, isApi));
-        upstreamRes.pipe(res);
-        upstreamRes.on('end', resolve);
-        upstreamRes.on('error', reject);
-      },
-    );
+    const upstream = upstreamRequest(config)(upstreamOptions(config, method, upstreamPath, headers), (upstreamRes) => {
+      const isApi = target.path.toLowerCase().startsWith('/api');
+      const headers = responseHeaders(upstreamRes, isApi);
+      const status = upstreamRes.statusCode ?? 502;
+      if (rewrite && status === 200 && appliesTo(rewrite, upstreamRes.headers['content-type'])) {
+        sendRewritten(res, upstreamRes, headers, rewrite, target).then(resolve, reject);
+        return;
+      }
+      res.writeHead(status, headers);
+      upstreamRes.pipe(res);
+      upstreamRes.on('end', resolve);
+      upstreamRes.on('error', reject);
+    });
     upstream.on('error', reject);
     res.on('close', () => upstream.destroy());
     upstream.end(body);
@@ -266,7 +324,16 @@ const handleUpgrade = (config: GatewayConfig, req: IncomingMessage, socket: Dupl
   upstream.end();
 };
 
+const fetchUserId = (getConfig: () => GatewayConfig) => async (gallery: Gallery) => {
+  const res = await fetch(new URL('/api/users/me', getConfig().upstream), { headers: { 'x-api-key': gallery.apiKey } });
+  if (!res.ok) {
+    throw new Error(`Could not resolve the user of ${gallery.host}: ${res.status}`);
+  }
+  return ((await res.json()) as { id: string }).id;
+};
+
 export const createGateway = (getConfig: () => GatewayConfig, log: Log = defaultLog): Server => {
+  const identity = new IdentityMap(fetchUserId(getConfig));
   const server = createServer((req, res) => {
     const config = getConfig();
     const method = req.method ?? 'GET';
@@ -282,13 +349,22 @@ export const createGateway = (getConfig: () => GatewayConfig, log: Log = default
         answer(res, method, decision);
         return;
       }
-      await forward(config, req, res, target);
+      await forward(config, identity, req, res, target, decision.rewrite);
     };
 
     handle().catch((error: unknown) => {
       const status = error instanceof HttpError ? error.status : 502;
       if (status === 502) {
         log({ event: 'upstream-error', host: target?.gallery.host, method, path: target?.path, error: String(error) });
+      } else if (status === 403) {
+        log({
+          event: 'denied',
+          host: target?.gallery.host,
+          method,
+          path: target?.path,
+          status,
+          reason: 'private-assets',
+        });
       }
       if (res.headersSent) {
         res.destroy();

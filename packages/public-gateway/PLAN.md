@@ -106,10 +106,14 @@ Face recognition on a public page publishes people's names and faces (biometric 
       against a real Noodle (`e2e/`): the web app loads and shows the timeline without login. The released
       image still rejects `/albums/names` and `/gallery/map/markers` with `Missing required permission: all`,
       which the phase 1 patch fixes.
-- [ ] **3. Full UI** — walk every screen (with ML enabled, for people) to capture calls; `/api/server/about`
-      and `/api/server/storage` are the only denials on the photos page (storage widget spins); CSS/JS
-      injection to hide Upload, Import, Utilities, Trash, Locked Folder, the user menu and edit controls.
-- [ ] **4. Feature flags & privacy** — people/map/download flags, GPS and email scrubbing, Global People check.
+- [x] **3. Full UI** — every screen walked in a browser through the gateway (`e2e/`, Noodle v5.8.0-rc.1 with the
+      web app from this branch): no failed requests except `/api/gallery/map/markers`, which the phase 1 patch fixes.
+      Instead of CSS injection (menu items have no stable selectors), the web app got a public-gallery mode driven by
+      a `<meta>` tag the gateway injects, and `/api/users/me` returns a fake user id so ownership checks make every
+      asset read-only. Archived/hidden/locked/trashed assets are refused; full-size images fall back to the preview
+      when originals are private.
+- [ ] **4. Feature flags & privacy** — done: people/map/download flags, email scrubbing on `/api/users/me`.
+      Left: GPS scrubbing when `map` is off, Global People cross-gallery check, emails in space member lists.
 - [ ] **5. Hardening** — rate limiting, host-keyed cache, CSP, logging of blocked requests.
 - [ ] **6. Adversarial tests** — every `write`/`admin`/`full` route × every gallery must be 403; bypass
       variants; cross-gallery isolation (asset of user 1 is 404 on gallery 2). Run on every upstream sync.

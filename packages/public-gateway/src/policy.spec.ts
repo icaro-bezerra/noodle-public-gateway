@@ -1,7 +1,7 @@
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { loadInventory } from './inventory.ts';
-import { ALL_FEATURES, decide, ruleTemplates, type Features } from './policy.ts';
+import { ALL_FEATURES, decide, requestsPrivateAssets, ruleTemplates, upstreamQuery, type Features } from './policy.ts';
 
 const SPEC = fileURLToPath(new URL('../../../open-api/immich-openapi-specs.json', import.meta.url));
 const inventory = loadInventory(SPEC);
@@ -72,7 +72,7 @@ describe('decide', () => {
     ['GET', '/photos'],
     ['GET', '/_app/immutable/entry/start.js'],
   ])('forwards %s %s', (method, path) => {
-    expect(decide(method, path)).toEqual({ action: 'forward' });
+    expect(decide(method, path)).toMatchObject({ action: 'forward' });
   });
 
   it.each([
@@ -115,7 +115,16 @@ describe('decide', () => {
   });
 
   it('redirects login, admin and settings pages home', () => {
-    for (const path of ['/auth/login', '/admin', '/admin/users', '/user-settings', '/AUTH/login']) {
+    for (const path of [
+      '/auth/login',
+      '/admin',
+      '/admin/users',
+      '/user-settings',
+      '/AUTH/login',
+      '/archive',
+      '/trash',
+      '/locked',
+    ]) {
       expect(decide('GET', path)).toEqual({ action: 'redirect', location: '/' });
     }
   });
@@ -129,5 +138,63 @@ describe('decide', () => {
 
   it('keeps the original download off unless enabled', () => {
     expect(decide('GET', `/api/assets/${ID}/original`, ALL_FEATURES)).toEqual({ action: 'forward' });
+  });
+});
+
+describe('upstreamQuery', () => {
+  const thumbnail = `/api/assets/${ID}/thumbnail`;
+
+  it('asks for the preview instead of a full-size image that would redirect to the original', () => {
+    expect(upstreamQuery(thumbnail, '?size=fullsize&c=1', NO_FEATURES)).toBe('?size=preview&c=1');
+  });
+
+  it('leaves everything else alone', () => {
+    expect(upstreamQuery(thumbnail, '?size=fullsize', ALL_FEATURES)).toBe('?size=fullsize');
+    expect(upstreamQuery(thumbnail, '?size=thumbnail', NO_FEATURES)).toBe('?size=thumbnail');
+    expect(upstreamQuery(thumbnail, '', NO_FEATURES)).toBe('');
+    expect(upstreamQuery('/api/timeline/bucket', '?size=fullsize', NO_FEATURES)).toBe('?size=fullsize');
+  });
+});
+
+describe('requestsPrivateAssets', () => {
+  const json = (value: unknown) => Buffer.from(JSON.stringify(value));
+
+  it.each([
+    '?visibility=archive',
+    '?visibility=LOCKED',
+    '?visibility=hidden',
+    '?isTrashed=true',
+    '?isTrashed=1',
+    '?isArchived=true',
+    '?withDeleted=true',
+    '?trashedAfter=2020-01-01',
+  ])('refuses the query %s', (query) => {
+    expect(requestsPrivateAssets(query)).toBe(true);
+  });
+
+  it.each(['', '?visibility=timeline', '?isTrashed=false', '?size=preview&timeBucket=2026-01-01'])(
+    'allows the query %s',
+    (query) => {
+      expect(requestsPrivateAssets(query)).toBe(false);
+    },
+  );
+
+  it.each([
+    { visibility: 'archive' },
+    { visibility: 'locked' },
+    { withDeleted: true },
+    { isTrashed: 'yes' },
+    { trashedBefore: '2026-01-01' },
+  ])('refuses the search body %j', (body) => {
+    expect(requestsPrivateAssets('', json(body))).toBe(true);
+  });
+
+  it('allows ordinary search bodies', () => {
+    expect(requestsPrivateAssets('', json({ query: 'beach', visibility: 'timeline', withDeleted: false }))).toBe(false);
+  });
+
+  it('refuses bodies it cannot inspect', () => {
+    expect(requestsPrivateAssets('', Buffer.from('not json'))).toBe(true);
+    expect(requestsPrivateAssets('', json(['visibility', 'archive']))).toBe(true);
   });
 });
