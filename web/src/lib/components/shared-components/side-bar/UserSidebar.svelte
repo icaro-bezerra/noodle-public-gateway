@@ -45,7 +45,7 @@
   } from '@mdi/js';
   import { t } from 'svelte-i18n';
   import { fly } from 'svelte/transition';
-  import { isPublicGallery } from '$lib/utils/public-gallery';
+  import { isPublicGallery, publicGalleryAllows } from '$lib/utils/public-gallery';
 
   const collapsed = $derived(sidebarModeStore.layout === 'rail' && !sidebarModeStore.railExpanded);
 </script>
@@ -79,7 +79,7 @@
     <SidebarNavItem title={$t('explore')} href={Route.explore()} icon={mdiMagnify} />
   {/if}
 
-  {#if featureFlagsManager.value.map}
+  {#if featureFlagsManager.value.map && publicGalleryAllows('map')}
     <SidebarNavItem title={$t('map')} href={Route.map()} icon={mdiMapOutline} activeIcon={mdiMap} />
   {/if}
 

@@ -306,7 +306,8 @@ export const getAssetActions = (
     // #763: favoriting is per-user — any authenticated reader may favorite. Shared-link
     // sessions are explicitly excluded: auth.user there is the LINK OWNER, and an anonymous
     // visitor must never write favorites in the owner's name (spec §5.1).
-    $if: () => !!authUser && !sharedLink && !asset.isFavorite,
+    // A public gallery's visitors all share one user, so none of them may favorite either.
+    $if: () => !!authUser && !sharedLink && !isPublicGallery && !asset.isFavorite,
     onAction: () => handleFavorite(asset),
     shortcuts: [{ key: 'f' }],
   };
@@ -314,7 +315,7 @@ export const getAssetActions = (
   const Unfavorite: ActionItem = {
     title: $t('unfavorite'),
     icon: mdiHeart,
-    $if: () => !!authUser && !sharedLink && asset.isFavorite,
+    $if: () => !!authUser && !sharedLink && !isPublicGallery && asset.isFavorite,
     onAction: () => handleUnfavorite(asset),
     shortcuts: [{ key: 'f' }],
   };
