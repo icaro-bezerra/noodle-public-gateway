@@ -9,7 +9,8 @@ import { request as httpsRequest } from 'node:https';
 import type { Duplex } from 'node:stream';
 import type { Gallery, GatewayConfig } from './config.ts';
 import { IdentityMap } from './identity.ts';
-import { decide, requestsPrivateAssets, upstreamQuery, type Decision } from './policy.ts';
+import { hideUnlistedPeople, PeopleAccess } from './people-access.ts';
+import { decide, locationDecision, requestsPrivateAssets, upstreamQuery, type Decision } from './policy.ts';
 import { buildUpstreamHeaders, normalizePath, stripCredentialParams } from './request.ts';
 import { appliesTo, MAX_REWRITE_BYTES, rewriteBody, type RewriteName } from './rewrite.ts';
 
@@ -188,9 +189,14 @@ const sendRewritten = async (
   headers: Record<string, string | string[]>,
   rewrite: RewriteName,
   target: Resolved,
+  people: PeopleAccess,
 ) => {
   const original = await readAll(upstreamRes, MAX_REWRITE_BYTES);
-  const body = Buffer.from(rewriteBody(rewrite, original.toString('utf8'), target.gallery));
+  let text = rewriteBody(rewrite, original.toString('utf8'), target.gallery);
+  if (rewrite === 'faces') {
+    text = await hideUnlistedPeople(text, target.gallery, people);
+  }
+  const body = Buffer.from(text);
   // the body changed, so validators computed by the server no longer describe it
   delete headers['etag'];
   delete headers['content-encoding'];
@@ -199,9 +205,13 @@ const sendRewritten = async (
   res.end(body);
 };
 
+// `/api/people/{id}` and below; static siblings such as `/api/people/statistics` are not person ids
+const PERSON_PATH = /^\/api\/people\/([0-9a-f-]{36})(\/|$)/i;
+
 const forward = async (
   config: GatewayConfig,
   identity: IdentityMap,
+  people: PeopleAccess,
   req: IncomingMessage,
   res: ServerResponse,
   target: Resolved,
@@ -211,6 +221,15 @@ const forward = async (
   const rawBody = await readBody(req, config.maxBodyBytes);
   if (requestsPrivateAssets(target.query, rawBody)) {
     throw new HttpError(403, 'Forbidden');
+  }
+  const person = PERSON_PATH.exec(target.path)?.[1];
+  if (person && !(await people.allows(target.gallery, person.toLowerCase()))) {
+    throw new HttpError(404, 'Not found');
+  }
+  const location = locationDecision(target.path, target.query, rawBody, target.gallery.features);
+  if (location) {
+    answer(res, method, location);
+    return;
   }
   // the policy already approved this path; swapping one id segment for another cannot change the route
   const query = upstreamQuery(target.path, target.query, target.gallery.features);
@@ -237,7 +256,7 @@ const forward = async (
       const headers = responseHeaders(upstreamRes, isApi);
       const status = upstreamRes.statusCode ?? 502;
       if (rewrite && status === 200 && appliesTo(rewrite, upstreamRes.headers['content-type'])) {
-        sendRewritten(res, upstreamRes, headers, rewrite, target).then(resolve, reject);
+        sendRewritten(res, upstreamRes, headers, rewrite, target, people).then(resolve, reject);
         return;
       }
       res.writeHead(status, headers);
@@ -332,8 +351,39 @@ const fetchUserId = (getConfig: () => GatewayConfig) => async (gallery: Gallery)
   return ((await res.json()) as { id: string }).id;
 };
 
+const fetchPeopleIds = (getConfig: () => GatewayConfig) => async (gallery: Gallery) => {
+  const ids: string[] = [];
+  for (let page = 1; ; page++) {
+    const url = new URL('/api/people', getConfig().upstream);
+    url.search = new URLSearchParams({
+      withSharedSpaces: 'true',
+      withHidden: 'false',
+      size: '1000',
+      page: String(page),
+    }).toString();
+    const res = await fetch(url, { headers: { 'x-api-key': gallery.apiKey } });
+    if (!res.ok) {
+      throw new Error(`Could not list the people of ${gallery.host}: ${res.status}`);
+    }
+    const body = (await res.json()) as {
+      people: { id: string; spacePersonId?: string | null }[];
+      hasNextPage?: boolean;
+    };
+    for (const person of body.people) {
+      ids.push(person.id.toLowerCase());
+      if (person.spacePersonId) {
+        ids.push(person.spacePersonId.toLowerCase());
+      }
+    }
+    if (!body.hasNextPage) {
+      return ids;
+    }
+  }
+};
+
 export const createGateway = (getConfig: () => GatewayConfig, log: Log = defaultLog): Server => {
   const identity = new IdentityMap(fetchUserId(getConfig));
+  const people = new PeopleAccess(fetchPeopleIds(getConfig));
   const server = createServer((req, res) => {
     const config = getConfig();
     const method = req.method ?? 'GET';
@@ -349,7 +399,7 @@ export const createGateway = (getConfig: () => GatewayConfig, log: Log = default
         answer(res, method, decision);
         return;
       }
-      await forward(config, identity, req, res, target, decision.rewrite);
+      await forward(config, identity, people, req, res, target, decision.rewrite);
     };
 
     handle().catch((error: unknown) => {

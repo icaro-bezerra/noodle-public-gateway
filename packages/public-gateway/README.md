@@ -93,7 +93,24 @@ cd .. && node src/main.ts e2e/gateway.yaml   # then open http://gal1.localhost:2
 `compose.web.yml` mounts `web/build`, so build the web app first (`pnpm --filter immich-web build`). Leave it out to
 test the image's own web app.
 
-## Not yet done
+## Privacy
 
-GPS data is not scrubbed from asset details when `map` is off, and Global People has not been checked for
-cross-gallery leaks. See phase 4 in [PLAN.md](PLAN.md).
+- Every JSON response is scrubbed by field name, so routes added upstream are covered too: `email` is blanked,
+  `originalPath` is cut to the file name, `thumbnailPath` is blanked, `canEdit` and `isAdmin` are forced to `false`.
+- With `map` off, `latitude`, `longitude`, `city`, `state` and `country` become `null` everywhere (columnar timeline
+  arrays keep their length), place groups are dropped from Explore, place suggestions come back empty, and searches
+  filtering by place are refused. Thumbnails and previews carry no EXIF (verified).
+- People are limited to what the gallery's own people list returns (its visible people plus its Shared Spaces'):
+  `/api/people/{id}/**` for any other id is 404, and `/api/faces` drops persons outside that list. This closes a
+  server-side exposure where a space member could read another user's private person row and a face crop taken
+  from a photo outside the space (`requireThumbnailAccess` in `server/src/services/person.service.ts` only excludes
+  locked photos).
+
+### Known limitations
+
+- `downloadOriginal` serves original files with all their embedded metadata, GPS included; the gateway warns at
+  startup when it is combined with `map: false`.
+- Videos that the server did not transcode are played from the original file, so their embedded metadata (which
+  may include location) reaches the visitor. Not yet verified; set the server's transcode policy to "all" if that
+  matters for a gallery.
+- Names in a Shared Space are whatever the space shows its members; publishing a space publishes those names.

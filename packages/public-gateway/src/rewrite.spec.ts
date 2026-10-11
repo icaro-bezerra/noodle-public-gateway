@@ -41,6 +41,39 @@ describe('rewriteBody', () => {
     });
   });
 
+  it('scrubs emails, server paths and edit capabilities from every JSON response, and location when the map is off', () => {
+    const noMap: Gallery = { ...gallery, features: { ...gallery.features, map: false } };
+    const body = JSON.stringify({
+      owner: { name: 'Owner', email: 'owner@private.example', isAdmin: true },
+      canEdit: true,
+      originalPath: '/mnt/photos/private/IMG_1.jpg',
+      exifInfo: { latitude: 48.85, longitude: 2.35, city: 'Paris', state: null, country: 'France', make: 'Canon' },
+      bucket: { id: ['a', 'b'], latitude: [48.85, null], longitude: [2.35, null], city: ['Paris', null] },
+      members: [{ email: 'a@x', name: 'A' }],
+    });
+    expect(JSON.parse(rewriteBody('json', body, noMap))).toEqual({
+      owner: { name: 'Owner', email: '', isAdmin: false },
+      canEdit: false,
+      originalPath: 'IMG_1.jpg',
+      exifInfo: { latitude: null, longitude: null, city: null, state: null, country: null, make: 'Canon' },
+      bucket: { id: ['a', 'b'], latitude: [null, null], longitude: [null, null], city: [null, null] },
+      members: [{ email: '', name: 'A' }],
+    });
+    // with the map on, location stays
+    expect(JSON.parse(rewriteBody('json', body, gallery)).exifInfo.city).toBe('Paris');
+  });
+
+  it('drops place groups from explore when the map is off', () => {
+    const noMap: Gallery = { ...gallery, features: { ...gallery.features, map: false } };
+    const explore = JSON.stringify([
+      { fieldName: 'exifInfo.city', items: [{ value: 'Paris' }] },
+      { fieldName: 'smartInfo.objects', items: [{ value: 'beach' }] },
+    ]);
+    expect(JSON.parse(rewriteBody('json', explore, noMap))).toEqual([
+      { fieldName: 'smartInfo.objects', items: [{ value: 'beach' }] },
+    ]);
+  });
+
   it('marks the app shell with the enabled features', () => {
     const html = rewriteBody('html', '<!doctype html><html><head><title>x</title></head></html>', gallery);
     expect(html).toBe(

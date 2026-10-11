@@ -1,7 +1,15 @@
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { loadInventory } from './inventory.ts';
-import { ALL_FEATURES, decide, requestsPrivateAssets, ruleTemplates, upstreamQuery, type Features } from './policy.ts';
+import {
+  ALL_FEATURES,
+  decide,
+  locationDecision,
+  requestsPrivateAssets,
+  ruleTemplates,
+  upstreamQuery,
+  type Features,
+} from './policy.ts';
 
 const SPEC = fileURLToPath(new URL('../../../open-api/immich-openapi-specs.json', import.meta.url));
 const inventory = loadInventory(SPEC);
@@ -103,7 +111,7 @@ describe('decide', () => {
   );
 
   it('does not let a parameter match a static sibling route', () => {
-    expect(decide('GET', '/api/people/statistics')).toEqual({ action: 'forward' });
+    expect(decide('GET', '/api/people/statistics')).toMatchObject({ action: 'forward' });
     expect(decide('GET', `/api/people/${ID}/thumbnail/extra`)).toEqual({ action: 'deny', status: 403 });
   });
 
@@ -137,7 +145,7 @@ describe('decide', () => {
   });
 
   it('keeps the original download off unless enabled', () => {
-    expect(decide('GET', `/api/assets/${ID}/original`, ALL_FEATURES)).toEqual({ action: 'forward' });
+    expect(decide('GET', `/api/assets/${ID}/original`, ALL_FEATURES)).toMatchObject({ action: 'forward' });
   });
 });
 
@@ -196,5 +204,37 @@ describe('requestsPrivateAssets', () => {
   it('refuses bodies it cannot inspect', () => {
     expect(requestsPrivateAssets('', Buffer.from('not json'))).toBe(true);
     expect(requestsPrivateAssets('', json(['visibility', 'archive']))).toBe(true);
+  });
+});
+
+describe('locationDecision', () => {
+  const json = (value: unknown) => Buffer.from(JSON.stringify(value));
+
+  it('lets everything through while the map is on', () => {
+    expect(locationDecision('/api/search/suggestions', '?type=city', undefined, ALL_FEATURES)).toBeUndefined();
+    expect(locationDecision('/api/search/metadata', '', json({ city: 'Paris' }), ALL_FEATURES)).toBeUndefined();
+  });
+
+  it('answers place suggestions empty while the map is off', () => {
+    expect(locationDecision('/api/search/suggestions', '?type=city', undefined, NO_FEATURES)).toEqual({
+      action: 'fake',
+      status: 200,
+      body: [],
+    });
+    expect(locationDecision('/api/search/suggestions', '?type=camera-make', undefined, NO_FEATURES)).toBeUndefined();
+  });
+
+  it('refuses searches filtering by place while the map is off', () => {
+    expect(locationDecision('/api/search/metadata', '', json({ country: 'France' }), NO_FEATURES)).toEqual({
+      action: 'deny',
+      status: 403,
+    });
+    expect(locationDecision('/api/search/large-assets', '?city=Paris', undefined, NO_FEATURES)).toEqual({
+      action: 'deny',
+      status: 403,
+    });
+    expect(
+      locationDecision('/api/search/metadata', '', json({ query: 'beach', city: null }), NO_FEATURES),
+    ).toBeUndefined();
   });
 });

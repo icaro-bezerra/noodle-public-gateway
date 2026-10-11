@@ -5,10 +5,23 @@ const configPath = process.env.GATEWAY_CONFIG ?? process.argv[2] ?? '/etc/public
 
 let config: GatewayConfig = loadConfig(configPath);
 
+const warn = (config: GatewayConfig) => {
+  for (const gallery of config.galleries.values()) {
+    if (gallery.features.downloadOriginal && !gallery.features.map) {
+      console.warn(
+        `${gallery.host}: downloadOriginal serves original files, whose embedded metadata (GPS included) ` +
+          'the gateway cannot scrub, so location is not private even with map off',
+      );
+    }
+  }
+};
+warn(config);
+
 // SIGHUP re-reads the config and API keys; a broken config keeps the previous one running.
 process.on('SIGHUP', () => {
   try {
     config = loadConfig(configPath);
+    warn(config);
     console.log(`Reloaded ${configPath}: ${config.galleries.size} galleries`);
   } catch (error) {
     console.error(`Reload of ${configPath} failed, keeping the previous config:`, error);

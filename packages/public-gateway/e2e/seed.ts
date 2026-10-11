@@ -28,11 +28,53 @@ const call = async (method: string, path: string, token?: string, body?: unknown
 const login = async (email: string, password: string) =>
   (await call('POST', '/auth/login', undefined, { email, password })).accessToken as string;
 
-const upload = async (token: string, name: string, colors: string, date: string) => {
+/** Inserts a minimal EXIF block with GPS coordinates (north/east, whole degrees) right after the JPEG's SOI */
+const withGps = (jpeg: Buffer, [lat, lon]: [number, number]) => {
+  const tiff = Buffer.alloc(128);
+  tiff.write('MM\0*', 0, 'latin1');
+  tiff.writeUInt32BE(8, 4); // IFD0
+  tiff.writeUInt16BE(1, 8);
+  tiff.writeUInt16BE(0x88_25, 10); // GPSInfo pointer
+  tiff.writeUInt16BE(4, 12);
+  tiff.writeUInt32BE(1, 14);
+  tiff.writeUInt32BE(26, 18);
+  tiff.writeUInt16BE(4, 26); // GPS IFD: 4 entries
+  const entry = (index: number, tag: number, type: number, count: number, value: number) => {
+    const at = 28 + index * 12;
+    tiff.writeUInt16BE(tag, at);
+    tiff.writeUInt16BE(type, at + 2);
+    tiff.writeUInt32BE(count, at + 4);
+    tiff.writeUInt32BE(value, at + 8);
+  };
+  entry(0, 1, 2, 2, 0x4e_00_00_00); // GPSLatitudeRef "N"
+  entry(1, 2, 5, 3, 80); // GPSLatitude → rationals at 80
+  entry(2, 3, 2, 2, 0x45_00_00_00); // GPSLongitudeRef "E"
+  entry(3, 4, 5, 3, 104); // GPSLongitude → rationals at 104
+  for (const [offset, degrees] of [
+    [80, lat],
+    [104, lon],
+  ]) {
+    tiff.writeUInt32BE(degrees, offset);
+    tiff.writeUInt32BE(1, offset + 4);
+    tiff.writeUInt32BE(0, offset + 8);
+    tiff.writeUInt32BE(1, offset + 12);
+    tiff.writeUInt32BE(0, offset + 16);
+    tiff.writeUInt32BE(1, offset + 20);
+  }
+  const header = Buffer.alloc(10);
+  header.writeUInt16BE(0xff_e1, 0);
+  header.writeUInt16BE(2 + 6 + tiff.length, 2);
+  header.write('Exif\0\0', 4, 'latin1');
+  return Buffer.concat([jpeg.subarray(0, 2), header, tiff, jpeg.subarray(2)]);
+};
+
+const upload = async (token: string, name: string, colors: string, date: string, gps?: [number, number]) => {
   const file = join(DIR, `${name}.jpg`);
   execFileSync('magick', ['-size', '800x600', `gradient:${colors}`, file]);
+  const jpeg = gps ? withGps(readFileSync(file), gps) : readFileSync(file);
+  writeFileSync(file, jpeg);
   const form = new FormData();
-  form.set('assetData', new Blob([readFileSync(file)], { type: 'image/jpeg' }), `${name}.jpg`);
+  form.set('assetData', new Blob([jpeg], { type: 'image/jpeg' }), `${name}.jpg`);
   form.set('fileCreatedAt', date);
   form.set('fileModifiedAt', date);
   form.set('deviceAssetId', name);
@@ -111,7 +153,8 @@ const admin = await login('admin@example.com', 'admin');
 const gal1 = await createUser(admin, 'gal1@example.com', 'Galeria 1');
 const gal2 = await createUser(admin, 'gal2@example.com', 'Galeria 2');
 
-const own1 = await upload(gal1.token, 'gal1-beach', 'skyblue-khaki', '2026-01-10T10:00:00.000Z');
+// near Paris
+const own1 = await upload(gal1.token, 'gal1-beach', 'skyblue-khaki', '2026-01-10T10:00:00.000Z', [48, 2]);
 const own2 = await upload(gal1.token, 'gal1-sunset', 'purple-orange', '2026-02-14T18:00:00.000Z');
 await call('POST', '/albums', gal1.token, { albumName: 'Viagem', assetIds: [own1] });
 const tag = await call('POST', '/tags', gal1.token, { name: 'praia' });
@@ -127,7 +170,8 @@ const space = await call('POST', '/shared-spaces', admin, { name: 'Família' });
 await call('POST', `/shared-spaces/${space.id}/members`, admin, { userId: gal1.id, role: 'viewer' });
 await call('POST', `/shared-spaces/${space.id}/assets`, admin, { assetIds: adminAssets });
 
-const gal2Asset = await upload(gal2.token, 'gal2-secret', 'red-black', '2026-03-01T12:00:00.000Z');
+// near Rome; gal2 keeps the map off, so these coordinates must never reach a visitor
+const gal2Asset = await upload(gal2.token, 'gal2-secret', 'red-black', '2026-03-01T12:00:00.000Z', [41, 12]);
 
 await apiKey(gal1.token, 'gal1.key');
 await apiKey(gal2.token, 'gal2.key');

@@ -93,8 +93,10 @@ A disabled feature returns empty results (not 403), so the UI renders cleanly.
 ## Privacy
 
 Face recognition on a public page publishes people's names and faces (biometric data under LGPD/GDPR).
-`people` and `map` default to off; hidden people (`isHidden`) stay hidden. **Must verify**: Global People
-(cross-library identity) never returns people from other users' libraries to a gallery user.
+`people` and `map` default to off; hidden people (`isHidden`) stay hidden. Global People was checked: Noodle keeps
+upstream's cluster groups unmounted, so there is no cross-library face pooling, but the server lets a space member
+read another user's private person row and a face crop from a photo outside the space; the gateway confines
+`/api/people/{id}/**` and `/api/faces` to the gallery's own people list. See README.md#privacy.
 
 ## Phases
 
@@ -112,8 +114,10 @@ Face recognition on a public page publishes people's names and faces (biometric 
       a `<meta>` tag the gateway injects, and `/api/users/me` returns a fake user id so ownership checks make every
       asset read-only. Archived/hidden/locked/trashed assets are refused; full-size images fall back to the preview
       when originals are private.
-- [ ] **4. Feature flags & privacy** — done: people/map/download flags, email scrubbing on `/api/users/me`.
-      Left: GPS scrubbing when `map` is off, Global People cross-gallery check, emails in space member lists.
+- [x] **4. Feature flags & privacy** — field-name scrubbing of every JSON response (emails, server paths,
+      `canEdit`, location when `map` is off), place searches gated, previews verified EXIF-free with GPS-tagged
+      seeds, people confined to the gallery's own list. Upstream follow-up worth filing: `requireThumbnailAccess`
+      should check access to the representative face's asset. Unverified: video originals' embedded location.
 - [ ] **5. Hardening** — rate limiting, host-keyed cache, CSP, logging of blocked requests.
 - [ ] **6. Adversarial tests** — every `write`/`admin`/`full` route × every gallery must be 403; bypass
       variants; cross-gallery isolation (asset of user 1 is 404 on gallery 2). Run on every upstream sync.

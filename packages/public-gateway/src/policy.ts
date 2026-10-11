@@ -95,8 +95,6 @@ const API_RULES: Rule[] = [
   // search and explore
   ...[
     '/api/search/explore',
-    '/api/search/cities',
-    '/api/search/places',
     '/api/search/suggestions',
     '/api/search/suggestions/filters',
     '/api/search/suggestions/tags',
@@ -113,7 +111,7 @@ const API_RULES: Rule[] = [
 
   // people and faces
   { methods: GET, path: '/api/people', feature: 'people', whenDisabled: { status: 200, body: emptyPeople() } },
-  { methods: GET, path: '/api/faces', feature: 'people', whenDisabled: empty },
+  { methods: GET, path: '/api/faces', feature: 'people', whenDisabled: empty, rewrite: 'faces' },
   { methods: GET, path: '/api/search/person', feature: 'people', whenDisabled: empty },
   ...[
     '/api/people/statistics',
@@ -134,6 +132,12 @@ const API_RULES: Rule[] = [
     '/api/shared-spaces/{id}/map-markers',
   ].map((path): Rule => ({ methods: GET, path, feature: 'map', whenDisabled: empty })),
   { methods: GET, path: '/api/map/reverse-geocode', feature: 'map' },
+  ...['/api/search/cities', '/api/search/places'].map((path): Rule => ({
+    methods: GET,
+    path,
+    feature: 'map',
+    whenDisabled: empty,
+  })),
 
   // shared spaces
   ...[
@@ -292,6 +296,42 @@ export const requestsPrivateAssets = (query: string, body?: Buffer): boolean => 
   );
 };
 
+const LOCATION_FILTERS = ['city', 'state', 'country'];
+const LOCATION_SUGGESTIONS = new Set(['city', 'state', 'country']);
+
+/**
+ * With the `map` feature off, location must not leak through search either: filtering by a city would reveal where
+ * photos were taken even with every coordinate scrubbed from responses. Suggestions for places are answered empty,
+ * searches filtering by place are refused. Returns `undefined` when the request may go through.
+ */
+export const locationDecision = (
+  path: string,
+  query: string,
+  body: Buffer | undefined,
+  features: Features,
+): Exclude<Decision, { action: 'forward' }> | undefined => {
+  if (features.map) {
+    return;
+  }
+  const params = new URLSearchParams(query.startsWith('?') ? query.slice(1) : query);
+  if (path === '/api/search/suggestions' && LOCATION_SUGGESTIONS.has((params.get('type') ?? '').toLowerCase())) {
+    return { action: 'fake', status: 200, body: [] };
+  }
+  if (LOCATION_FILTERS.some((name) => params.has(name))) {
+    return { action: 'deny', status: 403 };
+  }
+  if (body?.length) {
+    try {
+      const dto = JSON.parse(body.toString('utf8')) as Record<string, unknown>;
+      if (LOCATION_FILTERS.some((name) => dto[name] !== undefined && dto[name] !== null)) {
+        return { action: 'deny', status: 403 };
+      }
+    } catch {
+      // unparseable bodies are already refused by requestsPrivateAssets
+    }
+  }
+};
+
 const isUnder = (path: string, prefix: string) => path === prefix || path.startsWith(`${prefix}/`);
 
 /** `path` must already be normalized (see `normalizePath`) and carry no query string */
@@ -310,7 +350,7 @@ export const decide = (method: string, path: string, features: Features = ALL_FE
     if (rule.respond) {
       return { action: 'fake', ...rule.respond };
     }
-    return rule.rewrite ? { action: 'forward', rewrite: rule.rewrite } : { action: 'forward' };
+    return { action: 'forward', rewrite: rule.rewrite ?? 'json' };
   }
 
   if (!GET.includes(method)) {
