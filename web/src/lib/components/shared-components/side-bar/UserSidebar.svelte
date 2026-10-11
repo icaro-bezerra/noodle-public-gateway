@@ -45,6 +45,7 @@
   } from '@mdi/js';
   import { t } from 'svelte-i18n';
   import { fly } from 'svelte/transition';
+  import { isPublicGallery } from '$lib/utils/public-gallery';
 
   const collapsed = $derived(sidebarModeStore.layout === 'rail' && !sidebarModeStore.railExpanded);
 </script>
@@ -90,16 +91,19 @@
     <SidebarNavItem title={$t('people')} href={Route.people()} icon={mdiAccountOutline} activeIcon={mdiAccount} />
   {/if}
 
-  {#if authManager.preferences.sharedLinks.enabled && authManager.preferences.sharedLinks.sidebarWeb}
-    <SidebarNavItem title={$t('shared_links')} href={Route.sharedLinks()} icon={mdiLink} />
-  {/if}
+  <!-- A public gallery (see isPublicGallery) lists only what visitors can browse -->
+  {#if !isPublicGallery}
+    {#if authManager.preferences.sharedLinks.enabled && authManager.preferences.sharedLinks.sidebarWeb}
+      <SidebarNavItem title={$t('shared_links')} href={Route.sharedLinks()} icon={mdiLink} />
+    {/if}
 
-  <SidebarNavItem
-    title={$t('sharing')}
-    href={Route.sharing()}
-    icon={mdiAccountMultipleOutline}
-    activeIcon={mdiAccountMultiple}
-  />
+    <SidebarNavItem
+      title={$t('sharing')}
+      href={Route.sharing()}
+      icon={mdiAccountMultipleOutline}
+      activeIcon={mdiAccountMultiple}
+    />
+  {/if}
 
   <SidebarNavGroup title={$t('library')} />
 
@@ -134,24 +138,28 @@
     <SidebarNavItem title={$t('folders')} href={Route.folders()} icon={{ icon: mdiFolderOutline, flipped: true }} />
   {/if}
 
-  <SidebarNavItem title={$t('utilities')} href={Route.utilities()} icon={mdiToolboxOutline} activeIcon={mdiToolbox} />
+  {#if !isPublicGallery}
+    <SidebarNavItem title={$t('utilities')} href={Route.utilities()} icon={mdiToolboxOutline} activeIcon={mdiToolbox} />
 
-  <SidebarNavItem title={$t('import')} href={Route.import()} icon={mdiDatabaseImportOutline} />
+    <SidebarNavItem title={$t('import')} href={Route.import()} icon={mdiDatabaseImportOutline} />
 
-  <SidebarNavItem
-    title={$t('archive')}
-    href={Route.archive()}
-    icon={mdiArchiveArrowDownOutline}
-    activeIcon={mdiArchiveArrowDown}
-  />
+    <SidebarNavItem
+      title={$t('archive')}
+      href={Route.archive()}
+      icon={mdiArchiveArrowDownOutline}
+      activeIcon={mdiArchiveArrowDown}
+    />
 
-  <SidebarNavItem title={$t('locked_folder')} href={Route.locked()} icon={mdiLockOutline} activeIcon={mdiLock} />
+    <SidebarNavItem title={$t('locked_folder')} href={Route.locked()} icon={mdiLockOutline} activeIcon={mdiLock} />
 
-  {#if featureFlagsManager.value.trash}
-    <SidebarNavItem title={$t('trash')} href={Route.trash()} icon={mdiTrashCanOutline} activeIcon={mdiTrashCan} />
+    {#if featureFlagsManager.value.trash}
+      <SidebarNavItem title={$t('trash')} href={Route.trash()} icon={mdiTrashCanOutline} activeIcon={mdiTrashCan} />
+    {/if}
   {/if}
 
-  {#if collapsed}
+  {#if isPublicGallery}
+    <!-- no storage or server details for visitors -->
+  {:else if collapsed}
     <RailStorage />
   {:else}
     <!-- BottomInfo's three sections carry a start inset only (StorageSpace `ms-4`, PurchaseInfo

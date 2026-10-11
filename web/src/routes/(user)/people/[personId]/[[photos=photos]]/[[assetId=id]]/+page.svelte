@@ -8,6 +8,7 @@
   import ImageThumbnail from '$lib/components/assets/thumbnail/ImageThumbnail.svelte';
   import PeopleMergeSelector from '$lib/components/people/people-merge-selector.svelte';
   import OnEvents from '$lib/components/OnEvents.svelte';
+  import { isPublicGallery } from '$lib/utils/public-gallery';
   import ButtonContextMenu from '$lib/components/shared-components/context-menu/ButtonContextMenu.svelte';
   import MenuOption from '$lib/components/shared-components/context-menu/MenuOption.svelte';
   import ControlAppBar from '$lib/components/shared-components/ControlAppBar.svelte';
@@ -429,7 +430,8 @@
     }
   });
   const canEditSpacePerson = $derived(
-    !personSpaceId || isSpaceEditor(userInteraction.recentSpaces, personSpaceId, authManager.user.id),
+    !isPublicGallery &&
+      (!personSpaceId || isSpaceEditor(userInteraction.recentSpaces, personSpaceId, authManager.user.id)),
   );
 
   let suggestionTotal = $state(0);
@@ -833,19 +835,21 @@
   {:else if viewMode === PersonPageViewMode.VIEW_ASSETS}
     <ControlAppBar backIcon={mdiArrowLeft} onClose={() => goto(previousRoute)}>
       {#snippet trailing()}
-        <ContextMenuButton
-          items={[
-            SelectRepresentativeFace,
-            HidePerson,
-            ShowPerson,
-            SetDateOfBirth,
-            Merge,
-            SeparateFromGroupedPerson,
-            Favorite,
-            Unfavorite,
-          ]}
-          aria-label={$t('open')}
-        />
+        {#if !isPublicGallery}
+          <ContextMenuButton
+            items={[
+              SelectRepresentativeFace,
+              HidePerson,
+              ShowPerson,
+              SetDateOfBirth,
+              Merge,
+              SeparateFromGroupedPerson,
+              Favorite,
+              Unfavorite,
+            ]}
+            aria-label={$t('open')}
+          />
+        {/if}
       {/snippet}
     </ControlAppBar>
   {/if}

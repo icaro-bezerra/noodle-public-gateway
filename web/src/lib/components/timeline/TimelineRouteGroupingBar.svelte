@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { isPublicGallery } from '$lib/utils/public-gallery';
   import ActiveFiltersBar from '$lib/components/filter-panel/active-filters-bar.svelte';
   import FilterToolbar from '$lib/components/filter-panel/filter-toolbar.svelte';
   import SearchAddAllButton from '$lib/components/search/SearchAddAllButton.svelte';
@@ -41,7 +42,8 @@
   }));
 
   let hasActiveTemporalFilters = $derived(buildFilterContext(temporalFilters) !== undefined);
-  let showAddAll = $derived(!!onAddAllToCollection && (resultCount ?? 0) > 0);
+  // adding results to an album or space writes, which a public gallery never offers
+  let showAddAll = $derived(!isPublicGallery && !!onAddAllToCollection && (resultCount ?? 0) > 0);
 
   const removeTemporalFilter = (type: string) => {
     if (type === 'timeline') {

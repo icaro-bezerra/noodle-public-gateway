@@ -3,6 +3,7 @@ import { SvelteMap, SvelteSet } from 'svelte/reactivity';
 import { authManager } from '$lib/managers/auth-manager.svelte';
 import { eventManager } from '$lib/managers/event-manager.svelte';
 import type { TimelineAsset } from '$lib/managers/timeline-manager/types';
+import { isPublicGallery } from '$lib/utils/public-gallery';
 
 export type AssetMultiSelectOptions = {
   resetOnNavigate?: boolean;
@@ -59,6 +60,10 @@ export class AssetMultiSelectManager {
   }
 
   selectAsset(asset: TimelineAsset) {
+    // every bulk action writes, so a public gallery never enters selection mode
+    if (isPublicGallery) {
+      return;
+    }
     this.#selectedMap.set(asset.id, asset);
   }
 

@@ -37,6 +37,7 @@
     mdiViewGridOutline,
   } from '@mdi/js';
   import { t } from 'svelte-i18n';
+  import { isPublicGallery } from '$lib/utils/public-gallery';
   import { fly } from 'svelte/transition';
 
   interface Props {
@@ -208,12 +209,14 @@
 {/if}
 
 <!-- Create Album -->
-<Button
-  leadingIcon={mdiPlusBoxOutline}
-  onclick={() => createAlbumAndRedirect()}
-  size="small"
-  variant="ghost"
-  color="secondary"
->
-  <p class="hidden md:block">{$t('create_album')}</p>
-</Button>
+{#if !isPublicGallery}
+  <Button
+    leadingIcon={mdiPlusBoxOutline}
+    onclick={() => createAlbumAndRedirect()}
+    size="small"
+    variant="ghost"
+    color="secondary"
+  >
+    <p class="hidden md:block">{$t('create_album')}</p>
+  </Button>
+{/if}

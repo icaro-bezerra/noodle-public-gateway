@@ -2,6 +2,7 @@
   import { page } from '$app/state';
   import UploadCover from './DragAndDropUploadOverlay.svelte';
   import { assetViewerManager } from '$lib/managers/asset-viewer-manager.svelte';
+  import { isPublicGallery } from '$lib/utils/public-gallery';
   import type { Snippet } from 'svelte';
   interface Props {
     children?: Snippet;
@@ -25,7 +26,9 @@
 <div class:display-none={assetViewerManager.isViewing}>
   {@render children?.()}
 </div>
-<UploadCover />
+{#if !isPublicGallery}
+  <UploadCover />
+{/if}
 
 <style>
   :root {

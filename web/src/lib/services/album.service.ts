@@ -48,6 +48,7 @@ import { downloadArchive } from '$lib/utils/asset-utils';
 import { openFileUploadDialog } from '$lib/utils/file-uploader';
 import { handleError } from '$lib/utils/handle-error';
 import { getFormatter } from '$lib/utils/i18n';
+import { publicGalleryAllows } from '$lib/utils/public-gallery';
 
 export const isAlbumOwner = (album: AlbumResponseDto) => album.albumUsers[0].user.id === authManager.user.id;
 export const isAlbumEditor = (album: AlbumResponseDto) =>
@@ -97,7 +98,7 @@ export const getAlbumActions = ($t: MessageFormatter, album: AlbumResponseDto) =
   const Download: ActionItem = {
     title: $t('download'),
     icon: mdiDownload,
-    $if: () => album.assetCount > 0,
+    $if: () => album.assetCount > 0 && publicGalleryAllows('download'),
     onAction: () => handleDownloadAlbum(album),
   };
 

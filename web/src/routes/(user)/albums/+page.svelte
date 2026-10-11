@@ -9,6 +9,7 @@
   import { Route } from '$lib/route';
   import { AlbumFilter, albumViewSettings } from '$lib/stores/preferences.store';
   import { createAlbumAndRedirect } from '$lib/utils/album-utils';
+  import { isPublicGallery } from '$lib/utils/public-gallery';
   import { t } from 'svelte-i18n';
   import type { PageData } from './$types';
 
@@ -47,12 +48,16 @@
     ownedAlbums={data.albums}
     sharedAlbums={data.sharedAlbums}
     userSettings={$albumViewSettings}
-    allowEdit
+    allowEdit={!isPublicGallery}
     {searchQuery}
     bind:albumGroupIds={albumGroups}
   >
     {#snippet empty()}
-      <EmptyPlaceholder text={$t('no_albums_message')} onClick={() => createAlbumAndRedirect()} class="mx-auto mt-10" />
+      <EmptyPlaceholder
+        text={$t('no_albums_message')}
+        onClick={isPublicGallery ? undefined : () => createAlbumAndRedirect()}
+        class="mx-auto mt-10"
+      />
     {/snippet}
   </Albums>
 </UserPageLayout>

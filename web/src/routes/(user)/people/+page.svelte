@@ -51,6 +51,7 @@
   } from '@mdi/js';
   import { onMount } from 'svelte';
   import { t } from 'svelte-i18n';
+  import { isPublicGallery } from '$lib/utils/public-gallery';
   import type { PageData } from './$types';
 
   interface Props {
@@ -486,13 +487,15 @@
           onSelect={(sortBy) => ($peopleViewSettings.sortBy = sortBy)}
           render={(sortBy) => ({ title: peopleSortByNames[sortBy], icon: peopleSortIcons[sortBy] })}
         />
-        <Button
-          leadingIcon={mdiEyeOutline}
-          onclick={() => goto('/people/manage')}
-          size="small"
-          variant="ghost"
-          color="secondary">{$t('show_and_hide_people')}</Button
-        >
+        {#if !isPublicGallery}
+          <Button
+            leadingIcon={mdiEyeOutline}
+            onclick={() => goto('/people/manage')}
+            size="small"
+            variant="ghost"
+            color="secondary">{$t('show_and_hide_people')}</Button
+          >
+        {/if}
       </div>
     {/if}
   {/snippet}

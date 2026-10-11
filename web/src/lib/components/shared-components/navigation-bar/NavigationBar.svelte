@@ -14,6 +14,7 @@
   import { getGlobalActions } from '$lib/services/app.service';
   import { mediaQueryManager } from '$lib/stores/media-query-manager.svelte';
   import { notificationManager } from '$lib/stores/notification-manager.svelte';
+  import { isPublicGallery } from '$lib/utils/public-gallery';
   import { sidebarModeStore } from '$lib/stores/sidebar-mode.svelte';
   import { sidebarStore } from '$lib/stores/sidebar.svelte';
   import { ActionButton, Button, IconButton } from '@immich/ui';
@@ -181,7 +182,7 @@
           aria-label={$t('go_to_search')}
         />
 
-        {#if !page.url.pathname.includes('/admin') && onUploadClick}
+        {#if !page.url.pathname.includes('/admin') && onUploadClick && !isPublicGallery}
           <Button
             leadingIcon={mdiTrayArrowUp}
             onclick={onUploadClick}
@@ -206,60 +207,62 @@
 
         <ThemeButton />
 
-        <div
-          use:clickOutside={{
-            onOutclick: () => (shouldShowNotificationPanel = false),
-            onEscape: () => (shouldShowNotificationPanel = false),
-          }}
-        >
-          <div class="relative">
-            <IconButton
-              shape="round"
-              color={hasUnreadNotifications ? 'primary' : 'secondary'}
-              variant="ghost"
-              size="medium"
-              icon={hasUnreadNotifications ? mdiBellBadge : mdiBellOutline}
-              onclick={() => (shouldShowNotificationPanel = !shouldShowNotificationPanel)}
-              aria-label={$t('notifications')}
-            />
+        {#if !isPublicGallery}
+          <div
+            use:clickOutside={{
+              onOutclick: () => (shouldShowNotificationPanel = false),
+              onEscape: () => (shouldShowNotificationPanel = false),
+            }}
+          >
+            <div class="relative">
+              <IconButton
+                shape="round"
+                color={hasUnreadNotifications ? 'primary' : 'secondary'}
+                variant="ghost"
+                size="medium"
+                icon={hasUnreadNotifications ? mdiBellBadge : mdiBellOutline}
+                onclick={() => (shouldShowNotificationPanel = !shouldShowNotificationPanel)}
+                aria-label={$t('notifications')}
+              />
 
-            {#if hasUnreadNotifications}
-              <div
-                class="pointer-events-none absolute top-0 right-1 flex size-5 items-center justify-center rounded-full border bg-primary text-[10px] font-bold text-light"
-              >
-                {notificationManager.notifications.length}
-              </div>
+              {#if hasUnreadNotifications}
+                <div
+                  class="pointer-events-none absolute top-0 right-1 flex size-5 items-center justify-center rounded-full border bg-primary text-[10px] font-bold text-light"
+                >
+                  {notificationManager.notifications.length}
+                </div>
+              {/if}
+            </div>
+
+            {#if shouldShowNotificationPanel}
+              <NotificationPanel />
             {/if}
           </div>
 
-          {#if shouldShowNotificationPanel}
-            <NotificationPanel />
-          {/if}
-        </div>
+          <ActionButton action={Cast} />
 
-        <ActionButton action={Cast} />
-
-        <div
-          use:clickOutside={{
-            onOutclick: () => (shouldShowAccountInfoPanel = false),
-            onEscape: () => (shouldShowAccountInfoPanel = false),
-          }}
-        >
-          <button
-            type="button"
-            class="flex ps-2"
-            onclick={() => (shouldShowAccountInfoPanel = !shouldShowAccountInfoPanel)}
-            title="{authManager.user.name} ({authManager.user.email})"
+          <div
+            use:clickOutside={{
+              onOutclick: () => (shouldShowAccountInfoPanel = false),
+              onEscape: () => (shouldShowAccountInfoPanel = false),
+            }}
           >
-            {#key authManager.user}
-              <UserAvatar user={authManager.user} size="md" noTitle interactive />
-            {/key}
-          </button>
+            <button
+              type="button"
+              class="flex ps-2"
+              onclick={() => (shouldShowAccountInfoPanel = !shouldShowAccountInfoPanel)}
+              title="{authManager.user.name} ({authManager.user.email})"
+            >
+              {#key authManager.user}
+                <UserAvatar user={authManager.user} size="md" noTitle interactive />
+              {/key}
+            </button>
 
-          {#if shouldShowAccountInfoPanel}
-            <AccountInfoPanel onClose={() => (shouldShowAccountInfoPanel = false)} />
-          {/if}
-        </div>
+            {#if shouldShowAccountInfoPanel}
+              <AccountInfoPanel onClose={() => (shouldShowAccountInfoPanel = false)} />
+            {/if}
+          </div>
+        {/if}
       </section>
     </div>
   </div>

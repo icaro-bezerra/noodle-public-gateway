@@ -70,6 +70,7 @@ import { canEditAsset } from '$lib/utils/asset-editability';
 import { getEditableAssetsWithWarning } from '$lib/utils/asset-utils';
 import { handleError } from '$lib/utils/handle-error';
 import { getFormatter } from '$lib/utils/i18n';
+import { isPublicGallery, publicGalleryAllows } from '$lib/utils/public-gallery';
 
 export const getAssetBulkActions = (
   $t: MessageFormatter,
@@ -244,7 +245,7 @@ export const getAssetActions = (
   // rule in `getSelectionCapabilities`. Off a space surface `space` is undefined and nothing
   // changes: partner-shared assets do land in the caller's own album (Permission.AssetShare),
   // and the viewer cannot evaluate that from the DTO.
-  const canAddToAlbum = isOwner || space === undefined || space.canWrite;
+  const canAddToAlbum = !isPublicGallery && (isOwner || space === undefined || space.canWrite);
   const restrictToSpaceId = !isOwner && space?.canWrite ? space.id : undefined;
 
   const Share: ActionItem = {
@@ -258,14 +259,14 @@ export const getAssetActions = (
     title: $t('download'),
     icon: mdiDownload,
     shortcuts: { key: 'd', shift: true },
-    $if: () => !!authUser,
+    $if: () => !!authUser && publicGalleryAllows('download'),
     onAction: () => handleDownloadAsset(asset, { edited: true }),
   };
 
   const DownloadOriginal: ActionItem = {
     title: $t('download_original'),
     icon: mdiDownloadBox,
-    $if: () => !!authUser && asset.isEdited,
+    $if: () => !!authUser && asset.isEdited && publicGalleryAllows('download'),
     onAction: () => handleDownloadAsset(asset, { edited: false }),
   };
 
@@ -434,7 +435,7 @@ export const getAssetActions = (
   const SetProfilePicture: ActionItem = {
     title: $t('set_as_profile_picture'),
     icon: mdiAccountCircleOutline,
-    $if: () => asset.type === AssetTypeEnum.Image && asset.visibility !== AssetVisibility.Locked,
+    $if: () => !isPublicGallery && asset.type === AssetTypeEnum.Image && asset.visibility !== AssetVisibility.Locked,
     onAction: () => modalManager.show(ProfileImageCropperModal, { asset }),
   };
 
