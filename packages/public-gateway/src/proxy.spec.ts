@@ -77,6 +77,8 @@ beforeAll(async () => {
     listen: { host: '127.0.0.1', port: 0 },
     trustProxy: false,
     maxBodyBytes: 1024,
+    rateLimit: { default: { perSecond: 1000, burst: 1000 }, expensive: { perSecond: 1, burst: 3 } },
+    allowIndexing: false,
     galleries: new Map([
       ['gal1.example.com', { host: 'gal1.example.com', apiKey: 'key-one', features: ALL_FEATURES }],
       [
@@ -275,5 +277,101 @@ describe('gateway', () => {
     });
     expect(received.startsWith('HTTP/1.1 403')).toBe(true);
     expect(seen).toEqual([]);
+  });
+
+  it('sends security headers on forwarded and local answers alike, and keeps galleries out of search engines', async () => {
+    for (const res of [
+      await send('gal1.example.com', 'GET', '/photos'),
+      await send('gal1.example.com', 'GET', '/api/api-keys'),
+      await send('evil.example.com', 'GET', '/'),
+    ]) {
+      expect(res.headers['x-frame-options']).toBe('DENY');
+      expect(res.headers['content-security-policy']).toBe("frame-ancestors 'none'");
+      expect(res.headers['x-robots-tag']).toBe('noindex, nofollow');
+      expect(res.headers['x-content-type-options']).toBe('nosniff');
+    }
+  });
+
+  it('answers /healthz without contacting the server', async () => {
+    const res = await send('anything', 'GET', '/healthz');
+    expect(res.status).toBe(200);
+    expect(res.body).toBe('ok');
+    expect(seen).toEqual([]);
+  });
+});
+
+describe('gateway rate limiting', () => {
+  let limited: Server;
+  let port: number;
+
+  beforeAll(async () => {
+    const upstreamPort = (upstream.address() as AddressInfo).port;
+    const config: GatewayConfig = {
+      upstream: new URL(`http://127.0.0.1:${upstreamPort}`),
+      listen: { host: '127.0.0.1', port: 0 },
+      trustProxy: true,
+      maxBodyBytes: 1024,
+      rateLimit: { default: { perSecond: 0.001, burst: 3 }, expensive: { perSecond: 0.001, burst: 1 } },
+      allowIndexing: true,
+      galleries: new Map([
+        ['gal1.example.com', { host: 'gal1.example.com', apiKey: 'key-one', features: ALL_FEATURES }],
+      ]),
+    };
+    limited = createGateway(
+      () => config,
+      () => {},
+    );
+    port = await listen(limited);
+  });
+
+  afterAll(() => {
+    limited.closeAllConnections();
+    limited.close();
+  });
+
+  const hit = (path: string, client: string, method = 'GET') =>
+    new Promise<{ status: number; retryAfter?: string; robots?: string }>((resolve, reject) => {
+      const req = request(
+        {
+          host: '127.0.0.1',
+          port,
+          method,
+          path,
+          headers: { host: 'gal1.example.com', 'x-forwarded-for': `6.6.6.6, ${client}`, 'content-length': '0' },
+        },
+        (res) => {
+          res.resume();
+          res.on('end', () =>
+            resolve({
+              status: res.statusCode ?? 0,
+              retryAfter: res.headers['retry-after'] as string | undefined,
+              robots: res.headers['x-robots-tag'] as string | undefined,
+            }),
+          );
+        },
+      );
+      req.on('error', reject);
+      req.end();
+    });
+
+  it('limits each visitor, identified by the address the edge proxy appended', async () => {
+    const statuses = [];
+    for (let i = 0; i < 4; i++) {
+      statuses.push((await hit('/api/timeline/buckets', '10.0.0.1')).status);
+    }
+    expect(statuses).toEqual([200, 200, 200, 429]);
+    expect((await hit('/api/timeline/buckets', '10.0.0.1')).retryAfter).toBeDefined();
+    // same forged first entry, different real client: its own budget
+    expect((await hit('/api/timeline/buckets', '10.0.0.2')).status).toBe(200);
+  });
+
+  it('gives expensive requests their own, stricter budget', async () => {
+    expect((await hit('/api/search/smart', '10.0.0.3', 'POST')).status).toBe(200);
+    expect((await hit('/api/search/smart', '10.0.0.3', 'POST')).status).toBe(429);
+    expect((await hit('/api/timeline/buckets', '10.0.0.3')).status).toBe(200);
+  });
+
+  it('can allow indexing', async () => {
+    expect((await hit('/photos', '10.0.0.4')).robots).toBeUndefined();
   });
 });

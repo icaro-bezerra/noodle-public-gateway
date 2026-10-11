@@ -118,6 +118,9 @@ read another user's private person row and a face crop from a photo outside the 
       `canEdit`, location when `map` is off), place searches gated, previews verified EXIF-free with GPS-tagged
       seeds, people confined to the gallery's own list. Upstream follow-up worth filing: `requireThumbnailAccess`
       should check access to the representative face's asset. Unverified: video originals' embedded location.
-- [ ] **5. Hardening** — rate limiting, host-keyed cache, CSP, logging of blocked requests.
-- [ ] **6. Adversarial tests** — every `write`/`admin`/`full` route × every gallery must be 403; bypass
-      variants; cross-gallery isolation (asset of user 1 is 404 on gallery 2). Run on every upstream sync.
+- [x] **5. Hardening** — per-visitor rate limits (stricter for ML search and archives), security headers on every
+      response, `noindex` by default, client and upstream timeouts, `/healthz`, Dockerfile. No shared cache, on
+      purpose (see README.md#hardening).
+- [x] **6. Adversarial tests** — `e2e/adversarial.ts`: 1292 requests against the real server, 0 findings; its
+      detection was verified by mutation (no gateway: 901 findings; one deliberate policy hole: 17). Run it on every
+      upstream sync.

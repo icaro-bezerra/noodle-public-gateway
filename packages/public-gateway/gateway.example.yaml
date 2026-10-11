@@ -13,6 +13,15 @@ trustProxy: true
 # Largest request body accepted for the read-only POSTs (search)
 maxBodyBytes: 65536
 
+# Per visitor and gallery. `expensive` covers smart search (runs the ML model), metadata/random search and archive
+# downloads. A timeline page loads one thumbnail per photo on screen, so keep `default` generous. perSecond: 0 disables.
+rateLimit:
+  default: { perSecond: 100, burst: 400 }
+  expensive: { perSecond: 1, burst: 10 }
+
+# Search engines are told not to index the galleries (X-Robots-Tag) unless this is true
+allowIndexing: false
+
 galleries:
   # One entry per public hostname; each uses the read-only API key of a dedicated Noodle user
   - host: gal-publica1.example.com

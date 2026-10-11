@@ -180,6 +180,8 @@ writeFileSync(
   join(DIR, 'gateway.yaml'),
   `upstream: http://127.0.0.1:22830
 listen: { host: 127.0.0.1, port: 28080 }
+# the adversarial suite sends hundreds of requests; a 429 would hide what the gateway does with them
+rateLimit: { default: { perSecond: 10000, burst: 10000 }, expensive: { perSecond: 10000, burst: 10000 } }
 galleries:
   - host: gal1.localhost
     apiKeyFile: gal1.key

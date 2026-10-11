@@ -332,6 +332,20 @@ export const locationDecision = (
   }
 };
 
+// Smart search runs the ML model; the others are heavy database queries or archive builds.
+const EXPENSIVE = new Set([
+  '/api/search/smart',
+  '/api/search/smart/facets',
+  '/api/search/metadata',
+  '/api/search/random',
+  '/api/search/large-assets',
+  '/api/download/info',
+  '/api/download/archive',
+]);
+
+/** Requests that get the stricter `rateLimit.expensive` budget */
+export const isExpensive = (method: string, path: string) => method === 'POST' && EXPENSIVE.has(path);
+
 const isUnder = (path: string, prefix: string) => path === prefix || path.startsWith(`${prefix}/`);
 
 /** `path` must already be normalized (see `normalizePath`) and carry no query string */

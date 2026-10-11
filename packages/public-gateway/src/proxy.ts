@@ -10,7 +10,15 @@ import type { Duplex } from 'node:stream';
 import type { Gallery, GatewayConfig } from './config.ts';
 import { IdentityMap } from './identity.ts';
 import { hideUnlistedPeople, PeopleAccess } from './people-access.ts';
-import { decide, locationDecision, requestsPrivateAssets, upstreamQuery, type Decision } from './policy.ts';
+import {
+  decide,
+  isExpensive,
+  locationDecision,
+  requestsPrivateAssets,
+  upstreamQuery,
+  type Decision,
+} from './policy.ts';
+import { RateLimiter } from './rate-limit.ts';
 import { buildUpstreamHeaders, normalizePath, stripCredentialParams } from './request.ts';
 import { appliesTo, MAX_REWRITE_BYTES, rewriteBody, type RewriteName } from './rewrite.ts';
 
@@ -66,14 +74,32 @@ const resolve = (config: GatewayConfig, req: IncomingMessage): Resolved => {
   return { gallery, path, query };
 };
 
+/**
+ * The visitor's address. Behind a trusted edge proxy it is the last `X-Forwarded-For` entry, the one the edge
+ * appended; earlier entries come from the client and can be forged.
+ */
 const clientIp = (config: GatewayConfig, req: IncomingMessage) => {
-  const remote = req.socket.remoteAddress;
   const forwarded = req.headers['x-forwarded-for'];
   if (config.trustProxy && typeof forwarded === 'string') {
-    return remote ? `${forwarded}, ${remote}` : forwarded;
+    const last = forwarded.split(',').at(-1)?.trim();
+    if (last) {
+      return last;
+    }
   }
-  return remote;
+  return req.socket.remoteAddress ?? 'unknown';
 };
+
+const UPSTREAM_IDLE_MS = 60_000;
+
+/** Sent on every response, including the ones the gateway answers itself */
+const securityHeaders = (config: GatewayConfig): Record<string, string> => ({
+  'x-content-type-options': 'nosniff',
+  'referrer-policy': 'same-origin',
+  'x-frame-options': 'DENY',
+  'content-security-policy': "frame-ancestors 'none'",
+  'permissions-policy': 'camera=(), microphone=(), geolocation=(), payment=()',
+  ...(config.allowIndexing ? {} : { 'x-robots-tag': 'noindex, nofollow' }),
+});
 
 const sendJson = (res: ServerResponse, method: string, status: number, body?: unknown) => {
   if (body === undefined) {
@@ -162,8 +188,6 @@ const responseHeaders = (upstream: IncomingMessage, isApi: boolean) => {
   if (!isApi) {
     headers['set-cookie'] = [AUTH_COOKIE];
   }
-  headers['x-content-type-options'] = 'nosniff';
-  headers['referrer-policy'] = 'same-origin';
   return headers;
 };
 
@@ -265,6 +289,8 @@ const forward = async (
       upstreamRes.on('error', reject);
     });
     upstream.on('error', reject);
+    // an idle limit, not a total one: video streams legitimately run for minutes
+    upstream.setTimeout(UPSTREAM_IDLE_MS, () => upstream.destroy(new Error('Upstream timed out')));
     res.on('close', () => upstream.destroy());
     upstream.end(body);
   });
@@ -287,13 +313,24 @@ const answer = (res: ServerResponse, method: string, decision: Exclude<Decision,
   }
 };
 
-const handleUpgrade = (config: GatewayConfig, req: IncomingMessage, socket: Duplex, head: Buffer, log: Log) => {
+const handleUpgrade = (
+  config: GatewayConfig,
+  limiter: RateLimiter,
+  req: IncomingMessage,
+  socket: Duplex,
+  head: Buffer,
+  log: Log,
+) => {
   socket.on('error', () => socket.destroy());
   let target: Resolved;
   try {
     target = resolve(config, req);
   } catch {
     socket.end('HTTP/1.1 400 Bad Request\r\nConnection: close\r\n\r\n');
+    return;
+  }
+  if (limiter.take(`${target.gallery.host}|${clientIp(config, req)}|default`, config.rateLimit.default) > 0) {
+    socket.end('HTTP/1.1 429 Too Many Requests\r\nConnection: close\r\n\r\n');
     return;
   }
   if (target.path !== SOCKET_PATH || req.method !== 'GET') {
@@ -384,12 +421,35 @@ const fetchPeopleIds = (getConfig: () => GatewayConfig) => async (gallery: Galle
 export const createGateway = (getConfig: () => GatewayConfig, log: Log = defaultLog): Server => {
   const identity = new IdentityMap(fetchUserId(getConfig));
   const people = new PeopleAccess(fetchPeopleIds(getConfig));
+  const limiter = new RateLimiter();
+  const sweeper = setInterval(() => limiter.sweep(), 60_000);
+  sweeper.unref();
+
   const server = createServer((req, res) => {
     const config = getConfig();
     const method = req.method ?? 'GET';
+    for (const [name, value] of Object.entries(securityHeaders(config))) {
+      res.setHeader(name, value);
+    }
+    // for container health checks; answers on any host and never touches the server
+    if (req.url === '/healthz' && (method === 'GET' || method === 'HEAD')) {
+      res.writeHead(200, { 'content-type': 'text/plain' }).end(method === 'HEAD' ? undefined : 'ok');
+      return;
+    }
     let target: Resolved | undefined;
     const handle = async () => {
       target = resolve(config, req);
+      const expensive = isExpensive(method, target.path);
+      const wait = limiter.take(
+        `${target.gallery.host}|${clientIp(config, req)}|${expensive ? 'expensive' : 'default'}`,
+        expensive ? config.rateLimit.expensive : config.rateLimit.default,
+      );
+      if (wait > 0) {
+        await discardBody(req, config.maxBodyBytes);
+        res.setHeader('retry-after', String(wait));
+        sendJson(res, method, 429, { message: 'Too many requests' });
+        return;
+      }
       const decision = decide(method, target.path, target.gallery.features);
       if (decision.action !== 'forward') {
         if (decision.action === 'deny') {
@@ -428,8 +488,12 @@ export const createGateway = (getConfig: () => GatewayConfig, log: Log = default
   });
 
   server.on('upgrade', (req: IncomingMessage, socket: Duplex, head: Buffer) =>
-    handleUpgrade(getConfig(), req, socket, head, log),
+    handleUpgrade(getConfig(), limiter, req, socket, head, log),
   );
+  // slow clients must not hold connections open: headers within 10 s, the whole request within 30 s
+  server.headersTimeout = 10_000;
+  server.requestTimeout = 30_000;
+  server.on('close', () => clearInterval(sweeper));
 
   return server;
 };

@@ -17,6 +17,25 @@ pnpm install --filter @immich/public-gateway
 node src/main.ts path/to/gateway.yaml   # or GATEWAY_CONFIG=path/to/gateway.yaml
 ```
 
+Or with Docker, building from the repository root:
+
+```sh
+docker build -f packages/public-gateway/Dockerfile -t noodle-public-gateway .
+```
+
+```yaml
+# next to the Noodle services in docker-compose.yml
+public-gateway:
+  image: noodle-public-gateway
+  volumes:
+    - ./gateway.yaml:/etc/public-gateway/gateway.yaml:ro
+    - ./gallery-keys:/run/secrets:ro # one file per gallery key, referenced by apiKeyFile
+  ports: ['8080:8080']
+  restart: always
+```
+
+Reload the config with `docker kill -s HUP <container>`. `GET /healthz` answers on any host for health checks.
+
 See [gateway.example.yaml](gateway.example.yaml) for every option. Point each gallery hostname at the gateway
 (subdomains, not path prefixes: the web app must be served from `/`). Keep the normal Noodle hostname pointing at
 the server itself for the people who log in.
@@ -53,6 +72,19 @@ the server itself for the people who log in.
   redirect.
 - The websocket is proxied with the gallery's key.
 
+## Hardening
+
+- Rate limits per visitor and gallery (token buckets), with a stricter budget for expensive requests; over the limit
+  is `429` with `Retry-After`. Behind an edge proxy set `trustProxy: true`: the visitor is the last
+  `X-Forwarded-For` entry, the one the edge appended, so a forged header cannot dodge the limit.
+- Every response, including the gateway's own answers, carries `X-Frame-Options: DENY`,
+  `Content-Security-Policy: frame-ancestors 'none'`, `nosniff`, `Referrer-Policy`, a restrictive
+  `Permissions-Policy` and, unless `allowIndexing`, `X-Robots-Tag: noindex, nofollow`.
+- Slow clients are cut off (headers within 10 s, the whole request within 30 s); an upstream that goes quiet for
+  60 s is dropped (an idle limit, so long video streams still work).
+- No shared response cache: thumbnails already come with `Cache-Control: private, max-age=86400`, and a cache in the
+  gateway would be one more place where galleries could mix.
+
 ## How the web app stays read-only
 
 - `/api/users/me` answers with a stable fake user id per gallery (and `public@<host>` as email). The web app shows
@@ -78,6 +110,26 @@ pnpm inventory   # regenerate docs/route-classification.{json,md} from the OpenA
 `src/policy.spec.ts` reads the OpenAPI spec and fails if the policy forwards any route whose permission is not
 read-only, or any non-GET route outside the reviewed list. Run it after every upstream sync.
 
+## Adversarial suite
+
+`e2e/adversarial.ts` attacks a running gateway in front of the seeded Noodle and exits non-zero on any finding. It
+does not trust the gateway's policy: the Noodle server tags every response with `x-correlation-id` and the gateway's
+own answers never carry it, so whether a request reached the server is observed directly. It checks that
+
+1. no write, admin or full-permission route from the OpenAPI spec reaches the server, on every gallery;
+2. writes guarded only by read permissions (favorites, aliases, preferences) do not either;
+3. sensitive routes stay blocked under path tricks (case, `//`, `.`, `..`, encoded separators, backslash, matrix
+   params) combined with injected credentials (an admin's bearer token, cookie or user-token header, query keys)
+   and method override, and unusual methods (`OPTIONS`, `TRACE`, `CONNECT`, …) never get through;
+4. a visitor's credentials never replace the gallery's identity;
+5. galleries cannot read each other's assets, thumbnails, faces or spaces;
+6. archived, locked, hidden and trashed assets are unreachable;
+7. no forwarded read leaks an email address or a server path;
+8. nothing changed for any user (a snapshot of assets, albums, people, tags, spaces, keys and links before and after).
+
+Its own effectiveness was checked by mutation: pointed at the server without the gateway it reports 901 findings,
+and with `PUT /api/assets` deliberately allowed in the policy it reports 17.
+
 ## End-to-end environment
 
 `e2e/` starts a disposable Noodle and seeds two galleries (one owning photos, an album, a tag and a named face, and
@@ -88,6 +140,7 @@ cd e2e
 NOODLE_VERSION=v5.8.0-rc.1 docker compose -f compose.yml -f compose.web.yml up -d   # web from this checkout
 node seed.ts
 cd .. && node src/main.ts e2e/gateway.yaml   # then open http://gal1.localhost:28080
+node e2e/adversarial.ts                      # in another terminal
 ```
 
 `compose.web.yml` mounts `web/build`, so build the web app first (`pnpm --filter immich-web build`). Leave it out to
