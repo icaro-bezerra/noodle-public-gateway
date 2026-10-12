@@ -8,6 +8,8 @@ The gateway authenticates with a read-only API key of that user, injected server
 credential. The key's permissions are a second barrier: even a request the gateway let through by mistake could not
 write. See [PLAN.md](PLAN.md) for the design and the findings it is based on.
 
+**Setting up galleries step by step (Portuguese): [TUTORIAL.md](TUTORIAL.md).**
+
 ## Running
 
 Requires Node 24 (TypeScript runs directly, no build step).
