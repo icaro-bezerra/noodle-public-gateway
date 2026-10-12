@@ -1,7 +1,7 @@
 name: noodle-gateway-e2e
 services:
   server:
-    image: ghcr.io/open-noodle/gallery-server:${NOODLE_VERSION:-release}
+    image: ${NOODLE_IMAGE:-ghcr.io/open-noodle/gallery-server:${NOODLE_VERSION:-release}}
     volumes: ['./library:/data']
     env_file: [.env]
     ports: ['127.0.0.1:22830:2283']

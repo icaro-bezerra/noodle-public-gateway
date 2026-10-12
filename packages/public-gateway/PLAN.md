@@ -116,7 +116,7 @@ read another user's private person row and a face crop from a photo outside the 
       when originals are private.
 - [x] **4. Feature flags & privacy** — field-name scrubbing of every JSON response (emails, server paths,
       `canEdit`, location when `map` is off), place searches gated, previews verified EXIF-free with GPS-tagged
-      seeds, people confined to the gallery's own list. Upstream follow-up worth filing: `requireThumbnailAccess`
+      seeds, people confined to the gallery's own list. Upstream follow-up worth filing (reproduced): `requireThumbnailAccess`
       should check access to the representative face's asset. Unverified: video originals' embedded location.
 - [x] **5. Hardening** — per-visitor rate limits (stricter for ML search and archives), security headers on every
       response, `noindex` by default, client and upstream timeouts, `/healthz`, Dockerfile. No shared cache, on
@@ -124,3 +124,6 @@ read another user's private person row and a face crop from a photo outside the 
 - [x] **6. Adversarial tests** — `e2e/adversarial.ts`: 1292 requests against the real server, 0 findings; its
       detection was verified by mutation (no gateway: 901 findings; one deliberate policy hole: 17). Run it on every
       upstream sync.
+- Verified 2026-10-12 against an image built from this branch: the phase 1 patch makes `/albums/names` and
+  `/gallery/map/markers` answer a read-only key (200) and lets it join the websocket while a key without
+  `asset.read` is refused; every screen clean (16/16); adversarial suite 0 findings.

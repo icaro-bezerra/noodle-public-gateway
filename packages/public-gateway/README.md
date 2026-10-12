@@ -146,6 +146,10 @@ node e2e/adversarial.ts                      # in another terminal
 `compose.web.yml` mounts `web/build`, so build the web app first (`pnpm --filter immich-web build`). Leave it out to
 test the image's own web app.
 
+To test this branch's server too, build its image (`docker buildx build --load -f server/Dockerfile -t
+noodle-gallery-server:local .` from the repository root) and start with `NOODLE_IMAGE=noodle-gallery-server:local
+docker compose -f compose.yml up -d`; that image already contains the web app.
+
 ## Privacy
 
 - Every JSON response is scrubbed by field name, so routes added upstream are covered too: `email` is blanked,
@@ -155,9 +159,10 @@ test the image's own web app.
   filtering by place are refused. Thumbnails and previews carry no EXIF (verified).
 - People are limited to what the gallery's own people list returns (its visible people plus its Shared Spaces'):
   `/api/people/{id}/**` for any other id is 404, and `/api/faces` drops persons outside that list. This closes a
-  server-side exposure where a space member could read another user's private person row and a face crop taken
-  from a photo outside the space (`requireThumbnailAccess` in `server/src/services/person.service.ts` only excludes
-  locked photos).
+  server-side exposure, reproduced against this branch's server: a space member reads another user's private person
+  row, and `GET /api/people/{id}/thumbnail` returns the owner's chosen face crop even when it comes from a photo
+  outside the space that the member cannot open (`requireThumbnailAccess` in
+  `server/src/services/person.service.ts` only excludes locked photos).
 
 ### Known limitations
 
