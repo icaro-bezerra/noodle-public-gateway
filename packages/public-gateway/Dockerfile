@@ -16,6 +16,9 @@ COPY --from=build /out/package.json ./
 COPY --from=build /out/node_modules ./node_modules
 COPY --from=build /out/src ./src
 ENV NODE_ENV=production GATEWAY_CONFIG=/etc/public-gateway/gateway.yaml
+# keys of the gallery users the gateway creates; mount a volume here so they survive a new container
+RUN mkdir -p /var/lib/public-gateway && chown node:node /var/lib/public-gateway
+VOLUME /var/lib/public-gateway
 USER node
 EXPOSE 8080
 # reads the port from the config, so a custom `listen.port` keeps the check right

@@ -22,8 +22,22 @@ rateLimit:
 # Search engines are told not to index the galleries (X-Robots-Tag) unless this is true
 allowIndexing: false
 
+# An admin's API key with adminUser.read/create/update, sharedSpace.read/create and sharedSpaceMember.create.
+# Needed only for galleries described by `name` and `spaces`, which the gateway creates itself.
+adminApiKeyFile: /etc/public-gateway/admin.key
+# where the gateway keeps the keys of the gallery users it creates (mount a volume here)
+stateDir: /var/lib/public-gateway
+
+# Edits to this file apply on their own within seconds.
 galleries:
-  # One entry per public hostname; each uses the read-only API key of a dedicated Noodle user
+  # Provisioned: the gateway creates the user familia@public-gallery.local, makes it a Viewer of the Spaces
+  # (creating missing ones, empty) and issues its read-only key
+  - name: Família
+    hosts: [familia.example.com, familia.localhost]
+    spaces: [Família, Viagens]
+    features: { people: true }
+
+  # Manual: a read-only API key you created yourself for a dedicated Noodle user
   - host: gal-publica1.example.com
     apiKeyFile: /run/secrets/gal1_key # relative paths resolve against this file's directory
     title: Família Silva

@@ -42,6 +42,36 @@ See [gateway.example.yaml](gateway.example.yaml) for every option. Point each ga
 (subdomains, not path prefixes: the web app must be served from `/`). Keep the normal Noodle hostname pointing at
 the server itself for the people who log in.
 
+## Provisioned galleries
+
+Describe a gallery by `name`, `hosts` and `spaces`, and the gateway creates what it needs on start and whenever the
+file changes (it watches it; no restart or `SIGHUP` needed):
+
+```yaml
+adminApiKeyFile: admin.key
+galleries:
+  - name: Família
+    hosts: [familia.example.com]
+    spaces: [Família]
+    features: { people: true }
+```
+
+For each one it makes sure that a user `<slug>@public-gallery.local` exists (`Família` → `familia@…`), that the user
+is a **Viewer** of every listed Space (creating a missing Space, empty, owned by the admin), and that it holds a
+working read-only key, which it issues through a one-off login with a throwaway password and keeps in `stateDir`
+(`/var/lib/public-gateway` in the image; mount a volume). Repeated runs change nothing; a key revoked elsewhere is
+replaced within five minutes; a lost state directory is rebuilt, deleting the old keys.
+
+- The admin key needs only `adminUser.read`, `adminUser.create`, `adminUser.update`, `sharedSpace.read`,
+  `sharedSpace.create` and `sharedSpaceMember.create`.
+- The gateway only ever touches users in the `public-gallery.local` domain, so a personal account is never altered.
+  It never deletes anything: a gallery removed from the file stops being served, and its user stays until you delete
+  it. A gallery user deleted in the UI is not brought back; the log says so.
+- One failing gallery is logged (`provision-failed`) and retried every 10 s while the others serve; an unreachable
+  Noodle at start is retried the same way.
+
+Manual galleries (`apiKeyFile`, below) still work and can be mixed with provisioned ones.
+
 ## Adding a gallery
 
 1. Create a dedicated, non-admin Noodle user and give it the content to publish: its own library, partner sharing,
@@ -53,7 +83,7 @@ the server itself for the people who log in.
    `tag.read`, `stack.read`, `folder.read`, `sharedSpace.read`, `sharedSpaceAsset.read`, `user.read`,
    `userPreference.read`, `userProfileImage.read`, `userConfig.read`, `userOnboarding.read`, `activity.read`,
    `activity.statistics` — and `asset.download` only if `downloadOriginal` is enabled.
-4. Save the key to a file, add the gallery to the config and send the gateway `SIGHUP`.
+4. Save the key to a file and add the gallery to the config; the gateway picks up the change on its own.
 
 ## How requests are handled
 
